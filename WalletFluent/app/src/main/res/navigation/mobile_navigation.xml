@@ -3,23 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/languageFragment">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="ge.nlatsabidze.walletfluent.ui.home.HomeFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/languageFragment"
+        android:name="ge.nlatsabidze.walletfluent.ui.language.LanguageFragment"
+        android:label="@string/language"
+        tools:layout="@layout/fragment_language" />
 
     <fragment
-        android:id="@+id/nav_gallery"
-        android:name="ge.nlatsabidze.walletfluent.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:id="@+id/cryptoFragment"
+        android:name="ge.nlatsabidze.walletfluent.ui.crypto.CryptoFragment"
+        android:label="@string/crypto"
+        tools:layout="@layout/fragment_crypto" />
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="ge.nlatsabidze.walletfluent.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
+        android:id="@+id/currencyFragment"
+        android:name="ge.nlatsabidze.walletfluent.ui.currency.CurrencyFragment"
+        android:label="@string/currency"
+        tools:layout="@layout/fragment_currency" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="ge.nlatsabidze.walletfluent.ui.login.LoginFragment"
+        android:label="@string/enter"
+        tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/registerFragment"
+        android:name="ge.nlatsabidze.walletfluent.ui.register.RegisterFragment"
+        android:label="fragment_register"
+        tools:layout="@layout/fragment_register" />
 </navigation>

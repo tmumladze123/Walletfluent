@@ -3,6 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/O'Brands/AndroidStudioProjects/Walletfluent/WalletFluent/app/src/main/res/drawable/ic_login.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/O'Brands/AndroidStudioProjects/Walletfluent/WalletFluent/app/src/main/res/drawable/ic_menu_slideshow.xml" value="0.19166666666666668" />
+        <entry key="..\:/Users/O'Brands/AndroidStudioProjects/Walletfluent/WalletFluent/app/src/main/res/drawable/side_nav_bar.xml" value="0.19166666666666668" />
+        <entry key="..\:/Users/O'Brands/AndroidStudioProjects/Walletfluent/WalletFluent/app/src/main/res/layout/activity_main.xml" value="0.12047101449275362" />
+        <entry key="..\:/Users/O'Brands/AndroidStudioProjects/Walletfluent/WalletFluent/app/src/main/res/layout/content_main.xml" value="0.13043478260869565" />
+        <entry key="..\:/Users/O'Brands/AndroidStudioProjects/Walletfluent/WalletFluent/app/src/main/res/layout/fragment_gallery.xml" value="0.12047101449275362" />
+        <entry key="..\:/Users/O'Brands/AndroidStudioProjects/Walletfluent/WalletFluent/app/src/main/res/layout/fragment_home.xml" value="0.12047101449275362" />
+        <entry key="..\:/Users/O'Brands/AndroidStudioProjects/Walletfluent/WalletFluent/app/src/main/res/layout/fragment_login.xml" value="0.12047101449275362" />
+        <entry key="..\:/Users/O'Brands/AndroidStudioProjects/Walletfluent/WalletFluent/app/src/main/res/layout/fragment_slideshow.xml" value="0.12047101449275362" />
+        <entry key="..\:/Users/O'Brands/AndroidStudioProjects/Walletfluent/WalletFluent/app/src/main/res/layout/nav_header_main.xml" value="0.12047101449275362" />
+        <entry key="..\:/Users/O'Brands/AndroidStudioProjects/Walletfluent/WalletFluent/app/src/main/res/menu/activity_main_drawer.xml" value="0.18333333333333332" />
         <entry key="..\:/Users/user/WalletFluent/app/src/main/res/layout/activity_main.xml" value="0.20520833333333333" />
         <entry key="..\:/Users/user/WalletFluent/app/src/main/res/layout/content_main.xml" value="0.28804347826086957" />
         <entry key="..\:/Users/user/WalletFluent/app/src/main/res/layout/fragment_gallery.xml" value="0.28804347826086957" />

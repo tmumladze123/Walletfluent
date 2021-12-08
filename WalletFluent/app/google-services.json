@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "158188277441",
+    "project_id": "walletfluent-b2fe7",
+    "storage_bucket": "walletfluent-b2fe7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:158188277441:android:42926b214736eaad094e40",
+        "android_client_info": {
+          "package_name": "ge.nlatsabidze.walletfluent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "158188277441-n3un5cdvjbf2i7jq4knjqf6nln6idhbl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ge.nlatsabidze.walletfluent",
+            "certificate_hash": "00372965f7949b5644465dbbe926be071df90cfd"
+          }
+        },
+        {
+          "client_id": "158188277441-r3hqqeroabervne05gc7rfnkt7b56v0o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJMmkkI55Hc9PofXYnrgkiJNws5cx1Kp4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "158188277441-r3hqqeroabervne05gc7rfnkt7b56v0o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

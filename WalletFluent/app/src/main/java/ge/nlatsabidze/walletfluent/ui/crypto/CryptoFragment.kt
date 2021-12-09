@@ -9,3 +9,4 @@ class CryptoFragment : BaseFragment<FragmentCryptoBinding>(FragmentCryptoBinding
 
     }
 }
+

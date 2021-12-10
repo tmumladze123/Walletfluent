@@ -2,13 +2,15 @@ package ge.nlatsabidze.walletfluent.ui.login
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
+<<<<<<< Updated upstream
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.Color.RED
+=======
+>>>>>>> Stashed changes
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import ge.nlatsabidze.walletfluent.BaseFragment
@@ -19,7 +21,10 @@ import ge.nlatsabidze.walletfluent.databinding.FragmentLoginBinding
 class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::inflate) {
 
     private lateinit var firebaseAuth: FirebaseAuth
+<<<<<<< Updated upstream
     private val loginFragmentViewModel: LoginViewModel by viewModels()
+=======
+>>>>>>> Stashed changes
 
     override fun start() {
         firebaseAuth = FirebaseAuth.getInstance()

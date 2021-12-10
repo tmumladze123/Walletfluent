@@ -11,5 +11,5 @@
     <color name="gold">#CD853F</color>
     <color name="back">#191717</color>
     <color name="red">#DF1515</color>
-
+    <color name="transparent">#00DF1515</color>
 </resources>

@@ -2,7 +2,9 @@ package ge.nlatsabidze.walletfluent.ui.login
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
+import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.Color.RED
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
@@ -17,28 +19,23 @@ import ge.nlatsabidze.walletfluent.databinding.FragmentLoginBinding
 class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::inflate) {
 
     private lateinit var firebaseAuth: FirebaseAuth
-
     private val loginFragmentViewModel: LoginViewModel by viewModels()
 
-
-
     override fun start() {
-
         firebaseAuth = FirebaseAuth.getInstance()
-
-        binding.loginButton.setOnClickListener { loginUser() }
-        binding.registerTextView.setOnClickListener { navigateToRegisterPage() }
+        binding.btnSignin.setOnClickListener {
+            loginUser() }
+        binding.tvRegister.setOnClickListener { navigateToRegisterPage() }
     }
 
     @SuppressLint("ResourceAsColor")
     private fun loginUser() {
+
         with(binding) {
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
-
             checkInputValidation(email, password)
             navigateToPersonalPage(email, password)
-
         }
     }
 
@@ -57,10 +54,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
     private fun checkInputValidation(email: String, password: String) {
         with(binding) {
-
             val shake: Animation = AnimationUtils.loadAnimation(requireContext(), R.anim.vibrate)
             if (email.isEmpty() && password.isEmpty()) {
-
                 emailEditText.startAnimation(shake)
                 emailEditText.error = "ველი არ არის შევსებული"
 
@@ -71,7 +66,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                 passwordEditText.startAnimation(shake)
                 passwordEditText.error = "ველი არ არის შევსებული"
             } else if (email.isEmpty()) {
-
                 emailEditText.startAnimation(shake)
                 emailEditText.error = "ველი არ არის შევსებული"
 

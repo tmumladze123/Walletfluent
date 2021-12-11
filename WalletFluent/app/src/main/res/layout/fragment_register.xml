@@ -24,7 +24,7 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/edEmailWrapper"
+        android:id="@+id/nameEditTextWrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -35,13 +35,14 @@
         app:layout_constraintTop_toBottomOf="@+id/tvCreateAccount">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edEmail"
+            android:id="@+id/nameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/transparent"
             android:hint="@string/name" />
 
     </com.google.android.material.textfield.TextInputLayout>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/emailEditTextWrapper"
         android:layout_width="match_parent"
@@ -51,7 +52,7 @@
         android:layout_marginRight="20dp"
         app:startIconDrawable="@drawable/ic_email"
         android:textColorHint="@color/white"
-        app:layout_constraintTop_toBottomOf="@+id/edEmailWrapper">
+        app:layout_constraintTop_toBottomOf="@+id/nameEditTextWrapper">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/emailEditText"
@@ -96,7 +97,7 @@
         app:layout_constraintTop_toBottomOf="@+id/passwordEditTextWrapper" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btnSignin"
+        android:id="@+id/btnSignUp"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginLeft="150dp"

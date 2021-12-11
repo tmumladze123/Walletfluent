@@ -56,19 +56,33 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         with(binding) {
             val shake: Animation = AnimationUtils.loadAnimation(requireContext(), R.anim.vibrate)
             if (email.isEmpty() && password.isEmpty()) {
-                emailEditText.startAnimation(shake)
-                emailEditText.error = "ველი არ არის შევსებული"
+                emailEditTextWrapper.startAnimation(shake)
+                emailEditTextWrapper.helperText = "ველი არ არის შევსებული"
+                emailEditText.setBackgroundResource(R.drawable.border)
 
-                passwordEditText.startAnimation(shake)
-                passwordEditText.error = "ველი არ არის შევსებული"
+                passwordEditTextWrapper.startAnimation(shake)
+                passwordEditTextWrapper.helperText = "ველი არ არის შევსებული"
+                passwordEditText.setBackgroundResource(R.drawable.border)
 
             } else if (password.isEmpty()) {
-                passwordEditText.startAnimation(shake)
-                passwordEditText.error = "ველი არ არის შევსებული"
+                passwordEditTextWrapper.startAnimation(shake)
+                passwordEditTextWrapper.helperText ="ველი არ არის შევსებული"
+                emailEditTextWrapper.helperText = ""
+                passwordEditText.setBackgroundResource(R.drawable.border)
+                emailEditText.setBackgroundResource(R.color.transparent)
             } else if (email.isEmpty()) {
-                emailEditText.startAnimation(shake)
-                emailEditText.error = "ველი არ არის შევსებული"
-
+                emailEditTextWrapper.startAnimation(shake)
+                emailEditTextWrapper.helperText = "ველი არ არის შევსებული"
+                passwordEditTextWrapper.helperText = ""
+                emailEditText.setBackgroundResource(R.drawable.border)
+                passwordEditText.setBackgroundResource(R.color.transparent)
+            }
+            else {
+                passwordEditTextWrapper.helperText = ""
+                emailEditTextWrapper.helperText = ""
+                emailEditText.setBackgroundResource(R.color.transparent)
+                passwordEditText.setBackgroundResource(R.color.transparent)
+                passwordEditText.setBackgroundResource(R.color.transparent)
             }
         }
     }
@@ -87,4 +101,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
             }
         }
     }
+
+
 }

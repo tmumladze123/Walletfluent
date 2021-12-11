@@ -44,6 +44,9 @@
         <action
             android:id="@+id/action_registerFragment_to_personalInfoFragment"
             app:destination="@id/personalInfoFragment" />
+        <action
+            android:id="@+id/action_registerFragment_to_loginFragment"
+            app:popUpTo="@id/loginFragment" />
     </fragment>
 
     <fragment

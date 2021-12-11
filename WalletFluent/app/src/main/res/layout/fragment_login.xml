@@ -29,6 +29,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="140dp"
         android:layout_marginRight="20dp"
+        app:helperTextTextColor="@color/red"
         app:startIconDrawable="@drawable/ic_email"
         android:textColorHint="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/tvWelcome">
@@ -64,6 +65,7 @@
 >>>>>>> Stashed changes
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:textColor="@color/white"
             android:background="@color/transparent"
             android:hint="@string/email" />
 
@@ -76,6 +78,7 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="40dp"
         android:layout_marginRight="20dp"
+        app:helperTextTextColor="@color/red"
         android:hint="@string/password"
         app:startIconDrawable="@drawable/ic_lock"
         android:textColorHint="@color/white"
@@ -84,6 +87,7 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordEditText"
             android:inputType="textPassword"
+            android:textColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/transparent" />
@@ -96,7 +100,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:fontFamily="@font/beauty"
-        android:text="@string/sing_in"
+        android:text="@string/signin"
         android:textColor="@color/white"
         android:textSize="30sp"
         android:textStyle="bold"
@@ -122,11 +126,25 @@
         android:layout_marginLeft="20dp"
         android:layout_marginBottom="20dp"
         android:fontFamily="@font/beauty"
-        android:text="@string/sign_in"
+        android:text="@string/sign_up"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/tvForgotPassword"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="20dp"
+        android:fontFamily="@font/beauty"
+        android:text="@string/forgot_password"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
 
 
 

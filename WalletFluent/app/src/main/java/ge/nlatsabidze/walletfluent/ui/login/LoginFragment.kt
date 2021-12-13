@@ -27,7 +27,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     }
 
 
-
     @SuppressLint("ResourceAsColor")
     private fun loginUser() {
 

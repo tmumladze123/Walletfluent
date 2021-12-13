@@ -18,18 +18,18 @@ class AppRepository @Inject constructor(private val application: Application) {
 
     fun register(email: String?, password: String?) {
         firebaseAuth.createUserWithEmailAndPassword(email!!, password!!)
-            .addOnCompleteListener(application.mainExecutor, { task ->
+            .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     userMutableLiveData.postValue(firebaseAuth.currentUser)
                 } else {
                     showDialogError.postValue(true)
                 }
-            })
+            }
     }
 
     fun login(email: String?, password: String?) {
         firebaseAuth.signInWithEmailAndPassword(email!!, password!!)
-            .addOnCompleteListener(application.mainExecutor, { task ->
+            .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val user = firebaseAuth.currentUser
                     if (user!!.isEmailVerified) {
@@ -42,7 +42,7 @@ class AppRepository @Inject constructor(private val application: Application) {
                 } else {
                     showDialogError.postValue(true)
                 }
-            })
+            }
     }
 
 

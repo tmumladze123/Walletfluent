@@ -43,7 +43,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
             }
         })
 
-        binding.btnSignUp.setOnClickListener { registerUser() }
+        binding.btnSignUp.setOnClickListener {/* registerUser()*/ }
     }
 
     private fun registerUser() {
@@ -101,5 +101,4 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
         builder.setPositiveButton("yes", { dialogInterface: DialogInterface, i: Int -> })
         builder.show()
     }
-
 }

@@ -23,7 +23,7 @@ class RegisterViewModel @Inject constructor(private val appRepository: AppReposi
     }
 
     fun showDialogError(): MutableLiveData<Boolean>? {
-        showDialogError = appRepository.getDialogError()
+        showDialogError = appRepository.getVerifyDialogError()
         return showDialogError
     }
 

@@ -5,15 +5,19 @@ import android.content.DialogInterface
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.databinding.FragmentLoginBinding
 
-
+@AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::inflate) {
+
+    private val logInViewModel: LoginViewModel by viewModels()
 
     private lateinit var firebaseAuth: FirebaseAuth
     private val args: LoginFragmentArgs by navArgs()
@@ -21,7 +25,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     override fun start() {
         firebaseAuth = FirebaseAuth.getInstance()
         binding.tvSignUp.setOnClickListener { navigateToRegisterPage() }
-        binding.btnSignin.setOnClickListener { loginUser() }
+        binding.btnSignin.setOnClickListener {
+        }
         binding.tvForgotPassword.setOnClickListener { resetPassword() }
         setDataFromRegisterPage()
     }
@@ -52,7 +57,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         builder.setPositiveButton("კარგი", { dialogInterface: DialogInterface, i: Int -> })
         builder.show()
     }
-
 
 
     private fun checkInputValidation(email: String, password: String) {

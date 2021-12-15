@@ -1,28 +1,51 @@
-package ge.nlatsabidze.walletfluent.ui.login
+package ge.nlatsabidze.walletfluent.ui.loginAndRegister
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
+import android.util.Log.d
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.databinding.FragmentLoginBinding
 
-
+@AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::inflate) {
 
     private lateinit var firebaseAuth: FirebaseAuth
+
     private val args: LoginFragmentArgs by navArgs()
+
+    private val loginViewModel: LoginAndRegisterViewModel by activityViewModels()
 
     override fun start() {
         firebaseAuth = FirebaseAuth.getInstance()
-        binding.tvSignUp.setOnClickListener { navigateToRegisterPage() }
-        binding.btnSignin.setOnClickListener { loginUser() }
-        binding.tvForgotPassword.setOnClickListener { resetPassword() }
+
+        binding.tvSignUp.setOnClickListener {
+            navigateToRegisterPage()
+        }
+
+
+        binding.btnSignin.setOnClickListener {
+            loginUser()
+            loginViewModel.getMutableLiveData()?.observe(viewLifecycleOwner, { firebaseUser ->
+                d("dasasd", firebaseUser.toString())
+                if (firebaseUser != null) {
+                    navigateToPersonalPage()
+                }
+            })
+        }
+
+        binding.tvForgotPassword.setOnClickListener {
+            resetPassword()
+        }
+
         setDataFromRegisterPage()
     }
 
@@ -35,24 +58,33 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
             val password = passwordEditText.text.toString()
 
             checkInputValidation(email, password)
-            loginUserWithEmailAndPassword(email, password)
+            loginViewModel.login(email, password)
+
+
+//            loginViewModel.showDialogError()?.observe(viewLifecycleOwner, {
+//                if (it == true) {
+//                    showDialogError("ვწუხვართ, მითითებული სახელი ან პაროლი არასწორია, სცადე განმეორებით")
+//                } else {
+//                    showVerificationDialog()
+//                }
+//            })
+//            loginUserWithEmailAndPassword(email, password)
         }
     }
 
     private fun showDialogError(message: String) {
         val builder = AlertDialog.Builder(requireContext())
         builder.setMessage(message)
-        builder.setPositiveButton("yes", { dialogInterface: DialogInterface, i: Int -> })
+        builder.setPositiveButton("yes") { _: DialogInterface, _: Int -> }
         builder.show()
     }
 
     private fun showVerificationDialog() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setMessage("დაადასტურეთ მეილი!")
-        builder.setPositiveButton("კარგი", { dialogInterface: DialogInterface, i: Int -> })
+        builder.setPositiveButton("კარგი") { _: DialogInterface, _: Int -> }
         builder.show()
     }
-
 
 
     private fun checkInputValidation(email: String, password: String) {
@@ -89,25 +121,25 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         }
     }
 
-    private fun loginUserWithEmailAndPassword(email: String, password: String) {
-        if (email.isNotEmpty() && password.isNotEmpty()) {
-            val task = firebaseAuth.signInWithEmailAndPassword(email, password)
-            task.addOnCompleteListener {
-                if (task.isSuccessful) {
-                    val user = firebaseAuth.currentUser
-                    if (user!!.isEmailVerified) {
-                        navigateToPersonalPage()
-                    } else {
-                        user.sendEmailVerification()
-                        showVerificationDialog()
-                    }
-
-                } else {
-                    showDialogError("ვწუხვართ, მითითებული სახელი ან პაროლი არასწორია, სცადე განმეორებით")
-                }
-            }
-        }
-    }
+//    private fun loginUserWithEmailAndPassword(email: String, password: String) {
+//        if (email.isNotEmpty() && password.isNotEmpty()) {
+//            val task = firebaseAuth.signInWithEmailAndPassword(email, password)
+//            task.addOnCompleteListener {
+//                if (task.isSuccessful) {
+//                    val user = firebaseAuth.currentUser
+//                    if (user!!.isEmailVerified) {
+//                        navigateToPersonalPage()
+//                    } else {
+//                        user.sendEmailVerification()
+//                        showVerificationDialog()
+//                    }
+//
+//                } else {
+//                    showDialogError("ვწუხვართ, მითითებული სახელი ან პაროლი არასწორია, სცადე განმეორებით")
+//                }
+//            }
+//        }
+//    }
 
     private fun navigateToRegisterPage() {
         val actionLoginFragmentToRegister =

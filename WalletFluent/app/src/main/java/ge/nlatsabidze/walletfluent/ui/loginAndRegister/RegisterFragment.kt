@@ -1,47 +1,34 @@
-package ge.nlatsabidze.walletfluent.ui.register
+package ge.nlatsabidze.walletfluent.ui.loginAndRegister
 
 import android.content.DialogInterface
-import android.os.Build
-import android.util.Log.d
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.databinding.FragmentRegisterBinding
-import ge.nlatsabidze.walletfluent.ui.login.LoginFragmentDirections
 
 @AndroidEntryPoint
 class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterBinding::inflate) {
 
     private lateinit var firebaseAuth: FirebaseAuth
-    private val registerViewModel: RegisterViewModel by viewModels()
+    private val registerViewModel: LoginAndRegisterViewModel by activityViewModels()
 
 
     override fun start() {
 
         firebaseAuth = FirebaseAuth.getInstance()
 
-        registerViewModel.getMutableLiveData()?.observe(viewLifecycleOwner, { firebaseUser ->
-            if (firebaseUser != null) {
-                navigateToSignInPage(
-                    binding.emailEditText.text.toString(),
-                    binding.passwordEditText.text.toString()
-                )
-            }
-        })
 
-        registerViewModel.showDialogError()?.observe(viewLifecycleOwner, {
-            if (it == true) {
-                showDialogError()
-            }
-        })
+//        registerViewModel.showDialogError()?.observe(viewLifecycleOwner, {
+//            if (it == true) {
+//                showDialogError()
+//            }
+//        })
 
         binding.btnSignUp.setOnClickListener { registerUser() }
     }
@@ -52,6 +39,12 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
             val password = passwordEditText.text.toString()
             checkInputValidation(email, password)
             registerViewModel.register(email, password)
+
+            registerViewModel.getMutableLiveData()?.observe(viewLifecycleOwner, { firebaseUser ->
+                if (firebaseUser != null) {
+                    navigateToSignInPage(binding.emailEditText.text.toString(), binding.passwordEditText.text.toString())
+                }
+            })
         }
     }
 
@@ -90,9 +83,9 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
     }
 
     private fun navigateToSignInPage(email: String, password: String) {
-        val actionRegisterFragmentToPersonal =
+        val actionRegisterToLogin =
             RegisterFragmentDirections.actionRegisterFragmentToLoginFragment2(email, password)
-        findNavController().navigate(actionRegisterFragmentToPersonal)
+        findNavController().navigate(actionRegisterToLogin)
     }
 
     private fun showDialogError() {

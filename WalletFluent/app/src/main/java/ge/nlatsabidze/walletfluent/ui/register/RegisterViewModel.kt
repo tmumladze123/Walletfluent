@@ -13,7 +13,7 @@ class RegisterViewModel @Inject constructor(private val appRepository: AppReposi
     private var userMutableLiveData: MutableLiveData<FirebaseUser>? = null
     private var showDialogError: MutableLiveData<Boolean>? = null
 
-    fun register(email: String, password: String) {
+    /*fun register(email: String, password: String) {
         appRepository.register(email, password)
     }
 
@@ -26,6 +26,6 @@ class RegisterViewModel @Inject constructor(private val appRepository: AppReposi
         showDialogError = appRepository.getVerifyDialogError()
         return showDialogError
     }
-
+*/
 
 }

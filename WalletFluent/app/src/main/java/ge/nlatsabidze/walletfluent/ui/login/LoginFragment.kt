@@ -5,7 +5,9 @@ import android.content.DialogInterface
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.firebase.auth.FirebaseAuth
@@ -13,6 +15,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.databinding.FragmentLoginBinding
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::inflate) {
@@ -23,24 +28,42 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     private val args: LoginFragmentArgs by navArgs()
 
     override fun start() {
+
         firebaseAuth = FirebaseAuth.getInstance()
         binding.tvSignUp.setOnClickListener { navigateToRegisterPage() }
-        binding.btnSignin.setOnClickListener {
-        }
-        binding.tvForgotPassword.setOnClickListener { resetPassword() }
-        setDataFromRegisterPage()
+        binding.btnSignin.setOnClickListener { loginUser() }
+        listners()
+        /* binding.tvForgotPassword.setOnClickListener { resetPassword() }
+         setDataFromRegisterPage()*/
     }
 
+    private fun listners(){
+        viewLifecycleOwner.lifecycleScope.launch {
+            logInViewModel.userMutableLiveFlow.collectLatest { userLogedIn ->
+                if (userLogedIn) {
+                    navigateToPersonalPage()
 
+                }
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            logInViewModel.dialogError.collectLatest { userLogedIn ->
+                if (userLogedIn) {
+                    showErrorDialog()
+                }
+            }
+        }
+    }
     @SuppressLint("ResourceAsColor")
     private fun loginUser() {
-
         with(binding) {
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
 
             checkInputValidation(email, password)
-            loginUserWithEmailAndPassword(email, password)
+            logInViewModel.login(email, password)
+
+
         }
     }
 
@@ -54,6 +77,12 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     private fun showVerificationDialog() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setMessage("დაადასტურეთ მეილი!")
+        builder.setPositiveButton("კარგი", { dialogInterface: DialogInterface, i: Int -> })
+        builder.show()
+    }
+    private fun showErrorDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setMessage("მომხმარებლის სახელი ან პაროლი არასწორია, გთხოვთ სცადოთ თავიდან")
         builder.setPositiveButton("კარგი", { dialogInterface: DialogInterface, i: Int -> })
         builder.show()
     }
@@ -73,7 +102,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
             } else if (password.isEmpty()) {
                 passwordEditTextWrapper.startAnimation(shake)
-                passwordEditTextWrapper.helperText ="ველი არ არის შევსებული"
+                passwordEditTextWrapper.helperText = "ველი არ არის შევსებული"
                 emailEditTextWrapper.helperText = ""
                 passwordEditText.setBackgroundResource(R.drawable.border)
                 emailEditText.setBackgroundResource(R.color.transparent)
@@ -133,8 +162,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     }
 
     private fun resetPassword() {
-        with (binding) {
-            if (emailEditText.text.toString().isNotEmpty()){
+        with(binding) {
+            if (emailEditText.text.toString().isNotEmpty()) {
                 firebaseAuth.sendPasswordResetEmail(binding.emailEditText.text.toString())
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {

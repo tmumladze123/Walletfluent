@@ -19,8 +19,10 @@ import ge.nlatsabidze.walletfluent.databinding.FragmentRegisterBinding
 
 @AndroidEntryPoint
 class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterBinding::inflate) {
+    override fun start() {
+    }
 
-    private lateinit var firebaseAuth: FirebaseAuth
+    /*private lateinit var firebaseAuth: FirebaseAuth
     private val registerViewModel: RegisterViewModel by viewModels()
 
 
@@ -43,7 +45,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
             }
         })
 
-        binding.btnSignUp.setOnClickListener {/* registerUser()*/ }
+        binding.btnSignUp.setOnClickListener { registerUser() }
     }
 
     private fun registerUser() {
@@ -100,5 +102,5 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
         builder.setMessage("ვწუხვართ, მითითებული სახელი ან პაროლი არასწორია, სცადე განმეორებით")
         builder.setPositiveButton("yes", { dialogInterface: DialogInterface, i: Int -> })
         builder.show()
-    }
+    }*/
 }

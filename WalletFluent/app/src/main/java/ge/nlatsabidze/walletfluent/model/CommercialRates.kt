@@ -1,10 +1,11 @@
 package ge.nlatsabidze.walletfluent.model
 
+
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
-data class CurrencyItem(
+data class CommercialRates(
     @Json(name = "buy")
     val buy: Double?,
     @Json(name = "currency")

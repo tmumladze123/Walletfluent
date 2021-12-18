@@ -3,41 +3,60 @@ package ge.nlatsabidze.walletfluent.ui.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import ge.nlatsabidze.walletfluent.AppRepository
+import ge.nlatsabidze.walletfluent.FirebaseRepository
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val appRepository: AppRepository) : ViewModel() {
+class LoginViewModel @Inject constructor(private val firebaseRepository: FirebaseRepository) :
+    ViewModel() {
 
-     private var _userMutableLive= MutableStateFlow<Boolean>(false)
-     val userMutableLiveFlow :MutableStateFlow<Boolean> get()= _userMutableLive
+    private var _userMutableLive = MutableStateFlow<Boolean>(false)
+    val userMutableLiveFlow: MutableStateFlow<Boolean> get() = _userMutableLive
 
-    private var _dialogError = MutableStateFlow(false)
-    val dialogError: MutableStateFlow<Boolean> get() = _dialogError
+    private var _dialogError = MutableStateFlow("")
+    val dialogError: MutableStateFlow<String> get() = _dialogError
 
+    fun login(email: String, password: String) {
 
-     fun login(email: String, password: String) {
-         appRepository.login(email, password)
-         viewModelScope.launch {
-             appRepository.userMutableLiveFlow.collectLatest {
-                 _userMutableLive.value = it
-             }
-         }
-     }
-     fun  changeToFalse(){
-             appRepository.changeFlowToFalse()
-     }
-        /* _userMutableLiveFlow.value=false
-         viewModelScope.launch {
-             appRepository.dialogError.collectLatest {
-                 _dialogError.value=it
-             }
-         }*/
+        firebaseRepository.login(email, password)
+
+        viewModelScope.launch {
+            firebaseRepository.currentUser.collectLatest {
+                _userMutableLive.value = it
+            }
+        }
+
+        viewModelScope.launch {
+            firebaseRepository.repositoryDialog.collectLatest {
+                _dialogError.value = it
+            }
+        }
+
     }
+
+    fun resetPassword(email: String) {
+        firebaseRepository.resetUserPassword(email)
+
+        viewModelScope.launch {
+            firebaseRepository.repositoryDialog.collectLatest {
+                _dialogError.value = it
+            }
+        }
+
+    }
+
+    fun changeUserValue() {
+        firebaseRepository.changeUserFlowValue()
+    }
+
+    fun changeRepositoryValue() {
+        firebaseRepository.changeRepositoryDialogError()
+    }
+
+}
 
 
 

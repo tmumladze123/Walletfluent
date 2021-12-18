@@ -1,6 +1,5 @@
 package ge.nlatsabidze.walletfluent.network
 
-import ge.nlatsabidze.walletfluent.model.CommercialRates
 import ge.nlatsabidze.walletfluent.model.Currency
 import retrofit2.Response
 import retrofit2.http.GET

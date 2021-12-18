@@ -50,7 +50,8 @@ class AppRepository @Inject constructor(private val application: Application) {
 
         }
     }
-    fun changeFlowToFalse(){
+
+    fun changeFlowToFalse() {
         _userMutableLiveFlow.value = false
     }
 }

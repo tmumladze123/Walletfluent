@@ -14,17 +14,8 @@ class FirebaseRepository @Inject constructor(private val application: Applicatio
     private var _currentUser = MutableStateFlow(false)
     val currentUser: MutableStateFlow<Boolean> get() = _currentUser
 
-    private var _dialogError = MutableStateFlow(false)
-    val dialogError: MutableStateFlow<Boolean> get() = _dialogError
-
-    private var _verifyError = MutableStateFlow(false)
-    val verifyError: MutableStateFlow<Boolean> get() = _verifyError
-
-    private var _resetPasswordError = MutableStateFlow(false)
-    val resetPasswordError: MutableStateFlow<Boolean> get() = _resetPasswordError
-
-    private var _resetPasswordDialog = MutableStateFlow(false)
-    val resetPasswordDialog: MutableStateFlow<Boolean> get() = _resetPasswordDialog
+    private var _repositoryDialogError = MutableStateFlow("")
+    val repositoryDialog: MutableStateFlow<String> get() = _repositoryDialogError
 
     fun register(email: String?, password: String?) {
         firebaseAuth.createUserWithEmailAndPassword(email!!, password!!)
@@ -47,10 +38,10 @@ class FirebaseRepository @Inject constructor(private val application: Applicatio
                         _currentUser.value = true
                     } else {
                         firebaseUser.sendEmailVerification()
-                        _verifyError.value = true
+                        _repositoryDialogError.value = "გთხოვთ გაიაროთ ვერიფიკაცია მითითებულ ელ-ფოსტაზე."
                     }
                 } else {
-                    _dialogError.value = true
+                    _repositoryDialogError.value = "ვწუხვართ, მითითებული სახელი ან პაროლი არასწორია, სცადე განმეორებით."
                 }
             }
         }
@@ -61,11 +52,11 @@ class FirebaseRepository @Inject constructor(private val application: Applicatio
             firebaseAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener { userEmail ->
                     if (userEmail.isSuccessful) {
-                        _resetPasswordError.value = true
+                        _repositoryDialogError.value = "მიყევით ინსტრუქციას მითითებულ ელ-ფოსტაზე."
                     }
                 }
         } else {
-            _resetPasswordDialog.value = true
+            _repositoryDialogError.value = "გთხოვთ მიუთითეთ ელ-ფოსტა."
         }
     }
 
@@ -73,19 +64,7 @@ class FirebaseRepository @Inject constructor(private val application: Applicatio
         _currentUser.value = false
     }
 
-    fun changeDialogFlowValue() {
-        _dialogError.value = false
-    }
-
-    fun changeVerifyFlowValue() {
-        _verifyError.value = false
-    }
-
-    fun changeResetFlowValue() {
-        _resetPasswordError.value = false
-    }
-
-    fun changeResetPasswordDialogValue() {
-        _resetPasswordDialog.value = false
+    fun changeRepositoryDialogError() {
+        _repositoryDialogError.value = ""
     }
 }

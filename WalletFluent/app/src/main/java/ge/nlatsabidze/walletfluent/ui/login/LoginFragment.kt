@@ -53,40 +53,14 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            logInViewModel.showDialogError.collect { showDialogError ->
-                if (showDialogError) {
-                    showErrorDialog()
-                    logInViewModel.changeDialogValue()
+            logInViewModel.dialogError.collect { showResetPasswordError ->
+                if (showResetPasswordError != "") {
+                    showDialogError(showResetPasswordError)
+                    logInViewModel.changeRepositoryValue()
                 }
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            logInViewModel.showVerifyError.collect { showVerifyError ->
-                if (showVerifyError) {
-                    showVerificationDialog()
-                    logInViewModel.changeVerifyValue()
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            logInViewModel.showResetPasswordError.collect { showResetPasswordError ->
-                if (showResetPasswordError) {
-                    showDialogError("მიყევით ინსტრუქციას მეილზე")
-                    logInViewModel.changeResetPasswordErrorValue()
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            logInViewModel.showResetDialogError.collect { showResetPasswordError ->
-                if (showResetPasswordError) {
-                    showDialogError("შეიყვანეთ თქვენი მეილი")
-                    logInViewModel.changeResetDialogError()
-                }
-            }
-        }
     }
 
     @SuppressLint("ResourceAsColor")

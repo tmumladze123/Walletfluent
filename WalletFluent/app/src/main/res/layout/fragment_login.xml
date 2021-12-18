@@ -28,18 +28,18 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="140dp"
         android:layout_marginRight="20dp"
-        app:helperTextTextColor="@color/red"
-        app:startIconDrawable="@drawable/ic_email"
         android:textColorHint="@color/white"
-        app:layout_constraintTop_toBottomOf="@+id/tvWelcome">
+        app:helperTextTextColor="@color/red"
+        app:layout_constraintTop_toBottomOf="@+id/tvWelcome"
+        app:startIconDrawable="@drawable/ic_email">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/emailEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:background="@color/transparent"
-            android:hint="@string/email" />
+            android:hint="@string/email"
+            android:textColor="@color/white" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -50,19 +50,19 @@
         android:layout_marginLeft="20dp"
         android:layout_marginTop="40dp"
         android:layout_marginRight="20dp"
-        app:helperTextTextColor="@color/red"
         android:hint="@string/password"
-        app:startIconDrawable="@drawable/ic_lock"
         android:textColorHint="@color/white"
-        app:layout_constraintTop_toBottomOf="@+id/emailEditTextWrapper">
+        app:helperTextTextColor="@color/red"
+        app:layout_constraintTop_toBottomOf="@+id/emailEditTextWrapper"
+        app:startIconDrawable="@drawable/ic_lock">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordEditText"
-            android:inputType="textPassword"
-            android:textColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/transparent" />
+            android:background="@color/transparent"
+            android:inputType="text"
+            android:textColor="@color/white" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -92,7 +92,7 @@
         app:layout_constraintTop_toBottomOf="@+id/passwordEditTextWrapper" />
 
     <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvRegister"
+        android:id="@+id/tvSignUp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="20dp"
@@ -103,6 +103,7 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tvForgotPassword"
         android:layout_width="wrap_content"
@@ -115,9 +116,6 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

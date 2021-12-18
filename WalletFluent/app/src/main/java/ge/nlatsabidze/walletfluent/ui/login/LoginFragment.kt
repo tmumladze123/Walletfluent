@@ -2,55 +2,93 @@ package ge.nlatsabidze.walletfluent.ui.login
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
-import android.content.res.ColorStateList
-import android.graphics.Color
-import android.graphics.Color.RED
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.firebase.auth.FirebaseAuth
+import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.databinding.FragmentLoginBinding
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
-
+@AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::inflate) {
 
+    private val logInViewModel: LoginViewModel by viewModels()
+
     private lateinit var firebaseAuth: FirebaseAuth
-    private val loginFragmentViewModel: LoginViewModel by viewModels()
+    private val args: LoginFragmentArgs by navArgs()
 
     override fun start() {
+
         firebaseAuth = FirebaseAuth.getInstance()
-        binding.btnSignin.setOnClickListener {
-            loginUser() }
-        binding.tvRegister.setOnClickListener { navigateToRegisterPage() }
+        binding.tvSignUp.setOnClickListener { navigateToRegisterPage() }
+        binding.btnSignin.setOnClickListener { loginUser() }
+        listners()
+        /* binding.tvForgotPassword.setOnClickListener { resetPassword() }
+         setDataFromRegisterPage()*/
     }
 
+    private fun listners(){
+        viewLifecycleOwner.lifecycleScope.launch {
+            logInViewModel.userMutableLiveFlow.collect { userLogedIn ->
+                if (userLogedIn) {
+                    navigateToPersonalPage()
+                    logInViewModel.changeToFalse()
+
+
+                }
+            }
+        }
+       /* viewLifecycleOwner.lifecycleScope.launch {
+            logInViewModel.dialogError.collectLatest { userLogedIn ->
+                if (userLogedIn) {
+                    showErrorDialog()
+                }
+            }
+        }*/
+    }
     @SuppressLint("ResourceAsColor")
     private fun loginUser() {
-
         with(binding) {
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
+
             checkInputValidation(email, password)
-            navigateToPersonalPage(email, password)
+            logInViewModel.login(email, password)
+
+
         }
     }
 
-    private fun navigateToRegisterPage() {
-        val actionLoginFragmentToRegister =
-            LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
-        findNavController().navigate(actionLoginFragmentToRegister)
-    }
-
-    private fun showDialogError() {
+    private fun showDialogError(message: String) {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setMessage("ვწუხვართ, მითითებული სახელი ან პაროლი არასწორია, სცადე განმეორებით")
+        builder.setMessage(message)
         builder.setPositiveButton("yes", { dialogInterface: DialogInterface, i: Int -> })
         builder.show()
     }
+
+    private fun showVerificationDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setMessage("დაადასტურეთ მეილი!")
+        builder.setPositiveButton("კარგი", { dialogInterface: DialogInterface, i: Int -> })
+        builder.show()
+    }
+    private fun showErrorDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setMessage("მომხმარებლის სახელი ან პაროლი არასწორია, გთხოვთ სცადოთ თავიდან")
+        builder.setPositiveButton("კარგი", { dialogInterface: DialogInterface, i: Int -> })
+        builder.show()
+    }
+
 
     private fun checkInputValidation(email: String, password: String) {
         with(binding) {
@@ -66,7 +104,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
             } else if (password.isEmpty()) {
                 passwordEditTextWrapper.startAnimation(shake)
-                passwordEditTextWrapper.helperText ="ველი არ არის შევსებული"
+                passwordEditTextWrapper.helperText = "ველი არ არის შევსებული"
                 emailEditTextWrapper.helperText = ""
                 passwordEditText.setBackgroundResource(R.drawable.border)
                 emailEditText.setBackgroundResource(R.color.transparent)
@@ -76,8 +114,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                 passwordEditTextWrapper.helperText = ""
                 emailEditText.setBackgroundResource(R.drawable.border)
                 passwordEditText.setBackgroundResource(R.color.transparent)
-            }
-            else {
+            } else {
                 passwordEditTextWrapper.helperText = ""
                 emailEditTextWrapper.helperText = ""
                 emailEditText.setBackgroundResource(R.color.transparent)
@@ -87,20 +124,55 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         }
     }
 
-    private fun navigateToPersonalPage(email: String, password: String) {
+    private fun loginUserWithEmailAndPassword(email: String, password: String) {
         if (email.isNotEmpty() && password.isNotEmpty()) {
             val task = firebaseAuth.signInWithEmailAndPassword(email, password)
             task.addOnCompleteListener {
                 if (task.isSuccessful) {
-                    val actionLoginFragmentToPersonal =
-                        LoginFragmentDirections.actionLoginFragmentToPersonalInfoFragment()
-                    findNavController().navigate(actionLoginFragmentToPersonal)
+                    val user = firebaseAuth.currentUser
+                    if (user!!.isEmailVerified) {
+                        navigateToPersonalPage()
+                    } else {
+                        user.sendEmailVerification()
+                        showVerificationDialog()
+                    }
+
                 } else {
-                    showDialogError()
+                    showDialogError("ვწუხვართ, მითითებული სახელი ან პაროლი არასწორია, სცადე განმეორებით")
                 }
             }
         }
     }
 
+    private fun navigateToRegisterPage() {
+        val actionLoginFragmentToRegister =
+            LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
+        findNavController().navigate(actionLoginFragmentToRegister)
+    }
 
+    private fun navigateToPersonalPage() {
+        val actionLoginFragmentToPersonal =
+            LoginFragmentDirections.actionLoginFragmentToPersonalInfoFragment()
+        findNavController().navigate(actionLoginFragmentToPersonal)
+    }
+
+    private fun setDataFromRegisterPage() {
+        if (args.email != "email" && args.password != "password") {
+            binding.emailEditText.setText(args.email)
+            binding.passwordEditText.setText(args.password)
+        }
+    }
+
+    private fun resetPassword() {
+        with(binding) {
+            if (emailEditText.text.toString().isNotEmpty()) {
+                firebaseAuth.sendPasswordResetEmail(binding.emailEditText.text.toString())
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                            showDialogError("მიყევით ინსტრუქციას მითითებულ მეილზე")
+                        }
+                    }
+            }
+        }
+    }
 }

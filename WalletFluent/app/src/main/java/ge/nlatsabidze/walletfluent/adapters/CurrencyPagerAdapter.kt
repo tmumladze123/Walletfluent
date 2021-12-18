@@ -8,7 +8,7 @@ import ge.nlatsabidze.walletfluent.ui.currency.currencyPages.calculatorCurrencie
 import ge.nlatsabidze.walletfluent.ui.currency.currencyPages.countryCurrencies.CurrencyPageFragment
 
 
-class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
+class CurrencyPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
     companion object {
         const val NUM_TABS = 2

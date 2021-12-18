@@ -6,6 +6,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -22,7 +23,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::inflate) {
 
-    private val logInViewModel: LoginViewModel by viewModels()
+    private val logInViewModel: LoginViewModel by activityViewModels()
 
     private lateinit var firebaseAuth: FirebaseAuth
     private val args: LoginFragmentArgs by navArgs()
@@ -31,31 +32,63 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
         firebaseAuth = FirebaseAuth.getInstance()
         binding.tvSignUp.setOnClickListener { navigateToRegisterPage() }
+
         binding.btnSignin.setOnClickListener { loginUser() }
-        listners()
-        /* binding.tvForgotPassword.setOnClickListener { resetPassword() }
-         setDataFromRegisterPage()*/
+
+        binding.tvForgotPassword.setOnClickListener { resetPassword() }
+
+        listeners()
+//        setDataFromRegisterPage()
     }
 
-    private fun listners(){
+    private fun listeners() {
+
         viewLifecycleOwner.lifecycleScope.launch {
             logInViewModel.userMutableLiveFlow.collect { userLogedIn ->
                 if (userLogedIn) {
                     navigateToPersonalPage()
-                    logInViewModel.changeToFalse()
-
-
+                    logInViewModel.changeUserValue()
                 }
             }
         }
-       /* viewLifecycleOwner.lifecycleScope.launch {
-            logInViewModel.dialogError.collectLatest { userLogedIn ->
-                if (userLogedIn) {
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            logInViewModel.showDialogError.collect { showDialogError ->
+                if (showDialogError) {
                     showErrorDialog()
+                    logInViewModel.changeDialogValue()
                 }
             }
-        }*/
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            logInViewModel.showVerifyError.collect { showVerifyError ->
+                if (showVerifyError) {
+                    showVerificationDialog()
+                    logInViewModel.changeVerifyValue()
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            logInViewModel.showResetPasswordError.collect { showResetPasswordError ->
+                if (showResetPasswordError) {
+                    showDialogError("მიყევით ინსტრუქციას მეილზე")
+                    logInViewModel.changeResetPasswordErrorValue()
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            logInViewModel.showResetDialogError.collect { showResetPasswordError ->
+                if (showResetPasswordError) {
+                    showDialogError("შეიყვანეთ თქვენი მეილი")
+                    logInViewModel.changeResetDialogError()
+                }
+            }
+        }
     }
+
     @SuppressLint("ResourceAsColor")
     private fun loginUser() {
         with(binding) {
@@ -64,7 +97,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
             checkInputValidation(email, password)
             logInViewModel.login(email, password)
-
 
         }
     }
@@ -82,6 +114,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         builder.setPositiveButton("კარგი", { dialogInterface: DialogInterface, i: Int -> })
         builder.show()
     }
+
     private fun showErrorDialog() {
         val builder = AlertDialog.Builder(requireContext())
         builder.setMessage("მომხმარებლის სახელი ან პაროლი არასწორია, გთხოვთ სცადოთ თავიდან")
@@ -124,26 +157,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         }
     }
 
-    private fun loginUserWithEmailAndPassword(email: String, password: String) {
-        if (email.isNotEmpty() && password.isNotEmpty()) {
-            val task = firebaseAuth.signInWithEmailAndPassword(email, password)
-            task.addOnCompleteListener {
-                if (task.isSuccessful) {
-                    val user = firebaseAuth.currentUser
-                    if (user!!.isEmailVerified) {
-                        navigateToPersonalPage()
-                    } else {
-                        user.sendEmailVerification()
-                        showVerificationDialog()
-                    }
-
-                } else {
-                    showDialogError("ვწუხვართ, მითითებული სახელი ან პაროლი არასწორია, სცადე განმეორებით")
-                }
-            }
-        }
-    }
-
     private fun navigateToRegisterPage() {
         val actionLoginFragmentToRegister =
             LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
@@ -165,14 +178,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
     private fun resetPassword() {
         with(binding) {
-            if (emailEditText.text.toString().isNotEmpty()) {
-                firebaseAuth.sendPasswordResetEmail(binding.emailEditText.text.toString())
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            showDialogError("მიყევით ინსტრუქციას მითითებულ მეილზე")
-                        }
-                    }
-            }
+            val email = emailEditText.text.toString()
+            logInViewModel.resetPassword(email)
         }
     }
 }

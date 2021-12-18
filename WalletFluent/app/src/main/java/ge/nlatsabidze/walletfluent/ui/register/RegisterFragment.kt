@@ -8,6 +8,7 @@ import android.view.animation.AnimationUtils
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
@@ -15,35 +16,19 @@ import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.databinding.FragmentRegisterBinding
+import ge.nlatsabidze.walletfluent.ui.login.LoginViewModel
 
 
 @AndroidEntryPoint
 class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterBinding::inflate) {
-    override fun start() {
-    }
 
-    /*private lateinit var firebaseAuth: FirebaseAuth
-    private val registerViewModel: RegisterViewModel by viewModels()
+    private lateinit var firebaseAuth: FirebaseAuth
+    private val loginViewModel: LoginViewModel by activityViewModels()
 
 
     override fun start() {
 
         firebaseAuth = FirebaseAuth.getInstance()
-
-        registerViewModel.getMutableLiveData()?.observe(viewLifecycleOwner, { firebaseUser ->
-            if (firebaseUser != null) {
-                navigateToSignInPage(
-                    binding.emailEditText.text.toString(),
-                    binding.passwordEditText.text.toString()
-                )
-            }
-        })
-
-        registerViewModel.showDialogError()?.observe(viewLifecycleOwner, {
-            if (it == true) {
-                showDialogError()
-            }
-        })
 
         binding.btnSignUp.setOnClickListener { registerUser() }
     }
@@ -53,7 +38,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
             checkInputValidation(email, password)
-            registerViewModel.register(email, password)
+//            loginViewModel.register(email, password)
         }
     }
 
@@ -102,5 +87,5 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
         builder.setMessage("ვწუხვართ, მითითებული სახელი ან პაროლი არასწორია, სცადე განმეორებით")
         builder.setPositiveButton("yes", { dialogInterface: DialogInterface, i: Int -> })
         builder.show()
-    }*/
+    }
 }

@@ -1,15 +1,14 @@
 package ge.nlatsabidze.walletfluent.ui.register
 
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseUser
 import dagger.hilt.android.lifecycle.HiltViewModel
-import ge.nlatsabidze.walletfluent.AppRepository
+import ge.nlatsabidze.walletfluent.FirebaseRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class RegisterViewModel @Inject constructor(private val appRepository: AppRepository) :ViewModel() {
+class RegisterViewModel @Inject constructor(private val firebaseRepository: FirebaseRepository) :ViewModel() {
     private var userMutableLiveData: MutableLiveData<FirebaseUser>? = null
     private var showDialogError: MutableLiveData<Boolean>? = null
 

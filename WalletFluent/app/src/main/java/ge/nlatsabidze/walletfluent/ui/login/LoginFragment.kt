@@ -39,20 +39,22 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
     private fun listners(){
         viewLifecycleOwner.lifecycleScope.launch {
-            logInViewModel.userMutableLiveFlow.collectLatest { userLogedIn ->
+            logInViewModel.userMutableLiveFlow.collect { userLogedIn ->
                 if (userLogedIn) {
                     navigateToPersonalPage()
+                    logInViewModel.changeToFalse()
+
 
                 }
             }
         }
-        viewLifecycleOwner.lifecycleScope.launch {
+       /* viewLifecycleOwner.lifecycleScope.launch {
             logInViewModel.dialogError.collectLatest { userLogedIn ->
                 if (userLogedIn) {
                     showErrorDialog()
                 }
             }
-        }
+        }*/
     }
     @SuppressLint("ResourceAsColor")
     private fun loginUser() {

@@ -13,29 +13,32 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(private val appRepository: AppRepository) : ViewModel() {
 
-    private var _userMutableLiveFlow = MutableStateFlow<Boolean>(false)
-    val userMutableLiveFlow :MutableStateFlow<Boolean> get()= _userMutableLiveFlow
+     private var _userMutableLive= MutableStateFlow<Boolean>(false)
+     val userMutableLiveFlow :MutableStateFlow<Boolean> get()= _userMutableLive
 
     private var _dialogError = MutableStateFlow(false)
     val dialogError: MutableStateFlow<Boolean> get() = _dialogError
 
 
      fun login(email: String, password: String) {
-        appRepository.login(email, password)
-        viewModelScope.launch {
-            appRepository.userMutableLiveFlow.collectLatest {
-                _userMutableLiveFlow.value=it
-            }
-
-        }
-         _userMutableLiveFlow.value=false
+         appRepository.login(email, password)
+         viewModelScope.launch {
+             appRepository.userMutableLiveFlow.collectLatest {
+                 _userMutableLive.value = it
+             }
+         }
+     }
+     fun  changeToFalse(){
+             appRepository.changeFlowToFalse()
+     }
+        /* _userMutableLiveFlow.value=false
          viewModelScope.launch {
              appRepository.dialogError.collectLatest {
                  _dialogError.value=it
              }
-         }
+         }*/
     }
 
 
 
-}
+

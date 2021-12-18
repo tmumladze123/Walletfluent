@@ -18,19 +18,19 @@ import javax.inject.Inject
 class AppRepository @Inject constructor(private val application: Application) {
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    var result: Boolean = false
-    private val userMutableLiveFlow = MutableStateFlow(false);
-    private val userMutableLiveData: MutableLiveData<FirebaseUser> = MutableLiveData()
-    private val dialogVerifyError: MutableLiveData<Boolean> = MutableLiveData()
-    private val taskDialogError: MutableLiveData<Boolean> = MutableLiveData()
+
+    private var _userMutableLiveFlow = MutableStateFlow(false)
+    val userMutableLiveFlow: MutableStateFlow<Boolean> get() = _userMutableLiveFlow
+    private var _dialogError = MutableStateFlow(false)
+    val dialogError: MutableStateFlow<Boolean> get() = _dialogError
 
     fun register(email: String?, password: String?) {
         firebaseAuth.createUserWithEmailAndPassword(email!!, password!!)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    userMutableLiveData.postValue(firebaseAuth.currentUser)
+                    //  _userMutableLiveFlow.value = true
                 } else {
-                    taskDialogError.postValue(true)
+
                 }
             }
     }
@@ -38,27 +38,19 @@ class AppRepository @Inject constructor(private val application: Application) {
     fun login(email: String?, password: String?) {
         d("esaaa :", password.toString() + "  " + email.toString())
         if (email!!.isNotEmpty() && password!!.isNotEmpty()) {
-            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
-                result = it.isSuccessful
+            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener { Task ->
+                if (Task.isSuccessful) {
+                    _dialogError.value = false
+                    _userMutableLiveFlow.value = true
+                } else {
+                    _userMutableLiveFlow.value = false
+                    _dialogError.value = true
+                }
             }
 
         }
     }
-
-    fun getUserMutableLiveData(): MutableLiveData<FirebaseUser> {
-        return userMutableLiveData
+    fun changeFlowToFalse(){
+        _userMutableLiveFlow.value = false
     }
-
-    fun getTaskDialogError(): MutableLiveData<Boolean> {
-        return taskDialogError
-    }
-
-    fun getVerifyDialogError(): MutableLiveData<Boolean> {
-        return dialogVerifyError
-    }
-
-    fun getFlow(): MutableStateFlow<Boolean> {
-        return MutableStateFlow(result)
-    }
-
 }

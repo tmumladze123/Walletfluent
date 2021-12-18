@@ -19,6 +19,24 @@ class LoginViewModel @Inject constructor(private val firebaseRepository: Firebas
     private var _dialogError = MutableStateFlow("")
     val dialogError: MutableStateFlow<String> get() = _dialogError
 
+    fun register(email: String, password: String) {
+
+        firebaseRepository.register(email, password)
+
+        viewModelScope.launch {
+            firebaseRepository.currentUser.collectLatest {
+                _userMutableLive.value = it
+            }
+        }
+
+        viewModelScope.launch {
+            firebaseRepository.repositoryDialog.collectLatest {
+                _dialogError.value = it
+            }
+        }
+
+    }
+
     fun login(email: String, password: String) {
 
         firebaseRepository.login(email, password)
@@ -45,7 +63,6 @@ class LoginViewModel @Inject constructor(private val firebaseRepository: Firebas
                 _dialogError.value = it
             }
         }
-
     }
 
     fun changeUserValue() {

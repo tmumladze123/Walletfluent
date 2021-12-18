@@ -38,7 +38,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         binding.tvForgotPassword.setOnClickListener { resetPassword() }
 
         listeners()
-//        setDataFromRegisterPage()
+        setDataFromRegisterPage()
     }
 
     private fun listeners() {

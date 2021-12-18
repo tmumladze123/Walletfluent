@@ -1,40 +1,43 @@
 package ge.nlatsabidze.walletfluent.ui.currency
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.viewpager2.widget.ViewPager2
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.viewModels
+import androidx.viewpager.widget.ViewPager
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
-import ge.nlatsabidze.walletfluent.adapters.CurrencyViewPager
+import ge.nlatsabidze.walletfluent.adapters.ViewPagerAdapter
 import ge.nlatsabidze.walletfluent.databinding.FragmentCurrencyBinding
+import ge.nlatsabidze.walletfluent.ui.crypto.CryptoFragment
+
+
 @AndroidEntryPoint
 class CurrencyFragment : BaseFragment<FragmentCurrencyBinding>(FragmentCurrencyBinding::inflate) {
+
+    private val currencyViewModel: CurrencyViewModel by viewModels()
+
     override fun start() {
-    createAdapter()
-    }
-    fun createAdapter(){
-        val pager=binding.viewPager
-        val tabLayout=binding.tabLayout
-        //pager.adapter = galleryAdapter(this)
-        pager.adapter = CurrencyViewPager()
-        pager.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-        TabLayoutMediator(tabLayout, pager) {tab, position ->
-            when (position){
-                0 -> tab.text = "კურსები"
-                1 -> tab.text = "ისტორია"
-                2 -> tab.text = "კალკულატორი"
-            }
+//        currencyViewModel.getCommercialRates()
+//
+//        lifecycleScope.launch {
+//            currencyViewModel.commercialRates.collectLatest {
+//                d("dasdas", it.toString())
+//            }
+//        }
+        val currencyPages = arrayOf("კურსები", "კალკულატორი")
+
+        val viewPager = binding.viewPager
+        val tabLayout = binding.tabLayout
+
+        val adapter = ViewPagerAdapter(childFragmentManager, lifecycle)
+        viewPager.adapter = adapter
+
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = currencyPages[position]
         }.attach()
-
     }
-
 
 }

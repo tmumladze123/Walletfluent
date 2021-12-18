@@ -35,7 +35,7 @@ class AppRepository @Inject constructor(private val application: Application) {
             }
     }
 
-     fun login(email: String?, password: String?) {
+    fun login(email: String?, password: String?) {
         d("esaaa :", password.toString() + "  " + email.toString())
         if (email!!.isNotEmpty() && password!!.isNotEmpty()) {
             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener {
@@ -44,19 +44,21 @@ class AppRepository @Inject constructor(private val application: Application) {
 
         }
     }
-        fun getUserMutableLiveData(): MutableLiveData<FirebaseUser> {
-            return userMutableLiveData
-        }
 
-        fun getTaskDialogError(): MutableLiveData<Boolean> {
-            return taskDialogError
-        }
+    fun getUserMutableLiveData(): MutableLiveData<FirebaseUser> {
+        return userMutableLiveData
+    }
 
-        fun getVerifyDialogError(): MutableLiveData<Boolean> {
-            return dialogVerifyError
-        }
-        fun getFlow():   MutableStateFlow <Boolean> {
+    fun getTaskDialogError(): MutableLiveData<Boolean> {
+        return taskDialogError
+    }
+
+    fun getVerifyDialogError(): MutableLiveData<Boolean> {
+        return dialogVerifyError
+    }
+
+    fun getFlow(): MutableStateFlow<Boolean> {
         return MutableStateFlow(result)
-        }
+    }
 
 }

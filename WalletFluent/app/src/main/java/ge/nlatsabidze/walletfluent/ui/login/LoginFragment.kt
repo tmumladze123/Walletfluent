@@ -24,10 +24,13 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
     override fun start() {
         firebaseAuth = FirebaseAuth.getInstance()
+
         binding.tvSignUp.setOnClickListener { navigateToRegisterPage() }
-        binding.btnSignin.setOnClickListener {
-        }
+
+        binding.btnSignin.setOnClickListener { loginUser() }
+
         binding.tvForgotPassword.setOnClickListener { resetPassword() }
+
         setDataFromRegisterPage()
     }
 

@@ -16,20 +16,13 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object ApiModule {
     @Provides
-    fun provideBaseUrl() = "https://run.mocky.io/v3/"
+    fun provideBaseUrl() = "https://test-api.tbcbank.ge/v1/"
 
     @Provides
     @Singleton
     fun provideRetrofitInstance(BASE_URL: String): getCurrencyApi =
-        Retrofit.Builder()
-            .baseUrl(BASE_URL)
-            .addConverterFactory(
-                MoshiConverterFactory.create(
-                    Moshi.Builder().addLast(
-                        KotlinJsonAdapterFactory()
-                    ).build()
-                )
-            )
+        Retrofit.Builder().baseUrl(BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create(Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()))
             .build()
             .create(getCurrencyApi::class.java)
 }

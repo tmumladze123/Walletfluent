@@ -1,22 +1,28 @@
 package ge.nlatsabidze.walletfluent.adapters
 
-import android.view.LayoutInflater
-import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
-import ge.nlatsabidze.walletfluent.databinding.CurrencyPageBinding
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import androidx.lifecycle.Lifecycle
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import ge.nlatsabidze.walletfluent.ui.currency.currencyPages.calculatorCurrencies.CalculatorPageFragment
+import ge.nlatsabidze.walletfluent.ui.currency.currencyPages.countryCurrencies.CurrencyPageFragment
 
 
-class CurrencyViewPager (): RecyclerView.Adapter<CurrencyViewPager.ViewHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyViewPager.ViewHolder =
-        ViewHolder(CurrencyPageBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+class ViewPagerAdapter(fragmentManager: FragmentManager, lifecycle: Lifecycle) : FragmentStateAdapter(fragmentManager, lifecycle) {
 
-
-    override fun onBindViewHolder(holder: CurrencyViewPager.ViewHolder, position: Int) {
+    companion object {
+        const val NUM_TABS = 2
     }
 
-    override fun getItemCount(): Int =3
+    override fun getItemCount(): Int {
+        return NUM_TABS
+    }
 
-    inner class ViewHolder(val binding: CurrencyPageBinding): RecyclerView.ViewHolder(binding.root){
-
+    override fun createFragment(position: Int): Fragment {
+        if (position == 0) {
+            return CurrencyPageFragment()
+        }
+        return CalculatorPageFragment()
     }
 }
+

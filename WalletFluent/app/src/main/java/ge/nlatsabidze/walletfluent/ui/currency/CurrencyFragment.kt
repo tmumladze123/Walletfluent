@@ -11,16 +11,7 @@ import ge.nlatsabidze.walletfluent.databinding.FragmentCurrencyBinding
 @AndroidEntryPoint
 class CurrencyFragment : BaseFragment<FragmentCurrencyBinding>(FragmentCurrencyBinding::inflate) {
 
-    private val currencyViewModel: CurrencyViewModel by viewModels()
-
     override fun start() {
-//        currencyViewModel.getCommercialRates()
-//
-//        lifecycleScope.launch {
-//            currencyViewModel.commercialRates.collectLatest {
-//                d("dasdas", it.toString())
-//            }
-//        }
         val currencyPages = arrayOf("კურსები", "კალკულატორი")
 
         val viewPager = binding.viewPager

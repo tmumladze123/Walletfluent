@@ -8,7 +8,12 @@ import ge.nlatsabidze.walletfluent.model.CommercialRates
 
 
 class CurrencyAdapter : RecyclerView.Adapter<CurrencyAdapter.CurrencyItemViewHolder>() {
-    var currencies : List<CommercialRates> = listOf()
+
+    var currencies: List<CommercialRates> = listOf()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     inner class CurrencyItemViewHolder(private val binding: CurrencyItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -24,13 +29,7 @@ class CurrencyAdapter : RecyclerView.Adapter<CurrencyAdapter.CurrencyItemViewHol
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyItemViewHolder =
-        CurrencyItemViewHolder(
-            CurrencyItemBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-        )
+        CurrencyItemViewHolder(CurrencyItemBinding.inflate(LayoutInflater.from(parent.context), parent, false))
 
     override fun onBindViewHolder(holder: CurrencyItemViewHolder, position: Int) {
         holder.onBind()

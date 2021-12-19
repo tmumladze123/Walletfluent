@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(private val firebaseRepository: FirebaseRepository) :
+class LoginRegisterViewModel @Inject constructor(private val firebaseRepository: FirebaseRepository) :
     ViewModel() {
 
     private var _userMutableLive = MutableStateFlow<Boolean>(false)

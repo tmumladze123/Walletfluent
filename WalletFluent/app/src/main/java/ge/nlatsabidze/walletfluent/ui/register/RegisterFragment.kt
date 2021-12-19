@@ -1,15 +1,9 @@
 package ge.nlatsabidze.walletfluent.ui.register
 
-import android.content.DialogInterface
-import android.os.Build
-import android.util.Log.d
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
@@ -17,7 +11,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.databinding.FragmentRegisterBinding
-import ge.nlatsabidze.walletfluent.ui.login.LoginViewModel
+import ge.nlatsabidze.walletfluent.extensions.showDialogError
+import ge.nlatsabidze.walletfluent.ui.login.LoginRegisterViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -26,7 +21,7 @@ import kotlinx.coroutines.launch
 class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterBinding::inflate) {
 
     private lateinit var firebaseAuth: FirebaseAuth
-    private val loginViewModel: LoginViewModel by activityViewModels()
+    private val loginViewModel: LoginRegisterViewModel by activityViewModels()
 
 
     override fun start() {
@@ -107,17 +102,8 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
         findNavController().navigate(actionRegisterFragmentToPersonal)
     }
 
-    private fun showDialogError() {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setMessage("ვწუხვართ, მითითებული სახელი ან პაროლი არასწორია, სცადე განმეორებით")
-        builder.setPositiveButton("yes", { dialogInterface: DialogInterface, i: Int -> })
-        builder.show()
-    }
-
     private fun showDialogError(message: String) {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setMessage(message)
-        builder.setPositiveButton("yes", { dialogInterface: DialogInterface, i: Int -> })
-        builder.show()
+        builder.showDialogError(message, requireContext())
     }
 }

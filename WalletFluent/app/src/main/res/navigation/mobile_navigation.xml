@@ -25,7 +25,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="ge.nlatsabidze.walletfluent.ui.login.LoginFragment"
+        android:name="ge.nlatsabidze.walletfluent.ui.entry.LoginFragment"
         android:label="@string/enter"
         tools:layout="@layout/fragment_login" >
         <action
@@ -50,7 +50,7 @@
 
     <fragment
         android:id="@+id/registerFragment"
-        android:name="ge.nlatsabidze.walletfluent.ui.register.RegisterFragment"
+        android:name="ge.nlatsabidze.walletfluent.ui.entry.RegisterFragment"
         android:label="@string/register"
         tools:layout="@layout/fragment_register" >
         <action

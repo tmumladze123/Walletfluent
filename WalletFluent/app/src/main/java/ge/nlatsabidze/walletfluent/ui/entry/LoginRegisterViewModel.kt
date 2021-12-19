@@ -1,4 +1,4 @@
-package ge.nlatsabidze.walletfluent.ui.login
+package ge.nlatsabidze.walletfluent.ui.entry
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

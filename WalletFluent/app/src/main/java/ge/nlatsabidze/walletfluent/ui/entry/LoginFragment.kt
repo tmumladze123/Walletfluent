@@ -1,66 +1,83 @@
-package ge.nlatsabidze.walletfluent.ui.register
+package ge.nlatsabidze.walletfluent.ui.entry
 
+import android.annotation.SuppressLint
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.R
-import ge.nlatsabidze.walletfluent.databinding.FragmentRegisterBinding
+import ge.nlatsabidze.walletfluent.databinding.FragmentLoginBinding
 import ge.nlatsabidze.walletfluent.extensions.showDialogError
-import ge.nlatsabidze.walletfluent.ui.login.LoginRegisterViewModel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-
 @AndroidEntryPoint
-class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterBinding::inflate) {
+class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::inflate) {
+
+    private val logInViewModel: LoginRegisterViewModel by activityViewModels()
 
     private lateinit var firebaseAuth: FirebaseAuth
-    private val loginViewModel: LoginRegisterViewModel by activityViewModels()
-
+    private val args: LoginFragmentArgs by navArgs()
 
     override fun start() {
 
         firebaseAuth = FirebaseAuth.getInstance()
+        binding.tvSignUp.setOnClickListener { navigateToRegisterPage() }
 
-        binding.btnSignUp.setOnClickListener { registerUser() }
+        binding.btnSignin.setOnClickListener { loginUser() }
+
+        binding.tvForgotPassword.setOnClickListener { resetPassword() }
 
         listeners()
-    }
-
-    private fun registerUser() {
-        with(binding) {
-            val email = emailEditText.text.toString()
-            val password = passwordEditText.text.toString()
-            checkInputValidation(email, password)
-            loginViewModel.register(email, password)
-        }
+        setDataFromRegisterPage()
     }
 
     private fun listeners() {
+
         viewLifecycleOwner.lifecycleScope.launch {
-            loginViewModel.userMutableLiveFlow.collect { userLogedIn ->
+            logInViewModel.userMutableLiveFlow.collect { userLogedIn ->
                 if (userLogedIn) {
-                    navigateToSignInPage(binding.emailEditText.text.toString(), binding.passwordEditText.text.toString())
-                    loginViewModel.changeUserValue()
+                    navigateToPersonalPage()
+                    logInViewModel.changeUserValue()
                 }
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            loginViewModel.dialogError.collect { showDialogError ->
-                if (showDialogError != "") {
-                    showDialogError(showDialogError)
-                    loginViewModel.changeRepositoryValue()
+            logInViewModel.dialogError.collect { showResetPasswordError ->
+                if (showResetPasswordError != "") {
+                    showDialogError(showResetPasswordError)
+                    logInViewModel.changeRepositoryValue()
                 }
             }
         }
+
     }
+
+    @SuppressLint("ResourceAsColor")
+    private fun loginUser() {
+        with(binding) {
+            val email = emailEditText.text.toString()
+            val password = passwordEditText.text.toString()
+
+            checkInputValidation(email, password)
+            logInViewModel.login(email, password)
+        }
+    }
+
+    private fun resetPassword() {
+        with(binding) {
+            val email = emailEditText.text.toString()
+            logInViewModel.resetPassword(email)
+        }
+    }
+
 
     private fun checkInputValidation(email: String, password: String) {
         with(binding) {
@@ -96,14 +113,25 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
         }
     }
 
-    private fun navigateToSignInPage(email: String, password: String) {
-        val actionRegisterFragmentToPersonal =
-            RegisterFragmentDirections.actionRegisterFragmentToLoginFragment2(email, password)
-        findNavController().navigate(actionRegisterFragmentToPersonal)
+    private fun navigateToRegisterPage() {
+        val actionLoginFragmentToRegister = LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
+        findNavController().navigate(actionLoginFragmentToRegister)
+    }
+
+    private fun navigateToPersonalPage() {
+        val actionLoginFragmentToPersonal = LoginFragmentDirections.actionLoginFragmentToPersonalInfoFragment()
+        findNavController().navigate(actionLoginFragmentToPersonal)
     }
 
     private fun showDialogError(message: String) {
         val builder = AlertDialog.Builder(requireContext())
         builder.showDialogError(message, requireContext())
+    }
+
+    private fun setDataFromRegisterPage() {
+        if (args.email != "email" && args.password != "password") {
+            binding.emailEditText.setText(args.email)
+            binding.passwordEditText.setText(args.password)
+        }
     }
 }

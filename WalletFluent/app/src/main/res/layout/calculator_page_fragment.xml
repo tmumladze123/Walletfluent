@@ -11,6 +11,7 @@
         android:id="@+id/etNumber"
         android:layout_width="150dp"
         android:textSize="30sp"
+        android:maxLength="7"
         android:layout_height="80dp"
         android:layout_marginStart="10dp"
         android:layout_marginTop="20dp"
@@ -30,8 +31,9 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/textInputLayoutWrapper"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="100dp"
+        android:layout_width="115dp"
         android:layout_height="70dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="148dp"
@@ -43,14 +45,14 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <AutoCompleteTextView
-            android:id="@+id/autoCompleteTv"
+            android:id="@+id/autoCompleteFrom"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:inputType="none"
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
-            android:text="GEL"
+            android:text="USD"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="165dp" />
 
@@ -59,7 +61,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="100dp"
+        android:layout_width="115dp"
         android:layout_height="70dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="148dp"
@@ -70,7 +72,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <AutoCompleteTextView
-            android:id="@+id/autoCompleteTv1"
+            android:id="@+id/autoCompleteTo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"

@@ -12,7 +12,6 @@
     <string name="crypto">კრიპტო ვალუტა</string>
     <string name="walletfluent">Walletfluent</string>
     <string name="enter">შესვლა</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="register">რეგისტრაცია</string>
     <string name="PersonalInformation">პერსონალური მონაცემები</string>
@@ -30,5 +29,30 @@
     <string name="english">English</string>
     <string name="georgian">ქართული</string>
     <string name="application_language">Application Language</string>
+    <string-array name="countries">
+        <item >GEL</item>
+        <item >USD</item>
+        <item >EUR</item>
+        <item >AED</item>
+        <item >AMD</item>
+        <item >AVD</item>
+        <item >AZN</item>
+        <item >BGN</item>
+        <item >CAD</item>
+        <item >CHF</item>
+        <item >CNY</item>
+        <item >CZK</item>
+        <item >DKK</item>
+        <item >GBP</item>
+        <item >ILS</item>
+        <item >JPY</item>
+        <item >NOK</item>
+        <item >PLN</item>
+        <item >QAR</item>
+        <item >SAR</item>
+        <item >SEK</item>
+        <item >TRY</item>
+        <item >UKG</item>
+    </string-array>
 
 </resources>

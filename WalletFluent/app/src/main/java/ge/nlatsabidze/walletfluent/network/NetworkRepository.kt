@@ -1,6 +1,7 @@
 package ge.nlatsabidze.walletfluent.network
 import ge.nlatsabidze.walletfluent.Resource
 import ge.nlatsabidze.walletfluent.model.CommercialRates
+import ge.nlatsabidze.walletfluent.model.Converter
 import ge.nlatsabidze.walletfluent.model.Currency
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -15,6 +16,14 @@ class NetworkRepository @Inject constructor(private var apiService: CurrencyApi)
         return flow {
             emit(handleResponse {
                 apiService.getCurrencies()
+            })
+        }.flowOn(Dispatchers.IO)
+    }
+
+    suspend fun getConvertedValues(amount: Double, from: String, to: String): Flow<Resource<Converter>> {
+        return flow {
+            emit(handleResponse {
+                apiService.getConverterValues(amount, from, to)
             })
         }.flowOn(Dispatchers.IO)
     }

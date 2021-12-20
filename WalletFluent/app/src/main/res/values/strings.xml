@@ -29,6 +29,7 @@
     <string name="english">English</string>
     <string name="georgian">ქართული</string>
     <string name="application_language">Application Language</string>
+
     <string-array name="countries">
         <item >GEL</item>
         <item >USD</item>

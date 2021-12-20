@@ -18,13 +18,10 @@
         <entry key="..\:/Users/O'Brands/AndroidStudioProjects/Walletfluent/WalletFluent/app/src/main/res/drawable/side_nav_bar.xml" value="0.19166666666666668" />
         <entry key="..\:/Users/O'Brands/AndroidStudioProjects/Walletfluent/WalletFluent/app/src/main/res/layout/activity_main.xml" value="0.12047101449275362" />
         <entry key="..\:/Users/O'Brands/AndroidStudioProjects/Walletfluent/WalletFluent/app/src/main/res/layout/app_bar_main.xml" value="0.20425724637681159" />
-        <entry key="..\:/Users/O'Brands/AndroidStudioProjects/Walletfluent/WalletFluent/app/src/main/res/layout/calculator_page_fragment.xml" value="0.18840579710144928" />
         <entry key="..\:/Users/O'Brands/AndroidStudioProjects/Walletfluent/WalletFluent/app/src/main/res/layout/content_main.xml" value="0.13043478260869565" />
         <entry key="..\:/Users/O'Brands/AndroidStudioProjects/Walletfluent/WalletFluent/app/src/main/res/layout/currency_item.xml" value="0.2006340579710145" />
         <entry key="..\:/Users/O'Brands/AndroidStudioProjects/Walletfluent/WalletFluent/app/src/main/res/layout/currency_page.xml" value="0.2006340579710145" />
-        <entry key="..\:/Users/O'Brands/AndroidStudioProjects/Walletfluent/WalletFluent/app/src/main/res/layout/currency_page_fragment.xml" value="0.22" />
         <entry key="..\:/Users/O'Brands/AndroidStudioProjects/Walletfluent/WalletFluent/app/src/main/res/layout/fragment_blank.xml" value="0.12916666666666668" />
-        <entry key="..\:/Users/O'Brands/AndroidStudioProjects/Walletfluent/WalletFluent/app/src/main/res/layout/fragment_crypto.xml" value="0.209375" />
         <entry key="..\:/Users/O'Brands/AndroidStudioProjects/Walletfluent/WalletFluent/app/src/main/res/layout/fragment_currency.xml" value="0.11956521739130435" />
         <entry key="..\:/Users/O'Brands/AndroidStudioProjects/Walletfluent/WalletFluent/app/src/main/res/layout/fragment_gallery.xml" value="0.12047101449275362" />
         <entry key="..\:/Users/O'Brands/AndroidStudioProjects/Walletfluent/WalletFluent/app/src/main/res/layout/fragment_home.xml" value="0.12047101449275362" />
@@ -42,10 +39,12 @@
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/drawable/ic_email.xml" value="0.28541666666666665" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/activity_main.xml" value="0.254981884057971" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/app_bar_main.xml" value="0.254981884057971" />
-        <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/calculator_page_fragment.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/calculator_page_fragment.xml" value="0.33" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/content_main.xml" value="0.1" />
+        <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/currency_item.xml" value="0.26145833333333335" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/currency_page.xml" value="0.26145833333333335" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/currency_page_fragment.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/dropdown_item.xml" value="0.2708333333333333" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/fragment_base.xml" value="0.254981884057971" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/fragment_collector.xml" value="0.1641337386018237" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/fragment_crypto.xml" value="0.254981884057971" />

@@ -11,7 +11,7 @@ class FirebaseRepository @Inject constructor(private val application: Applicatio
 
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    private var _currentUser = MutableStateFlow(false)
+    private var _currentUser = MutableStateFlow<Boolean>(false)
     val currentUser: MutableStateFlow<Boolean> get() = _currentUser
 
     private var _repositoryDialogError = MutableStateFlow("")

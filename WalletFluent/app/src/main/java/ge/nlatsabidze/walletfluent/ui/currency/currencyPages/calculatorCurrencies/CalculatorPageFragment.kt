@@ -1,6 +1,7 @@
 package ge.nlatsabidze.walletfluent.ui.currency.currencyPages.calculatorCurrencies
 
 import android.util.Log.d
+import android.view.WindowManager
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,7 +16,9 @@ class CalculatorPageFragment : BaseFragment<CalculatorPageFragmentBinding>(Calcu
     private val calculatorViewModel: CalculatorPageViewModel by viewModels()
 
     override fun start() {
-        calculatorViewModel.getConvertedValue(45.1, "usd", "eur")
+        ((activity))!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+        calculatorViewModel.getConvertedValue(45.1, "USD", "eur")
+
 
         lifecycleScope.launch {
             calculatorViewModel.convertedValue.collectLatest {

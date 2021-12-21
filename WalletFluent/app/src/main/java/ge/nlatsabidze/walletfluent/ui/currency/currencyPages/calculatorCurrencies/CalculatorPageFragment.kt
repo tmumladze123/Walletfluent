@@ -23,37 +23,70 @@ class CalculatorPageFragment :
 
     private val calculatorViewModel: CalculatorPageViewModel by viewModels()
 
-    override fun onResume() {
-        super.onResume()
-
-        val countries: Array<String> = resources.getStringArray(R.array.countries)
-        val value = binding.autoCompleteFrom.text.toString()
-
-        val countriesFrom = ArrayAdapter(requireContext(), R.layout.dropdown_item, countries)
-        binding.autoCompleteFrom.setAdapter(countriesFrom)
-
-        val countriesTo = ArrayAdapter(requireContext(), R.layout.dropdown_item, countries)
-        binding.autoCompleteTo.setAdapter(countriesTo)
-
-        binding.autoCompleteFrom.onItemClickListener =
-            OnItemClickListener { adapterView, view, position, id ->
-                val selectedValue: String? = countriesFrom.getItem(position)
-                d("dsadsa", selectedValue.toString())
-            }
-    }
-
     override fun start() {
         collectConvertedValue()
-
+        setValueToResult()
     }
 
     private fun collectConvertedValue() {
 
-        calculatorViewModel.getConvertedValue(45.1, "USD", "eur")
+        val countries = resources.getStringArray(R.array.countries)
+//        val value = binding.autoCompleteFrom.text.toString()
 
-        lifecycleScope.launch {
+        val countriesFrom = ArrayAdapter(requireContext(), R.layout.dropdown_item, countries)
+        binding.autoCompleteFrom.setAdapter(countriesFrom)
+        binding.autoCompleteTo.setAdapter(countriesFrom)
+
+        var firstValue = binding.textInputLayoutWrapper.editText?.text.toString()
+        binding.autoCompleteFrom.onItemClickListener =
+            OnItemClickListener { adapterView, view, position, id ->
+                val selectedValue: String? = countriesFrom.getItem(position)
+                firstValue = selectedValue!!
+                d("dsadsa", firstValue)
+            }
+
+        var secondValue = binding.secondTextInputLayoutWrapper.editText?.text.toString()
+        binding.autoCompleteTo.onItemClickListener =
+            OnItemClickListener { adapterView, view, position, id ->
+                val selectedValue: String? = countriesFrom.getItem(position)
+                secondValue = selectedValue!!
+                d("dsadsa", secondValue)
+            }
+
+        binding.btnConverter.setOnClickListener {
+            if (binding.etNumber.text.toString().isNotEmpty()) {
+                val amount = binding.etNumber.text.toString().toDouble()
+                d("amount", amount.toString())
+                calculatorViewModel.getConvertedValue(amount, firstValue, secondValue)
+            }
+        }
+
+        binding.btnSwap.setOnClickListener {
+            firstValue = secondValue.also { secondValue = firstValue }
+
+            binding.textInputLayoutWrapper.editText?.setText(firstValue)
+            binding.secondTextInputLayoutWrapper.editText?.setText(secondValue)
+
+//            val newCountries = ArrayAdapter(requireContext(), R.layout.dropdown_item, countries)
+//            binding.autoCompleteFrom.setAdapter(newCountries)
+//            binding.autoCompleteTo.setAdapter(newCountries)
+            binding.autoCompleteFrom.showDropDown()
+            binding.autoCompleteTo.showDropDown()
+
+//            binding.autoCompleteFrom.onItemClickListener =
+//                OnItemClickListener { adapterView, view, position, id ->
+//                    val selectedValue: String? = countriesFrom.getItem(position)
+//                    secondValue = selectedValue!!
+//                    d("dsadsa", secondValue)
+//                }
+        }
+
+    }
+
+    private fun setValueToResult() {
+        viewLifecycleOwner.lifecycleScope.launch {
             calculatorViewModel.convertedValue.collectLatest {
-                d("dsadas", it.value.toString())
+                binding.etConvertedNumber.setText(it.value.toString())
             }
         }
     }

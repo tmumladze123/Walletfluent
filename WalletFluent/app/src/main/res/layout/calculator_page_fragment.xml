@@ -96,4 +96,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayoutWrapper" />
 
+    <Button
+        android:id="@+id/btnSwap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="swap values"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnConverter" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

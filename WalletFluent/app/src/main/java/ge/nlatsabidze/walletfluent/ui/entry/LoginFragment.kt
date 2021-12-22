@@ -1,13 +1,10 @@
-package ge.nlatsabidze.walletfluent.ui.login
+package ge.nlatsabidze.walletfluent.ui.entry
 
 import android.annotation.SuppressLint
-import android.content.DialogInterface
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -16,14 +13,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.databinding.FragmentLoginBinding
+import ge.nlatsabidze.walletfluent.extensions.showDialogError
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::inflate) {
 
-    private val logInViewModel: LoginViewModel by activityViewModels()
+    private val logInViewModel: LoginRegisterViewModel by activityViewModels()
 
     private lateinit var firebaseAuth: FirebaseAuth
     private val args: LoginFragmentArgs by navArgs()
@@ -38,7 +35,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         binding.tvForgotPassword.setOnClickListener { resetPassword() }
 
         listeners()
-//        setDataFromRegisterPage()
+        setDataFromRegisterPage()
     }
 
     private fun listeners() {
@@ -71,29 +68,14 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
             checkInputValidation(email, password)
             logInViewModel.login(email, password)
-
         }
     }
 
-    private fun showDialogError(message: String) {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setMessage(message)
-        builder.setPositiveButton("yes", { dialogInterface: DialogInterface, i: Int -> })
-        builder.show()
-    }
-
-    private fun showVerificationDialog() {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setMessage("დაადასტურეთ მეილი!")
-        builder.setPositiveButton("კარგი", { dialogInterface: DialogInterface, i: Int -> })
-        builder.show()
-    }
-
-    private fun showErrorDialog() {
-        val builder = AlertDialog.Builder(requireContext())
-        builder.setMessage("მომხმარებლის სახელი ან პაროლი არასწორია, გთხოვთ სცადოთ თავიდან")
-        builder.setPositiveButton("კარგი", { dialogInterface: DialogInterface, i: Int -> })
-        builder.show()
+    private fun resetPassword() {
+        with(binding) {
+            val email = emailEditText.text.toString()
+            logInViewModel.resetPassword(email)
+        }
     }
 
 
@@ -132,28 +114,24 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     }
 
     private fun navigateToRegisterPage() {
-        val actionLoginFragmentToRegister =
-            LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
+        val actionLoginFragmentToRegister = LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
         findNavController().navigate(actionLoginFragmentToRegister)
     }
 
     private fun navigateToPersonalPage() {
-        val actionLoginFragmentToPersonal =
-            LoginFragmentDirections.actionLoginFragmentToPersonalInfoFragment()
+        val actionLoginFragmentToPersonal = LoginFragmentDirections.actionLoginFragmentToPersonalInfoFragment()
         findNavController().navigate(actionLoginFragmentToPersonal)
+    }
+
+    private fun showDialogError(message: String) {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.showDialogError(message, requireContext())
     }
 
     private fun setDataFromRegisterPage() {
         if (args.email != "email" && args.password != "password") {
             binding.emailEditText.setText(args.email)
             binding.passwordEditText.setText(args.password)
-        }
-    }
-
-    private fun resetPassword() {
-        with(binding) {
-            val email = emailEditText.text.toString()
-            logInViewModel.resetPassword(email)
         }
     }
 }

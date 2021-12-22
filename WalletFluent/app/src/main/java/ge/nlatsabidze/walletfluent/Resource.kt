@@ -5,6 +5,7 @@ enum class ApiStatus {
     SUCCESS,
     ERROR
 }
+
 sealed class Resource<out T>(val status: ApiStatus, val data: T?, val message: String?) {
 
     data class Success<out R>(val _data: R?) :

@@ -11,21 +11,23 @@ class FirebaseRepository @Inject constructor(private val application: Applicatio
 
     private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
-    private var _currentUser = MutableStateFlow(false)
+    private var _currentUser = MutableStateFlow<Boolean>(false)
     val currentUser: MutableStateFlow<Boolean> get() = _currentUser
 
     private var _repositoryDialogError = MutableStateFlow("")
     val repositoryDialog: MutableStateFlow<String> get() = _repositoryDialogError
 
     fun register(email: String?, password: String?) {
-        firebaseAuth.createUserWithEmailAndPassword(email!!, password!!)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    //  _userMutableLiveFlow.value = true
-                } else {
-
+        if (email!!.isNotEmpty() && password!!.isNotEmpty()) {
+            firebaseAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        _currentUser.value = true
+                    } else {
+                        _repositoryDialogError.value = "ვწუხვართ, მითითებული ელ-ფოსტა ან პაროლი არავალიდურია."
+                    }
                 }
-            }
+        }
     }
 
     fun login(email: String?, password: String?) {

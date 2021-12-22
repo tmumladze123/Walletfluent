@@ -1,29 +1,26 @@
-package ge.nlatsabidze.walletfluent.ui.register
+package ge.nlatsabidze.walletfluent.ui.entry
 
-import android.content.DialogInterface
-import android.os.Build
-import android.util.Log.d
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.databinding.FragmentRegisterBinding
-import ge.nlatsabidze.walletfluent.ui.login.LoginViewModel
+import ge.nlatsabidze.walletfluent.extensions.showDialogError
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 
 @AndroidEntryPoint
 class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterBinding::inflate) {
 
     private lateinit var firebaseAuth: FirebaseAuth
-    private val loginViewModel: LoginViewModel by activityViewModels()
+    private val loginViewModel: LoginRegisterViewModel by activityViewModels()
 
 
     override fun start() {
@@ -31,6 +28,8 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
         firebaseAuth = FirebaseAuth.getInstance()
 
         binding.btnSignUp.setOnClickListener { registerUser() }
+
+        listeners()
     }
 
     private fun registerUser() {
@@ -38,7 +37,27 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
             checkInputValidation(email, password)
-//            loginViewModel.register(email, password)
+            loginViewModel.register(email, password)
+        }
+    }
+
+    private fun listeners() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            loginViewModel.userMutableLiveFlow.collect { userLogedIn ->
+                if (userLogedIn) {
+                    navigateToSignInPage(binding.emailEditText.text.toString(), binding.passwordEditText.text.toString())
+                    loginViewModel.changeUserValue()
+                }
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            loginViewModel.dialogError.collect { showDialogError ->
+                if (showDialogError != "") {
+                    showDialogError(showDialogError)
+                    loginViewModel.changeRepositoryValue()
+                }
+            }
         }
     }
 
@@ -82,10 +101,8 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
         findNavController().navigate(actionRegisterFragmentToPersonal)
     }
 
-    private fun showDialogError() {
+    private fun showDialogError(message: String) {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setMessage("ვწუხვართ, მითითებული სახელი ან პაროლი არასწორია, სცადე განმეორებით")
-        builder.setPositiveButton("yes", { dialogInterface: DialogInterface, i: Int -> })
-        builder.show()
+        builder.showDialogError(message, requireContext())
     }
 }

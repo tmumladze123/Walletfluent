@@ -30,20 +30,14 @@ class CalculatorPageFragment :
 
     private fun collectConvertedValue() {
 
-        val countries: Array<String> = resources.getStringArray(R.array.countries)
-        val arrayListOfCountries = ArrayList<String>()
+        val countries = resources.getStringArray(R.array.countries)
+//        val value = binding.autoCompleteFrom.text.toString()
 
-        for (i in countries.indices) {
-            arrayListOfCountries.add(countries[i])
-        }
-
-        val countriesFrom = ArrayAdapter(requireContext(), R.layout.dropdown_item, arrayListOfCountries)
+        val countriesFrom = ArrayAdapter(requireContext(), R.layout.dropdown_item, countries)
         binding.autoCompleteFrom.setAdapter(countriesFrom)
+        binding.autoCompleteTo.setAdapter(countriesFrom)
 
-        val countriesTo = ArrayAdapter(requireContext(), R.layout.dropdown_item, arrayListOfCountries)
-        binding.autoCompleteTo.setAdapter(countriesTo)
-
-        var firstValue = binding.autoCompleteFrom.text.toString()
+        var firstValue = binding.textInputLayoutWrapper.editText?.text.toString()
         binding.autoCompleteFrom.onItemClickListener =
             OnItemClickListener { adapterView, view, position, id ->
                 val selectedValue: String? = countriesFrom.getItem(position)
@@ -51,10 +45,10 @@ class CalculatorPageFragment :
                 d("dsadsa", firstValue)
             }
 
-        var secondValue = binding.autoCompleteTo.text.toString()
+        var secondValue = binding.secondTextInputLayoutWrapper.editText?.text.toString()
         binding.autoCompleteTo.onItemClickListener =
             OnItemClickListener { adapterView, view, position, id ->
-                val selectedValue: String? = countriesTo.getItem(position)
+                val selectedValue: String? = countriesFrom.getItem(position)
                 secondValue = selectedValue!!
                 d("dsadsa", secondValue)
             }
@@ -67,12 +61,26 @@ class CalculatorPageFragment :
             }
         }
 
-//        binding.btnSwap.setOnClickListener {
-//            firstValue = secondValue.also {secondValue = firstValue}
-//            d("dsadas",countriesFrom.getPosition("AVD").toString())
-//            countriesFrom.setDropDownViewResource(countriesFrom.getPosition("AVD"))
-//            countriesFrom.
-//        }
+        binding.btnSwap.setOnClickListener {
+            firstValue = secondValue.also { secondValue = firstValue }
+
+            binding.textInputLayoutWrapper.editText?.setText(firstValue)
+            binding.secondTextInputLayoutWrapper.editText?.setText(secondValue)
+
+//            val newCountries = ArrayAdapter(requireContext(), R.layout.dropdown_item, countries)
+//            binding.autoCompleteFrom.setAdapter(newCountries)
+//            binding.autoCompleteTo.setAdapter(newCountries)
+            binding.autoCompleteFrom.showDropDown()
+            binding.autoCompleteTo.showDropDown()
+
+//            binding.autoCompleteFrom.onItemClickListener =
+//                OnItemClickListener { adapterView, view, position, id ->
+//                    val selectedValue: String? = countriesFrom.getItem(position)
+//                    secondValue = selectedValue!!
+//                    d("dsadsa", secondValue)
+//                }
+        }
+
     }
 
     private fun setValueToResult() {

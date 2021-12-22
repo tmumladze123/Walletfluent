@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ge.nlatsabidze.walletfluent.databinding.CurrencyItemBinding
-import ge.nlatsabidze.walletfluent.model.CommercialRates
+import ge.nlatsabidze.walletfluent.model.valuteModel.CommercialRates
 
 
 class CurrencyAdapter : RecyclerView.Adapter<CurrencyAdapter.CurrencyItemViewHolder>() {

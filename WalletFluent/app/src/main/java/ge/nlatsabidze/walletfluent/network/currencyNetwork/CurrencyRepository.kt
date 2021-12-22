@@ -1,8 +1,7 @@
-package ge.nlatsabidze.walletfluent.network
+package ge.nlatsabidze.walletfluent.network.currencyNetwork
 import ge.nlatsabidze.walletfluent.Resource
-import ge.nlatsabidze.walletfluent.model.CommercialRates
-import ge.nlatsabidze.walletfluent.model.Converter
-import ge.nlatsabidze.walletfluent.model.Currency
+import ge.nlatsabidze.walletfluent.model.valuteModel.Converter
+import ge.nlatsabidze.walletfluent.model.valuteModel.Currency
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -10,7 +9,7 @@ import kotlinx.coroutines.flow.flowOn
 import retrofit2.Response
 import javax.inject.Inject
 
-class NetworkRepository @Inject constructor(private var apiService: CurrencyApi) {
+class CurrencyRepository @Inject constructor(private var apiService: CurrencyApi) {
 
     suspend fun getCountryCurrencies(): Flow<Resource<Currency>>{
         return flow {

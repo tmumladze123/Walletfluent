@@ -1,4 +1,4 @@
-package ge.nlatsabidze.walletfluent.model
+package ge.nlatsabidze.walletfluent.model.valuteModel
 
 
 import com.squareup.moshi.Json

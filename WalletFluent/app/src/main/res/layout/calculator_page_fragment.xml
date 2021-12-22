@@ -52,7 +52,7 @@
             android:inputType="none"
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
-            android:text="USD"
+            android:text="GEL"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="165dp" />
 
@@ -80,7 +80,7 @@
             android:inputType="none"
             android:paddingTop="16dp"
             android:paddingBottom="16dp"
-            android:text="GEL"
+            android:text="USD"
             tools:layout_editor_absoluteX="0dp"
             tools:layout_editor_absoluteY="165dp" />
 

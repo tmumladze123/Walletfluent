@@ -1,7 +1,7 @@
-package ge.nlatsabidze.walletfluent.network
+package ge.nlatsabidze.walletfluent.network.currencyNetwork
 
-import ge.nlatsabidze.walletfluent.model.Converter
-import ge.nlatsabidze.walletfluent.model.Currency
+import ge.nlatsabidze.walletfluent.model.valuteModel.Converter
+import ge.nlatsabidze.walletfluent.model.valuteModel.Currency
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Headers

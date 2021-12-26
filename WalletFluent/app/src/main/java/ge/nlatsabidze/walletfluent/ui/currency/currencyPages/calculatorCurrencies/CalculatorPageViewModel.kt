@@ -6,7 +6,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.nlatsabidze.walletfluent.model.valuteModel.Converter
 import ge.nlatsabidze.walletfluent.network.currencyNetwork.CurrencyRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -21,7 +23,7 @@ class CalculatorPageViewModel @Inject constructor(private val currencyRepository
     fun getConvertedValue(amount: Double, from: String, to: String) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                currencyRepository.getConvertedValues(amount, from, to).collectLatest {
+                currencyRepository.getConvertedValues(amount, from, to).collect {
                     _convertedValue.emit(it.data!!)
                 }
             }

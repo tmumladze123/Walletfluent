@@ -24,8 +24,8 @@ class CalculatorPageFragment :
         makeResultEditTextNotClickable()
         collectConvertedValue()
         setValueToResult()
-    }
 
+    }
     private fun collectConvertedValue() {
 
         val countries = resources.getStringArray(R.array.countries)
@@ -59,7 +59,10 @@ class CalculatorPageFragment :
 
         binding.etNumber.doAfterTextChanged {
             val amountAsString = binding.etNumber.text.toString()
-            if (amountAsString.isNotEmpty()) {
+            if(amountAsString.isNotEmpty() && amountAsString[0]=='0'){
+                binding.etConvertedNumber.setText("0");
+            }
+            else if (amountAsString.isNotEmpty()) {
                 val amount = binding.etNumber.text.toString().toDouble()
                 calculatorViewModel.getConvertedValue(amount, firstValue, secondValue)
             } else if (amountAsString.isEmpty() && binding.etConvertedNumber.text.toString().isNotEmpty()) {

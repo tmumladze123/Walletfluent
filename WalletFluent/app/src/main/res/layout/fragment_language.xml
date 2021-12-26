@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ic_background"
+    android:background="@color/white"
     tools:context=".ui.language.LanguageFragment">
 
     <androidx.appcompat.widget.AppCompatTextView
@@ -13,7 +13,6 @@
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginLeft="30dp"
         android:textSize="25sp"
-        android:textColor="@color/white"
         android:text="@string/application_language"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
@@ -27,13 +26,11 @@
         android:layout_height="wrap_content">
         <RadioButton
             android:id="@+id/rbGeorgian"
-            android:textColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/georgian"/>
         <RadioButton
             android:id="@+id/rbEnglish"
-            android:textColor="@color/white"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:text="@string/english"/>

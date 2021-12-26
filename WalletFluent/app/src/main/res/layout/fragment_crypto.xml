@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".ui.crypto.CryptoFragment">
 
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="35dp"
+        android:indeterminate="true"
+        app:indicatorColor="@color/purple_700"
+        app:layout_constraintBottom_toBottomOf="@+id/rvCrypto"
+        app:layout_constraintEnd_toEndOf="@+id/rvCrypto"
+        app:layout_constraintStart_toStartOf="@+id/rvCrypto"
+        tools:ignore="MissingConstraints" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCrypto"

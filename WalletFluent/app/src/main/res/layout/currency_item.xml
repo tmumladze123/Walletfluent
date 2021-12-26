@@ -1,79 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@drawable/borderlayout"
-    android:layout_marginTop="20dp"
+    app:cardElevation="10dp"
+    app:cardCornerRadius="100dp"
+    android:layout_marginTop="15dp"
     android:layout_height="wrap_content">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="10dp"
+            android:text="GEL"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvBuy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="buy : "
+            android:textSize="15sp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintEnd_toStartOf="@+id/tvBuyAmount"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintStart_toStartOf="@+id/tvName"
+            app:layout_constraintTop_toBottomOf="@+id/tvName" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvBuyAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4.56878"
+            android:textSize="15sp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="80dp"
+            app:layout_constraintEnd_toStartOf="@+id/tvSell"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tvBuy"
+            app:layout_constraintTop_toBottomOf="@+id/tvName" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSell"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="sell : "
+            android:textSize="15sp"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintEnd_toStartOf="@+id/tvSellAmount"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tvBuyAmount"
+            app:layout_constraintTop_toBottomOf="@+id/tvName" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tvSellAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="4.56878"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/tvSell"
+            app:layout_constraintTop_toBottomOf="@+id/tvName" />
 
 
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="10dp"
-        android:text="GEL"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvBuy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:text="buy : "
-        android:textSize="15sp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintEnd_toStartOf="@+id/tvBuyAmount"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintStart_toStartOf="@+id/tvName"
-        app:layout_constraintTop_toBottomOf="@+id/tvName" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvBuyAmount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:text="4.56878"
-        android:textSize="15sp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="80dp"
-        app:layout_constraintEnd_toStartOf="@+id/tvSell"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/tvBuy"
-        app:layout_constraintTop_toBottomOf="@+id/tvName" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvSell"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:text="sell : "
-        android:textSize="15sp"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintEnd_toStartOf="@+id/tvSellAmount"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/tvBuyAmount"
-        app:layout_constraintTop_toBottomOf="@+id/tvName" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:id="@+id/tvSellAmount"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:text="4.56878"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:textSize="15sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/tvSell"
-        app:layout_constraintTop_toBottomOf="@+id/tvName" />
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

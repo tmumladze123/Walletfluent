@@ -1,21 +1,21 @@
 package ge.nlatsabidze.walletfluent.ui.entry
 
-
-import android.util.Log.d
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
-import com.google.firebase.ktx.Firebase
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.databinding.FragmentRegisterBinding
 import ge.nlatsabidze.walletfluent.extensions.showDialogError
+import ge.nlatsabidze.walletfluent.ui.entry.userData.User
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -25,23 +25,17 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
 
     private lateinit var firebaseAuth: FirebaseAuth
     private val loginViewModel: LoginRegisterViewModel by activityViewModels()
-    private lateinit var dataBase : DatabaseReference
-    /*val dataBase = FirebaseDatabase.getInstance();
-    val myRef = dataBase.getReference("message");
-*/
+    private lateinit var database: DatabaseReference
 
 
     override fun start() {
-        dataBase = FirebaseDatabase.getInstance().getReference("Users");
-
-        // Read from the database
-        // Read from the database
 
         firebaseAuth = FirebaseAuth.getInstance()
+        binding.btnSignUp.setOnClickListener {
+            registerUser()
+        }
 
-        binding.btnSignUp.setOnClickListener { registerUser() }
-
-        listeners()
+        observervers()
     }
 
     private fun registerUser() {
@@ -53,7 +47,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
         }
     }
 
-    private fun listeners() {
+    private fun observervers() {
         viewLifecycleOwner.lifecycleScope.launch {
             loginViewModel.userMutableLiveFlow.collect { userLogedIn ->
                 if (userLogedIn) {
@@ -117,4 +111,5 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
         val builder = AlertDialog.Builder(requireContext())
         builder.showDialogError(message, requireContext())
     }
+
 }

@@ -16,7 +16,6 @@
         android:layout_marginTop="70dp"
         android:fontFamily="@font/beauty"
         android:text="@string/create_account"
-        android:textColor="@color/white"
         android:textSize="50sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,7 +30,6 @@
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
         app:startIconDrawable="@drawable/ic_name"
-        android:textColorHint="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/tvCreateAccount">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -39,7 +37,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/transparent"
-            android:textColor="@color/white"
             android:hint="@string/name" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -52,7 +49,6 @@
         android:layout_marginTop="40dp"
         android:layout_marginRight="20dp"
         app:startIconDrawable="@drawable/ic_email"
-        android:textColorHint="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/nameEditTextWrapper">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -60,7 +56,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/transparent"
-            android:textColor="@color/white"
             android:hint="@string/email" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -74,14 +69,12 @@
         android:layout_marginRight="20dp"
         android:hint="Password"
         app:startIconDrawable="@drawable/ic_email"
-        android:textColorHint="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/emailEditTextWrapper">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
             android:background="@color/transparent" />
 
     </com.google.android.material.textfield.TextInputLayout>
@@ -119,7 +112,6 @@
         android:layout_marginBottom="20dp"
         android:fontFamily="@font/beauty"
         android:text="@string/sign_in"
-        android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

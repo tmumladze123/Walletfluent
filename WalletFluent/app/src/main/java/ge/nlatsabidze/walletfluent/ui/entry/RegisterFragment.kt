@@ -1,5 +1,7 @@
 package ge.nlatsabidze.walletfluent.ui.entry
 
+
+import android.util.Log.d
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
@@ -7,6 +9,8 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.R
@@ -21,9 +25,17 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
 
     private lateinit var firebaseAuth: FirebaseAuth
     private val loginViewModel: LoginRegisterViewModel by activityViewModels()
+    private lateinit var dataBase : DatabaseReference
+    /*val dataBase = FirebaseDatabase.getInstance();
+    val myRef = dataBase.getReference("message");
+*/
 
 
     override fun start() {
+        dataBase = FirebaseDatabase.getInstance().getReference("Users");
+
+        // Read from the database
+        // Read from the database
 
         firebaseAuth = FirebaseAuth.getInstance()
 

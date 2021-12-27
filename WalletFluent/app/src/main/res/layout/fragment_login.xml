@@ -15,7 +15,6 @@
         android:layout_marginTop="70dp"
         android:fontFamily="@font/beauty"
         android:text="@string/welcome"
-        android:textColor="@color/white"
         android:textSize="50sp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -1,5 +1,6 @@
 package ge.nlatsabidze.walletfluent.ui.entry
 
+import android.util.Log.d
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Toast
@@ -41,10 +42,11 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
 
     private fun registerUser() {
         with(binding) {
+            val name = nameEditText.text.toString()
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
             checkInputValidation(email, password)
-            loginViewModel.register(email, password)
+            loginViewModel.register(email, password, name, 2000)
         }
     }
 
@@ -52,7 +54,10 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
         viewLifecycleOwner.lifecycleScope.launch {
             loginViewModel.userMutableLiveFlow.collect { userLogedIn ->
                 if (userLogedIn) {
-                    navigateToSignInPage(binding.emailEditText.text.toString(), binding.passwordEditText.text.toString())
+                    navigateToSignInPage(
+                        binding.emailEditText.text.toString(),
+                        binding.passwordEditText.text.toString()
+                    )
                     loginViewModel.changeUserValue()
                 }
             }
@@ -123,5 +128,9 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
         }
 
     }
+
+    private fun randomID(): String = List(16) {
+        (('a'..'z') + ('A'..'Z') + ('0'..'9')).random()
+    }.joinToString("")
 
 }

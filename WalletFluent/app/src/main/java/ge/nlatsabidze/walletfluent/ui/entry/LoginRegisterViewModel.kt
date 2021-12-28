@@ -19,9 +19,9 @@ class LoginRegisterViewModel @Inject constructor(private val firebaseRepository:
     private var _dialogError = MutableStateFlow("")
     val dialogError: MutableStateFlow<String> get() = _dialogError
 
-    fun register(email: String, password: String, name: String) {
+    fun register(email: String, password: String, name: String, balance: Int) {
 
-        firebaseRepository.register(email, password, name)
+        firebaseRepository.register(email, password, name, balance)
 
         viewModelScope.launch {
             firebaseRepository.currentUser.collectLatest {

@@ -5,6 +5,7 @@ import android.util.Log.d
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import ge.nlatsabidze.walletfluent.ui.entry.userData.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
@@ -21,7 +22,7 @@ class FirebaseRepository @Inject constructor(private val application: Applicatio
     private var _repositoryDialogError = MutableStateFlow("")
     val repositoryDialog: MutableStateFlow<String> get() = _repositoryDialogError
 
-    fun register(email: String?, password: String?, name: String) {
+    fun register(email: String?, password: String?, name: String, balance: Int) {
         if (email!!.isNotEmpty() && password!!.isNotEmpty()) {
             firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
@@ -31,9 +32,19 @@ class FirebaseRepository @Inject constructor(private val application: Applicatio
                         val uid = user?.uid
 
                         database = FirebaseDatabase.getInstance("https://walletfluent-b2fe7-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Users")
-                        _currentUser.value = true
+
+                        val activeUser = User(email, name, password, balance)
+                        database.child(uid!!).setValue(activeUser).addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                _currentUser.value = true
+                            } else {
+                                _repositoryDialogError.value =
+                                    "ვწუხვართ, თქვენს მიერ მითითებული მონაცემები არავალიდურია."
+                            }
+                        }
                     } else {
-                        _repositoryDialogError.value = "ვწუხვართ, მითითებული ელ-ფოსტა ან პაროლი არავალიდურია."
+                        _repositoryDialogError.value =
+                            "ვწუხვართ, მითითებული ელ-ფოსტა ან პაროლი არავალიდურია."
                     }
                 }
         }
@@ -49,10 +60,12 @@ class FirebaseRepository @Inject constructor(private val application: Applicatio
                         _currentUser.value = true
                     } else {
                         firebaseUser.sendEmailVerification()
-                        _repositoryDialogError.value = "გთხოვთ გაიაროთ ვერიფიკაცია მითითებულ ელ-ფოსტაზე."
+                        _repositoryDialogError.value =
+                            "გთხოვთ გაიაროთ ვერიფიკაცია მითითებულ ელ-ფოსტაზე."
                     }
                 } else {
-                    _repositoryDialogError.value = "ვწუხვართ, მითითებული სახელი ან პაროლი არასწორია, სცადე განმეორებით."
+                    _repositoryDialogError.value =
+                        "ვწუხვართ, მითითებული სახელი ან პაროლი არასწორია, სცადე განმეორებით."
                 }
             }
         }

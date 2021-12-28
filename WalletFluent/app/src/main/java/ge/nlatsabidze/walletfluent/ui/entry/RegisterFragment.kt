@@ -34,7 +34,6 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
         firebaseAuth = FirebaseAuth.getInstance()
         binding.btnSignUp.setOnClickListener {
             registerUser()
-            saveUserInDataBase()
         }
 
         observervers()
@@ -46,7 +45,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
             checkInputValidation(email, password)
-            loginViewModel.register(email, password, name)
+            loginViewModel.register(email, password, name, 2000)
         }
     }
 
@@ -54,7 +53,10 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
         viewLifecycleOwner.lifecycleScope.launch {
             loginViewModel.userMutableLiveFlow.collect { userLogedIn ->
                 if (userLogedIn) {
-                    navigateToSignInPage(binding.emailEditText.text.toString(), binding.passwordEditText.text.toString())
+                    navigateToSignInPage(
+                        binding.emailEditText.text.toString(),
+                        binding.passwordEditText.text.toString()
+                    )
                     loginViewModel.changeUserValue()
                 }
             }
@@ -113,23 +115,6 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
     private fun showDialogError(message: String) {
         val builder = AlertDialog.Builder(requireContext())
         builder.showDialogError(message, requireContext())
-    }
-
-    private fun saveUserInDataBase() {
-
-        database = FirebaseDatabase.getInstance("https://walletfluent-b2fe7-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Users")
-
-        val name = binding.nameEditText.text.toString()
-        val email = binding.emailEditText.text.toString()
-        val password = binding.passwordEditText.text.toString()
-        var uniqueId = randomID()
-
-        val user = User(uniqueId, email, name, password, 2)
-        database.child(uniqueId).setValue(user).addOnCompleteListener {
-            showDialogError("asdsadasdsa")
-        }.addOnFailureListener {
-            showDialogError("failed")
-        }
     }
 
     private fun randomID(): String = List(16) {

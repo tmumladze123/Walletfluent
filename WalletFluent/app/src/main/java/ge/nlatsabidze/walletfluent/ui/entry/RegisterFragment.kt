@@ -33,7 +33,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
 
         firebaseAuth = FirebaseAuth.getInstance()
         binding.btnSignUp.setOnClickListener {
-            storeData()
+
             registerUser()
         }
 
@@ -46,7 +46,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
             checkInputValidation(email, password)
-            loginViewModel.register(email, password, name, 2000)
+            loginViewModel.register(email, password, name, 200)
         }
     }
 
@@ -117,20 +117,6 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
         val builder = AlertDialog.Builder(requireContext())
         builder.showDialogError(message, requireContext())
     }
-    private  fun storeData(){
 
-        val database = FirebaseDatabase.getInstance("https://walletfluent-b2fe7-default-rtdb.europe-west1.firebasedatabase.app/")
-        var email = binding.emailEditText
-        var name = binding.nameEditText
-        database.getReference("Users").child("someUser").get().addOnCompleteListener {
-
-            println(it.result!!.child("name").value.toString() + "shedegi")
-        }
-
-    }
-
-    private fun randomID(): String = List(16) {
-        (('a'..'z') + ('A'..'Z') + ('0'..'9')).random()
-    }.joinToString("")
 
 }

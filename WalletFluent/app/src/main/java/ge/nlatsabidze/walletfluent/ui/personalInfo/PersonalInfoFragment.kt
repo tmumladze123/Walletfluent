@@ -1,16 +1,22 @@
 package ge.nlatsabidze.walletfluent.ui.personalInfo
 
 import android.util.Log.d
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.databinding.PersonalInfoFragmentBinding
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PersonalInfoFragment :
     BaseFragment<PersonalInfoFragmentBinding>(PersonalInfoFragmentBinding::inflate) {
+
+    private val personalInfoViewModel: PersonalInfoViewModel by viewModels()
 
     private lateinit var firebaseAuth: FirebaseAuth
     private lateinit var database: DatabaseReference
@@ -18,54 +24,46 @@ class PersonalInfoFragment :
 
     override fun start() {
 
-        firebaseAuth = FirebaseAuth.getInstance()
-        firebaseUser = firebaseAuth.currentUser!!
+        initializeFirebase()
 
-        setInformationFromDatabase()
+        personalInfoViewModel.setInformationFromDatabase(database)
+
         binding.btnIncrease.setOnClickListener {
-            changeAmount(binding.btnIncrease.text.toString())
+            personalInfoViewModel.changeUserAmount(binding.balance.text.toString(), binding.btnIncrease.text.toString(), database)
         }
 
         binding.btnDecrease.setOnClickListener {
-            changeAmount(binding.btnDecrease.text.toString())
+            personalInfoViewModel.changeUserAmount(binding.balance.text.toString(), binding.btnDecrease.text.toString(), database)
         }
 
+        observes()
     }
 
-    private fun setInformationFromDatabase() {
+    private fun observes() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            personalInfoViewModel.setAmount.collect {
+                binding.balance.setText(it.toString() + "₾")
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            personalInfoViewModel.balance.collect {
+                binding.balance.setText(it)
+            }
+        }
+        viewLifecycleOwner.lifecycleScope.launch {
+            personalInfoViewModel.name.collect {
+                binding.tvName.setText(it)
+            }
+        }
+    }
+
+    private fun initializeFirebase() {
+        firebaseAuth = FirebaseAuth.getInstance()
+        firebaseUser = firebaseAuth.currentUser!!
+
         database =
             FirebaseDatabase.getInstance("https://walletfluent-b2fe7-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Users").child(firebaseUser.uid)
-
-        database.get().addOnCompleteListener {
-            if (it.result?.exists() == true) {
-                val balance = it.result!!.child("balance").value.toString().toInt()
-                d("sssssss", balance.toString())
-                binding.balance.setText(balance.toString() + "₾")
-                binding.tvName.setText(it.result!!.child("name").value.toString() + "'s" + " card")
-            }
-        }
-    }
-
-    private fun changeAmount(operator: String) {
-
-        val valueAsString = binding.balance.text.toString()
-        var convertedValueToInt = valueAsString.dropLast(1).toInt()
-
-        if (operator == "+") {
-            convertedValueToInt += 20
-        } else {
-            convertedValueToInt -= 20
-        }
-
-        binding.balance.setText(convertedValueToInt.toString() + "₾")
-
-        val user = HashMap<String, Any>()
-        user.put("balance", convertedValueToInt)
-        database.updateChildren(user).addOnCompleteListener {
-            if (it.isSuccessful) {
-                d("sdadasdas", convertedValueToInt.toString())
-            }
-        }
     }
 }

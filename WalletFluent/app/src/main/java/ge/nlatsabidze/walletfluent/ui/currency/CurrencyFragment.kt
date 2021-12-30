@@ -12,7 +12,7 @@ import ge.nlatsabidze.walletfluent.databinding.FragmentCurrencyBinding
 class CurrencyFragment : BaseFragment<FragmentCurrencyBinding>(FragmentCurrencyBinding::inflate) {
 
     override fun start() {
-        val currencyPages = arrayOf("კურსები", "კალკულატორი")
+        val currencyPages = arrayOf("Currencies", "Calculator")
 
         val viewPager = binding.viewPager
         val tabLayout = binding.tabLayout

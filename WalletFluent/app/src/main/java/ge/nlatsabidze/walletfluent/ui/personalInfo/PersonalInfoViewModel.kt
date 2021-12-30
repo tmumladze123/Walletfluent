@@ -25,7 +25,7 @@ class PersonalInfoViewModel : ViewModel() {
             if (it.result?.exists() == true) {
 
                 val balance = it.result!!.child("balance").value.toString() + "₾"
-                val name = it.result!!.child("name").value.toString()
+                val name = it.result!!.child("name").value.toString() +"'s card"
 
 
                 viewModelScope.launch {

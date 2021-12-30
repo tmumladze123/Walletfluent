@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     app:cardElevation="10dp"
     app:cardCornerRadius="100dp"
@@ -27,7 +28,7 @@
             android:id="@+id/tvBuy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="buy : "
+            android:text="@string/buy"
             android:layout_marginLeft="50dp"
             android:textSize="15sp"
             android:layout_marginBottom="10dp"
@@ -41,7 +42,6 @@
             android:id="@+id/tvBuyAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="4.56878"
             android:textSize="15sp"
             android:layout_marginBottom="10dp"
             android:layout_marginRight="80dp"
@@ -55,19 +55,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="50dp"
-            android:text="sell : "
+            android:text="@string/sell"
             android:textSize="15sp"
             android:layout_marginBottom="10dp"
             app:layout_constraintEnd_toStartOf="@+id/tvSellAmount"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/tvBuyAmount"
-            app:layout_constraintTop_toBottomOf="@+id/tvName" />
+            app:layout_constraintTop_toBottomOf="@+id/tvName"
+            />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvSellAmount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="4.56878"
             android:layout_marginBottom="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             android:textSize="15sp"

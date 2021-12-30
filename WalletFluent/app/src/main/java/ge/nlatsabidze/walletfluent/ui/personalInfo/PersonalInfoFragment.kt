@@ -22,10 +22,10 @@ class PersonalInfoFragment :
     private lateinit var database: DatabaseReference
     private lateinit var firebaseUser: FirebaseUser
 
+
     override fun start() {
-
         initializeFirebase()
-
+        activity!!.actionBar?.hide()
         personalInfoViewModel.setInformationFromDatabase(database)
 
         binding.btnIncrease.setOnClickListener {

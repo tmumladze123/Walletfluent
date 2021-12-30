@@ -1,17 +1,22 @@
 package ge.nlatsabidze.walletfluent.ui.entry
 
+import android.util.Log.d
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.databinding.FragmentRegisterBinding
 import ge.nlatsabidze.walletfluent.extensions.showDialogError
+import ge.nlatsabidze.walletfluent.ui.entry.userData.User
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -21,31 +26,38 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
 
     private lateinit var firebaseAuth: FirebaseAuth
     private val loginViewModel: LoginRegisterViewModel by activityViewModels()
+    private lateinit var database: DatabaseReference
 
 
     override fun start() {
 
         firebaseAuth = FirebaseAuth.getInstance()
+        binding.btnSignUp.setOnClickListener {
 
-        binding.btnSignUp.setOnClickListener { registerUser() }
+            registerUser()
+        }
 
-        listeners()
+        observervers()
     }
 
     private fun registerUser() {
         with(binding) {
+            val name = nameEditText.text.toString()
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
             checkInputValidation(email, password)
-            loginViewModel.register(email, password)
+            loginViewModel.register(email, password, name, 200)
         }
     }
 
-    private fun listeners() {
+    private fun observervers() {
         viewLifecycleOwner.lifecycleScope.launch {
             loginViewModel.userMutableLiveFlow.collect { userLogedIn ->
                 if (userLogedIn) {
-                    navigateToSignInPage(binding.emailEditText.text.toString(), binding.passwordEditText.text.toString())
+                    navigateToSignInPage(
+                        binding.emailEditText.text.toString(),
+                        binding.passwordEditText.text.toString()
+                    )
                     loginViewModel.changeUserValue()
                 }
             }
@@ -105,4 +117,6 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
         val builder = AlertDialog.Builder(requireContext())
         builder.showDialogError(message, requireContext())
     }
+
+
 }

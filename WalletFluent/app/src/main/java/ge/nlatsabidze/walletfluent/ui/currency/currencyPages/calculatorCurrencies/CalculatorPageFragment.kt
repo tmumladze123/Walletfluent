@@ -1,20 +1,17 @@
 package ge.nlatsabidze.walletfluent.ui.currency.currencyPages.calculatorCurrencies
 
-import android.text.Editable
 import android.util.Log.d
-import android.view.WindowManager
+import android.widget.AdapterView.OnItemClickListener
 import android.widget.ArrayAdapter
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.databinding.CalculatorPageFragmentBinding
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import android.widget.AutoCompleteTextView
-import android.widget.AdapterView
-import android.widget.AdapterView.OnItemClickListener
 
 
 @AndroidEntryPoint
@@ -24,62 +21,67 @@ class CalculatorPageFragment :
     private val calculatorViewModel: CalculatorPageViewModel by viewModels()
 
     override fun start() {
+        makeResultEditTextNotClickable()
         collectConvertedValue()
         setValueToResult()
-    }
 
+    }
     private fun collectConvertedValue() {
 
-        val countries: Array<String> = resources.getStringArray(R.array.countries)
-        val arrayListOfCountries = ArrayList<String>()
+        val countries = resources.getStringArray(R.array.countries)
 
-        for (i in countries.indices) {
-            arrayListOfCountries.add(countries[i])
-        }
-
-        val countriesFrom = ArrayAdapter(requireContext(), R.layout.dropdown_item, arrayListOfCountries)
+        val countriesFrom = ArrayAdapter(requireContext(), R.layout.dropdown_item, countries)
         binding.autoCompleteFrom.setAdapter(countriesFrom)
+        binding.autoCompleteTo.setAdapter(countriesFrom)
 
-        val countriesTo = ArrayAdapter(requireContext(), R.layout.dropdown_item, arrayListOfCountries)
-        binding.autoCompleteTo.setAdapter(countriesTo)
-
-        var firstValue = binding.autoCompleteFrom.text.toString()
+        var firstValue = binding.textInputLayoutWrapper.editText?.text.toString()
+        var secondValue = binding.secondTextInputLayoutWrapper.editText?.text.toString()
         binding.autoCompleteFrom.onItemClickListener =
             OnItemClickListener { adapterView, view, position, id ->
                 val selectedValue: String? = countriesFrom.getItem(position)
                 firstValue = selectedValue!!
+                if (binding.etNumber.text?.isNotEmpty() == true) {
+                    calculatorViewModel.getConvertedValue(binding.etNumber.text.toString().toDouble(), firstValue, secondValue)
+                }
                 d("dsadsa", firstValue)
             }
 
-        var secondValue = binding.autoCompleteTo.text.toString()
+
         binding.autoCompleteTo.onItemClickListener =
             OnItemClickListener { adapterView, view, position, id ->
-                val selectedValue: String? = countriesTo.getItem(position)
+                val selectedValue: String? = countriesFrom.getItem(position)
                 secondValue = selectedValue!!
+                if (binding.etNumber.text?.isNotEmpty() == true) {
+                    calculatorViewModel.getConvertedValue(binding.etNumber.text.toString().toDouble(), firstValue, secondValue)
+                }
                 d("dsadsa", secondValue)
             }
 
-        binding.btnConverter.setOnClickListener {
-            if (binding.etNumber.text.toString().isNotEmpty()) {
+        binding.etNumber.doAfterTextChanged {
+            val amountAsString = binding.etNumber.text.toString()
+            if(amountAsString.isNotEmpty() && amountAsString[0]=='0'){
+                binding.etConvertedNumber.setText("0");
+            }
+            else if (amountAsString.isNotEmpty()) {
                 val amount = binding.etNumber.text.toString().toDouble()
-                d("amount", amount.toString())
                 calculatorViewModel.getConvertedValue(amount, firstValue, secondValue)
+            } else if (amountAsString.isEmpty() && binding.etConvertedNumber.text.toString().isNotEmpty()) {
+                binding.etConvertedNumber.text?.clear()
             }
         }
-
-//        binding.btnSwap.setOnClickListener {
-//            firstValue = secondValue.also {secondValue = firstValue}
-//            d("dsadas",countriesFrom.getPosition("AVD").toString())
-//            countriesFrom.setDropDownViewResource(countriesFrom.getPosition("AVD"))
-//            countriesFrom.
-//        }
     }
 
     private fun setValueToResult() {
         viewLifecycleOwner.lifecycleScope.launch {
-            calculatorViewModel.convertedValue.collectLatest {
-                binding.etConvertedNumber.setText(it.value.toString())
+            calculatorViewModel.convertedValue.collect {
+                if (binding.etNumber.text?.isNotEmpty() == true) {
+                    binding.etConvertedNumber.setText(it.value.toString())
+                }
             }
         }
+    }
+
+    private fun makeResultEditTextNotClickable() {
+        binding.etConvertedNumber.isEnabled = false
     }
 }

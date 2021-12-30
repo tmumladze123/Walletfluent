@@ -1,6 +1,7 @@
 package ge.nlatsabidze.walletfluent
 
 import android.app.Application
+import android.content.Context
 import android.util.Log.d
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
@@ -39,12 +40,12 @@ class FirebaseRepository @Inject constructor(private val application: Applicatio
                                 _currentUser.value = true
                             } else {
                                 _repositoryDialogError.value =
-                                    "ვწუხვართ, თქვენს მიერ მითითებული მონაცემები არავალიდურია."
+                                    application.resources.getString(R.string.NotValidInformation)
                             }
                         }
                     } else {
                         _repositoryDialogError.value =
-                            "ვწუხვართ, მითითებული ელ-ფოსტა ან პაროლი არავალიდურია."
+                            application.resources.getString(R.string.InvalidRegistration)
                     }
                 }
         }
@@ -61,11 +62,11 @@ class FirebaseRepository @Inject constructor(private val application: Applicatio
                     } else {
                         firebaseUser.sendEmailVerification()
                         _repositoryDialogError.value =
-                            "გთხოვთ გაიაროთ ვერიფიკაცია მითითებულ ელ-ფოსტაზე."
+                            application.resources.getString(R.string.VerificationDialog)
                     }
                 } else {
                     _repositoryDialogError.value =
-                        "ვწუხვართ, მითითებული სახელი ან პაროლი არასწორია, სცადე განმეორებით."
+                        application.resources.getString(R.string.InvalidRegistration)
                 }
             }
         }
@@ -76,11 +77,11 @@ class FirebaseRepository @Inject constructor(private val application: Applicatio
             firebaseAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener { userEmail ->
                     if (userEmail.isSuccessful) {
-                        _repositoryDialogError.value = "მიყევით ინსტრუქციას მითითებულ ელ-ფოსტაზე."
+                        _repositoryDialogError.value = application.resources.getString(R.string.ResetPasswordDialog)
                     }
                 }
         } else {
-            _repositoryDialogError.value = "გთხოვთ მიუთითეთ ელ-ფოსტა."
+            _repositoryDialogError.value = application.resources.getString(R.string.ResetPasswordUsingEmailDialog)
         }
     }
 

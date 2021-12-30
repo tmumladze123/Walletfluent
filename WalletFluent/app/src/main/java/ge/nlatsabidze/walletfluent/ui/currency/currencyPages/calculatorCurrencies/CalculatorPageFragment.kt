@@ -59,7 +59,7 @@ class CalculatorPageFragment :
 
         binding.etNumber.doAfterTextChanged {
             val amountAsString = binding.etNumber.text.toString()
-            if(amountAsString.isNotEmpty() && amountAsString[0]=='0'){
+            if(amountAsString.isNotEmpty() && amountAsString[0] == '0'){
                 binding.etConvertedNumber.setText("0");
             }
             else if (amountAsString.isNotEmpty()) {

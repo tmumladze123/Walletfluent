@@ -84,22 +84,22 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
             val shake: Animation = AnimationUtils.loadAnimation(requireContext(), R.anim.vibrate)
             if (email.isEmpty() && password.isEmpty()) {
                 emailEditTextWrapper.startAnimation(shake)
-                emailEditTextWrapper.helperText = "Field is not Filled"
+                emailEditTextWrapper.helperText = resources.getString(R.string.invalidField)
                 emailEditText.setBackgroundResource(R.drawable.border)
 
                 passwordEditTextWrapper.startAnimation(shake)
-                passwordEditTextWrapper.helperText = "Field is not Filled"
+                passwordEditTextWrapper.helperText = resources.getString(R.string.invalidField)
                 passwordEditText.setBackgroundResource(R.drawable.border)
 
             } else if (password.isEmpty()) {
                 passwordEditTextWrapper.startAnimation(shake)
-                passwordEditTextWrapper.helperText = "Field is not Filled"
+                passwordEditTextWrapper.helperText = resources.getString(R.string.invalidField)
                 emailEditTextWrapper.helperText = ""
                 passwordEditText.setBackgroundResource(R.drawable.border)
                 emailEditText.setBackgroundResource(R.color.transparent)
             } else if (email.isEmpty()) {
                 emailEditTextWrapper.startAnimation(shake)
-                emailEditTextWrapper.helperText = "Field is not Filled"
+                emailEditTextWrapper.helperText = resources.getString(R.string.invalidField);
                 passwordEditTextWrapper.helperText = ""
                 emailEditText.setBackgroundResource(R.drawable.border)
                 passwordEditText.setBackgroundResource(R.color.transparent)

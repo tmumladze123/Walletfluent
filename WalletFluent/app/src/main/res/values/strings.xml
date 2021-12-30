@@ -1,38 +1,44 @@
 <resources>
     <string name="app_name">WalletFluent</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
+    <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+    <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+    <string name="nav_header_title" translatable="false">Android Studio</string>
+    <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
+    <string name="nav_header_desc" translatable="false">Navigation header</string>
+    <string name="action_settings" translatable="false">Settings</string>
     <string name="login">log In</string>
     <string name="currency">Currencies</string>
     <string name="language">ენა/Language</string>
     <string name="crypto">Crypto</string>
-    <string name="walletfluent">Walletfluent</string>
+    <string name="walletfluent" translatable="false">Walletfluent</string>
     <string name="enter">შესვლა</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="register">რეგისტრაცია</string>
     <string name="PersonalInformation">პერსონალური მონაცემები</string>
     <string name="username">Username</string>
     <string name="invalidField">Field is not filled</string>
     <string name="signin">Sign in</string>
     <string name="sign_in"><u>Sign in</u></string>
-    <string name="sign_up"><u>Sign up</u></string>
-    <string name="signup">Sign up</string>
+    <string name="sign_up" translatable="false"><u>Sign up</u></string>
+    <string name="signup" translatable="false">Sign up</string>
     <string name="forgot_password"><u>Forgot Password</u></string>
-    <string name="create_account">Create\nAccount</string>
+    <string name="create_account" translatable="false">Create\nAccount</string>
     <string name="name">Name</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="balance">Current Balance</string>
     <string name="welcome">welcome</string>
-    <string name="english">English</string>
-    <string name="georgian">Georgian</string>
-    <string name="application_language">Application Language</string>
+    <string name="english" translatable="false">English</string>
+    <string name="georgian" translatable="false">Georgian</string>
+    <string name="application_language" translatable="false">Application Language</string>
     <string name="buy">buy : </string>
     <string name="sell">sell : </string>
+    <string name="InvalidRegistration">Sorry, Invalid Email or password</string>
+    <string name="NotValidInformation">Sorry, Data you have entered is invalid</string>
+    <string name="VerificationDialog">Please, Verify your account using your email</string>
+    <string name="ResetPasswordDialog">Please follow instructions on your Email</string>
+    <string name="ResetPasswordUsingEmailDialog">Please specify your email</string>
+
 
     <string-array name="countries">
         <item >GEL</item>

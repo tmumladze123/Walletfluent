@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WalletFluent</string>
+    <string name="login">შესვლა</string>
+    <string name="currency">ვალუტა</string>
+    <string name="language">ენა</string>
+    <string name="crypto">კრიპტო ვალუტა</string>
+    <string name="enter">შესვლა</string>
+    <string name="register">რეგისტრაცია</string>
+    <string name="PersonalInformation">პერსონალური მონაცემები</string>
+    <string name="username">სახელი</string>
+    <string name="invalidField">ველი არ არის შევსებული</string>
+    <string name="signin">შესვლა</string>
+    <string name="sign_in">შესვლა</string>
+    <string name="forgot_password">დაგავიწყათ პაროლი?</string>
+    <string name="name">სახელი</string>
+    <string name="email">მეილი</string>
+    <string name="password">პაროლი</string>
+    <string name="balance">მიმდინარე ბალანსი</string>
+    <string name="welcome">მოგესალმებით</string>
+    <string name="buy">ყიდვა: </string>
+    <string name="sell">გაყიდვა: </string>
+    <string name="InvalidRegistration">ვწუხვართ, მითითებული მეილი და პაროლი არასწორია</string>
+    <string name="NotValidInformation">ვწუხვართ, მითითებული მონაცემები არ არის სწორი</string>
+    <string name="VerificationDialog">გთხოვთ დაადასტუროთ მეილი</string>
+    <string name="ResetPasswordDialog">მიყევით ინსტრუქციას მითითებული მეილზე</string>
+    <string name="ResetPasswordUsingEmailDialog">გთხოვთ შეიყვანოთ თქვენი მეილი</string>
+
+</resources>

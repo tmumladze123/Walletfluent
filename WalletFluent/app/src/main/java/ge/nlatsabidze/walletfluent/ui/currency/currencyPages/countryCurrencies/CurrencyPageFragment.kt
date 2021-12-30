@@ -18,11 +18,13 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class CurrencyPageFragment :
     BaseFragment<CurrencyPageFragmentBinding>(CurrencyPageFragmentBinding::inflate) {
-    private lateinit var pb: ProgressBar
+
     private val currencyPageViewModel: CurrencyPageViewModel by viewModels()
     private var currencyAdapter = CurrencyAdapter()
+
     override fun start() {
         ((activity))!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+
         initAdapter()
         setDataFromApi()
         displayProgressBar()

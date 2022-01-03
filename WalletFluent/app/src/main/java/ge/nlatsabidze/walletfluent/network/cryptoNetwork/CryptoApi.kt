@@ -9,6 +9,6 @@ import retrofit2.http.Query
 
 interface CryptoApi {
 
-    @GET("exchanges?per_page=20&page=1")
+    @GET("exchanges?per_page=100&page=1")
     suspend fun getCryptoExchanges(): Response<List<Exchanges>>
 }

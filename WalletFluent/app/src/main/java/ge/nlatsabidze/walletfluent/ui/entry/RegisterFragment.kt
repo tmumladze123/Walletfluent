@@ -26,7 +26,6 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
 
     private lateinit var firebaseAuth: FirebaseAuth
     private val loginViewModel: LoginRegisterViewModel by activityViewModels()
-    private lateinit var database: DatabaseReference
 
 
     override fun start() {
@@ -78,22 +77,22 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
             val shake: Animation = AnimationUtils.loadAnimation(requireContext(), R.anim.vibrate)
             if (email.isEmpty() && password.isEmpty()) {
                 emailEditTextWrapper.startAnimation(shake)
-                emailEditTextWrapper.helperText = "ველი არ არის შევსებული"
+                emailEditTextWrapper.helperText = resources.getString(R.string.invalidField)
                 emailEditText.setBackgroundResource(R.drawable.border)
 
                 passwordEditTextWrapper.startAnimation(shake)
-                passwordEditTextWrapper.helperText = "ველი არ არის შევსებული"
+                passwordEditTextWrapper.helperText = resources.getString(R.string.invalidField)
                 passwordEditText.setBackgroundResource(R.drawable.border)
 
             } else if (password.isEmpty()) {
                 passwordEditTextWrapper.startAnimation(shake)
-                passwordEditTextWrapper.helperText = "ველი არ არის შევსებული"
+                passwordEditTextWrapper.helperText = resources.getString(R.string.invalidField)
                 emailEditTextWrapper.helperText = ""
                 passwordEditText.setBackgroundResource(R.drawable.border)
                 emailEditText.setBackgroundResource(R.color.transparent)
             } else if (email.isEmpty()) {
                 emailEditTextWrapper.startAnimation(shake)
-                emailEditTextWrapper.helperText = "ველი არ არის შევსებული"
+                emailEditTextWrapper.helperText = resources.getString(R.string.invalidField)
                 passwordEditTextWrapper.helperText = ""
                 emailEditText.setBackgroundResource(R.drawable.border)
                 passwordEditText.setBackgroundResource(R.color.transparent)

@@ -11,11 +11,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
 
-class FirebaseRepository @Inject constructor(private val application: Application) {
-
-    private val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
-
-    private lateinit var database: DatabaseReference
+class FirebaseRepository @Inject constructor(
+    private val application: Application,
+    private val firebaseAuth: FirebaseAuth,
+    private var database: DatabaseReference
+) {
 
     private var _currentUser = MutableStateFlow<Boolean>(false)
     val currentUser: MutableStateFlow<Boolean> get() = _currentUser
@@ -32,7 +32,7 @@ class FirebaseRepository @Inject constructor(private val application: Applicatio
                         val user = firebaseAuth.currentUser
                         val uid = user?.uid
 
-                        database = FirebaseDatabase.getInstance("https://walletfluent-b2fe7-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Users")
+//                        database = FirebaseDatabase.getInstance("https://walletfluent-b2fe7-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Users")
 
                         val activeUser = User(email, name, password, balance)
                         database.child(uid!!).setValue(activeUser).addOnCompleteListener {
@@ -52,7 +52,6 @@ class FirebaseRepository @Inject constructor(private val application: Applicatio
     }
 
     fun login(email: String?, password: String?) {
-        d("esaaa :", password.toString() + "  " + email.toString())
         if (email!!.isNotEmpty() && password!!.isNotEmpty()) {
             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener { Task ->
                 if (Task.isSuccessful) {
@@ -77,11 +76,13 @@ class FirebaseRepository @Inject constructor(private val application: Applicatio
             firebaseAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener { userEmail ->
                     if (userEmail.isSuccessful) {
-                        _repositoryDialogError.value = application.resources.getString(R.string.ResetPasswordDialog)
+                        _repositoryDialogError.value =
+                            application.resources.getString(R.string.ResetPasswordDialog)
                     }
                 }
         } else {
-            _repositoryDialogError.value = application.resources.getString(R.string.ResetPasswordUsingEmailDialog)
+            _repositoryDialogError.value =
+                application.resources.getString(R.string.ResetPasswordUsingEmailDialog)
         }
     }
 

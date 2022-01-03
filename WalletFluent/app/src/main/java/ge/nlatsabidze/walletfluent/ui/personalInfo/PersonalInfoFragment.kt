@@ -29,11 +29,19 @@ class PersonalInfoFragment :
         personalInfoViewModel.setInformationFromDatabase(database)
 
         binding.btnIncrease.setOnClickListener {
-            personalInfoViewModel.changeUserAmount(binding.balance.text.toString(), binding.btnIncrease.text.toString(), database)
+            personalInfoViewModel.changeUserAmount(
+                binding.balance.text.toString(),
+                binding.btnIncrease.text.toString(),
+                database
+            )
         }
 
         binding.btnDecrease.setOnClickListener {
-            personalInfoViewModel.changeUserAmount(binding.balance.text.toString(), binding.btnDecrease.text.toString(), database)
+            personalInfoViewModel.changeUserAmount(
+                binding.balance.text.toString(),
+                binding.btnDecrease.text.toString(),
+                database
+            )
         }
 
         observes()
@@ -42,18 +50,18 @@ class PersonalInfoFragment :
     private fun observes() {
         viewLifecycleOwner.lifecycleScope.launch {
             personalInfoViewModel.setAmount.collect {
-                binding.balance.setText(it.toString() + "₾")
+                binding.balance.text = it.toString() + "₾"
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
             personalInfoViewModel.balance.collect {
-                binding.balance.setText(it)
+                binding.balance.text = it
             }
         }
         viewLifecycleOwner.lifecycleScope.launch {
             personalInfoViewModel.name.collect {
-                binding.tvName.setText(it)
+                binding.tvName.text = it
             }
         }
     }

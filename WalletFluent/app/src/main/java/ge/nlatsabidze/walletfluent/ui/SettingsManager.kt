@@ -8,12 +8,13 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
 enum class UiMode {
     LIGHT, DARK
 }
 
-class SettingsManager(context: Context) {
+class SettingsManager @Inject constructor(context: Context) {
 
     companion object {
         val IS_DARK_MODE = booleanPreferencesKey("dark_mode")

@@ -10,7 +10,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.databinding.CalculatorPageFragmentBinding
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 
@@ -22,11 +22,12 @@ class CalculatorPageFragment :
 
     override fun start() {
         makeResultEditTextNotClickable()
-        collectConvertedValue()
         setValueToResult()
 
     }
-    private fun collectConvertedValue() {
+
+    override fun onResume() {
+        super.onResume()
 
         val countries = resources.getStringArray(R.array.countries)
 
@@ -41,9 +42,11 @@ class CalculatorPageFragment :
                 val selectedValue: String? = countriesFrom.getItem(position)
                 firstValue = selectedValue!!
                 if (binding.etNumber.text?.isNotEmpty() == true) {
-                    calculatorViewModel.getConvertedValue(binding.etNumber.text.toString().toDouble(), firstValue, secondValue)
+                    calculatorViewModel.getConvertedValue(
+                        binding.etNumber.text.toString().toDouble(), firstValue, secondValue
+                    )
                 }
-                d("dsadsa", firstValue)
+
             }
 
 
@@ -52,28 +55,31 @@ class CalculatorPageFragment :
                 val selectedValue: String? = countriesFrom.getItem(position)
                 secondValue = selectedValue!!
                 if (binding.etNumber.text?.isNotEmpty() == true) {
-                    calculatorViewModel.getConvertedValue(binding.etNumber.text.toString().toDouble(), firstValue, secondValue)
+                    calculatorViewModel.getConvertedValue(
+                        binding.etNumber.text.toString().toDouble(), firstValue, secondValue
+                    )
                 }
-                d("dsadsa", secondValue)
             }
 
         binding.etNumber.doAfterTextChanged {
             val amountAsString = binding.etNumber.text.toString()
-            if(amountAsString.isNotEmpty() && amountAsString[0] == '0'){
+            if (amountAsString.isNotEmpty() && amountAsString[0] == '0') {
                 binding.etConvertedNumber.setText("0");
-            }
-            else if (amountAsString.isNotEmpty()) {
+            } else if (amountAsString.isNotEmpty()) {
                 val amount = binding.etNumber.text.toString().toDouble()
                 calculatorViewModel.getConvertedValue(amount, firstValue, secondValue)
-            } else if (amountAsString.isEmpty() && binding.etConvertedNumber.text.toString().isNotEmpty()) {
+            } else if (amountAsString.isEmpty() && binding.etConvertedNumber.text.toString()
+                    .isNotEmpty()
+            ) {
                 binding.etConvertedNumber.text?.clear()
             }
         }
+
     }
 
     private fun setValueToResult() {
         viewLifecycleOwner.lifecycleScope.launch {
-            calculatorViewModel.convertedValue.collect {
+            calculatorViewModel.convertedValue.collectLatest {
                 if (binding.etNumber.text?.isNotEmpty() == true) {
                     binding.etConvertedNumber.setText(it.value.toString())
                 }

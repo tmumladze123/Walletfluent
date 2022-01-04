@@ -93,10 +93,10 @@ dependencies {
     implementation "androidx.paging:paging-runtime-ktx:3.1.0"
 
     //datastore
-    implementation("androidx.datastore:datastore-rxjava3:1.0.0")
     implementation("androidx.datastore:datastore:1.0.0")
-    implementation("androidx.datastore:datastore-rxjava2:1.0.0")
     implementation("androidx.datastore:datastore-core:1.0.0")
+    implementation 'androidx.datastore:datastore-preferences:1.0.0'
+    implementation("androidx.datastore:datastore-preferences-core:1.0.0")
 
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
@@ -111,18 +111,16 @@ dependencies {
 
     //Room
     def roomVersion = "2.3.0"
-
     implementation("androidx.room:room-runtime:$roomVersion")
     annotationProcessor("androidx.room:room-compiler:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     androidTestImplementation "androidx.room:room-testing:$roomVersion"
+
     // To use Kotlin annotation processing tool (kapt)
     kapt("androidx.room:room-compiler:$roomVersion")
 
     //dagger-hilt
     implementation("com.google.dagger:hilt-android:2.38.1")
-//    kapt("com.google.dagger:hilt-android-compiler:2.38.1")
-
     kapt "com.google.dagger:hilt-compiler:2.38.1"
 
     implementation("com.google.android.material:material:1.6.0-alpha01")

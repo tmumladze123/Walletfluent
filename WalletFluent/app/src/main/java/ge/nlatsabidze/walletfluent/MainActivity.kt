@@ -1,19 +1,23 @@
 package ge.nlatsabidze.walletfluent
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.datastore.preferences.preferencesDataStore
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
+import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.databinding.ActivityMainBinding
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -21,15 +25,26 @@ class MainActivity : AppCompatActivity() {
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
+    private lateinit var settingsManager: SettingsManager
+    private var isDarkMode = true
+
+    private val Context.dataStore by preferencesDataStore(name = "settings")
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
         setSupportActionBar(binding.appBarMain.toolbar)
 
-        changeBackgroundMode()
+        settingsManager = SettingsManager(applicationContext)
+        observeUiPreferences()
+
+        binding.switchView.setOnClickListener {
+            setUpUi()
+        }
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
@@ -62,5 +77,35 @@ class MainActivity : AppCompatActivity() {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
         }
+    }
+
+    private fun setUpUi() {
+        lifecycleScope.launch {
+            when(isDarkMode) {
+                true -> settingsManager.setUpUiMode(UiMode.LIGHT)
+                false -> settingsManager.setUpUiMode(UiMode.DARK)
+            }
+        }
+    }
+
+    private fun observeUiPreferences() {
+        settingsManager.uiModeFlow.asLiveData().observe(this) {
+            it?.let {
+                when(it) {
+                    UiMode.LIGHT -> onLightMode()
+                    UiMode.DARK -> onDarkMode()
+                }
+            }
+        }
+    }
+
+    private fun onLightMode() {
+        isDarkMode = false
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+    }
+
+    private fun onDarkMode() {
+        isDarkMode = true
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
     }
 }

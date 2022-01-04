@@ -69,16 +69,6 @@ class MainActivity : AppCompatActivity() {
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    private fun changeBackgroundMode() {
-        binding.switchView.setOnClickListener {
-            if (binding.switchView.isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }
-        }
-    }
-
     private fun setUpUi() {
         lifecycleScope.launch {
             when(isDarkMode) {

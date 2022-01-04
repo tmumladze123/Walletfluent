@@ -17,6 +17,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.databinding.ActivityMainBinding
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -79,11 +80,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun observeUiPreferences() {
-        settingsManager.uiModeFlow.asLiveData().observe(this) {
-            it?.let {
-                when(it) {
-                    UiMode.LIGHT -> onLightMode()
-                    UiMode.DARK -> onDarkMode()
+        lifecycleScope.launch {
+            settingsManager.uiModeFlow.collect {
+                it.let {
+                    when(it) {
+                        UiMode.LIGHT -> onLightMode()
+                        UiMode.DARK -> onDarkMode()
+                    }
                 }
             }
         }

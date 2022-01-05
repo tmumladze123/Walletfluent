@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -52,7 +51,10 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.languageFragment, R.id.cryptoFragment, R.id.currencyFragment, R.id.loginFragment
+                R.id.languageFragment,
+                R.id.cryptoFragment,
+                R.id.currencyFragment,
+                R.id.loginFragment
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -65,6 +67,7 @@ class MainActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
+
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
@@ -72,7 +75,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setUpUi() {
         lifecycleScope.launch {
-            when(isDarkMode) {
+            when (isDarkMode) {
                 true -> settingsManager.setUpUiMode(UiMode.LIGHT)
                 false -> settingsManager.setUpUiMode(UiMode.DARK)
             }
@@ -83,7 +86,7 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             settingsManager.uiModeFlow.collect {
                 it.let {
-                    when(it) {
+                    when (it) {
                         UiMode.LIGHT -> onLightMode()
                         UiMode.DARK -> onDarkMode()
                     }
@@ -94,11 +97,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun onLightMode() {
         isDarkMode = false
+        binding.switchView.isChecked = false
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }
 
     private fun onDarkMode() {
         isDarkMode = true
+        binding.switchView.isChecked = true
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
     }
 }

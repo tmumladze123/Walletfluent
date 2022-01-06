@@ -26,7 +26,9 @@ class CurrencyPageViewModel @Inject constructor(private val currencyRepository: 
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 currencyRepository.getCountryCurrencies().collectLatest {
-                    _commercialRates.emit(it.data?.commercialRatesList!!)
+                    if (it.data?.commercialRatesList != null) {
+                        _commercialRates.emit(it.data.commercialRatesList)
+                    }
                 }
             }
         }

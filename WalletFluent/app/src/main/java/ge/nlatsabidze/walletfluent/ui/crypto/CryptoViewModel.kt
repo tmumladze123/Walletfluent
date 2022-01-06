@@ -3,7 +3,7 @@ package ge.nlatsabidze.walletfluent.ui.crypto
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import ge.nlatsabidze.walletfluent.model.cryptoModel.Exchanges
+import ge.nlatsabidze.walletfluent.model.cryptoModel.MarketsItem
 import ge.nlatsabidze.walletfluent.network.cryptoNetwork.CryptoRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -16,8 +16,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CryptoViewModel @Inject constructor(private val cryptoService: CryptoRepository) : ViewModel() {
 
-    private val _cryptoExchangedValues = MutableSharedFlow<List<Exchanges>>()
-    val cryptoExchangedValues: MutableSharedFlow<List<Exchanges>> get() = _cryptoExchangedValues
+    private val _marketItemsValues = MutableSharedFlow<List<MarketsItem>>()
+    val marketItems: MutableSharedFlow<List<MarketsItem>> get() = _marketItemsValues
 
     private var _showLoadingViewModelState = MutableStateFlow<Boolean>(false)
     val showLoadingViewModel: MutableStateFlow<Boolean> get() = _showLoadingViewModelState
@@ -25,8 +25,8 @@ class CryptoViewModel @Inject constructor(private val cryptoService: CryptoRepos
     fun getCryptoExchangeValues() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                cryptoService.getCryptoExchanges().collectLatest {
-                    _cryptoExchangedValues.emit(it.data!!)
+                cryptoService.getMarketValues().collectLatest {
+                    _marketItemsValues.emit(it.data!!)
                 }
             }
         }

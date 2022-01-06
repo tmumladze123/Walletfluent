@@ -12,10 +12,25 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="35dp"
         android:indeterminate="true"
+        android:visibility="gone"
         app:indicatorColor="@color/purple_700"
         app:layout_constraintBottom_toBottomOf="@+id/rvCrypto"
         app:layout_constraintEnd_toEndOf="@+id/rvCrypto"
         app:layout_constraintStart_toStartOf="@+id/rvCrypto"
+        tools:ignore="MissingConstraints" />
+
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/spin_kit"
+        style="@style/SpinKitView.Large.FadingCircle"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_gravity="center"
+        app:SpinKit_Color="@color/purple_700"
+        app:layout_constraintBottom_toBottomOf="@+id/rvCrypto"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rvCrypto"
         tools:ignore="MissingConstraints" />
 
     <androidx.recyclerview.widget.RecyclerView

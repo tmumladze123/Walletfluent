@@ -24,7 +24,9 @@ class CalculatorPageViewModel @Inject constructor(private val currencyRepository
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 currencyRepository.getConvertedValues(amount, from, to).collect {
-                    _convertedValue.emit(it.data!!)
+                    if (it.data != null) {
+                        _convertedValue.emit(it.data)
+                    }
                 }
             }
         }

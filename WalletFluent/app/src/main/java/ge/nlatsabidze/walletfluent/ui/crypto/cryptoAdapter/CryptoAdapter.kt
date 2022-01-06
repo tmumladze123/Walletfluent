@@ -5,12 +5,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ge.nlatsabidze.walletfluent.databinding.ExchangeItemBinding
 import ge.nlatsabidze.walletfluent.extensions.setImage
-import ge.nlatsabidze.walletfluent.model.cryptoModel.Exchanges
-import ge.nlatsabidze.walletfluent.model.valuteModel.CommercialRates
+import ge.nlatsabidze.walletfluent.model.cryptoModel.MarketsItem
 
 class CryptoAdapter : RecyclerView.Adapter<CryptoAdapter.CryptoItemViewHolder>() {
 
-    var cryptoExchanges: List<Exchanges> = listOf()
+    var cryptoExchanges: List<MarketsItem> = listOf()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -18,16 +17,16 @@ class CryptoAdapter : RecyclerView.Adapter<CryptoAdapter.CryptoItemViewHolder>()
 
     inner class CryptoItemViewHolder(private val binding: ExchangeItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        private lateinit var currentItem: Exchanges
+        private lateinit var currentItem: MarketsItem
 
         fun onBind() {
             currentItem = cryptoExchanges[bindingAdapterPosition]
             with(binding) {
                 with(currentItem) {
                     imCrypto.setImage(image)
-                    tvCountry.text = country.toString()
-                    tvDesc.text = description.toString()
-                    tvName.text = name
+                    tvCountry.text = currentItem.name.toString()
+                    tvDesc.text = currentItem.current_price.toString()
+                    tvName.text = currentItem.atl_date.toString()
                 }
             }
         }

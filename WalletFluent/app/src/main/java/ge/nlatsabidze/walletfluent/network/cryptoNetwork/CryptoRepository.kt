@@ -1,10 +1,7 @@
 package ge.nlatsabidze.walletfluent.network.cryptoNetwork
 
 import ge.nlatsabidze.walletfluent.Resource
-import ge.nlatsabidze.walletfluent.model.cryptoModel.Exchanges
-import ge.nlatsabidze.walletfluent.model.valuteModel.Converter
-import ge.nlatsabidze.walletfluent.model.valuteModel.Currency
-import ge.nlatsabidze.walletfluent.network.currencyNetwork.CurrencyApi
+import ge.nlatsabidze.walletfluent.model.cryptoModel.MarketsItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,10 +15,10 @@ class CryptoRepository @Inject constructor(private var apiService: CryptoApi) {
     private var _showLoading = MutableStateFlow<Boolean>(false)
     val showLoading: MutableStateFlow<Boolean> get() = _showLoading
 
-    suspend fun getCryptoExchanges(): Flow<Resource<List<Exchanges>>>{
+    suspend fun getMarketValues(): Flow<Resource<List<MarketsItem>>> {
         return flow {
             emit(handleResponse {
-                apiService.getCryptoExchanges()
+                apiService.getMarketItems()
             })
         }.flowOn(Dispatchers.IO)
     }
@@ -35,7 +32,7 @@ class CryptoRepository @Inject constructor(private var apiService: CryptoApi) {
                 _showLoading.value = false
                 return Resource.Success(body)
             }
-            return Resource.Error("exception")
+            return Resource.Error("exceptionMessage")
 
         }catch (e: Exception) {
             return Resource.Error("exception")

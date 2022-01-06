@@ -1,6 +1,5 @@
 package ge.nlatsabidze.walletfluent.ui.crypto
 
-import android.util.Log.d
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -28,9 +27,8 @@ class CryptoFragment : BaseFragment<FragmentCryptoBinding>(FragmentCryptoBinding
         binding.rvCrypto.layoutManager = LinearLayoutManager(requireContext())
 
         cryptoViewModel.getCryptoExchangeValues()
-
         viewLifecycleOwner.lifecycleScope.launch {
-            cryptoViewModel.cryptoExchangedValues.collectLatest {
+            cryptoViewModel.marketItems.collectLatest {
                 cryptoAdapter.cryptoExchanges = it
             }
         }
@@ -40,7 +38,7 @@ class CryptoFragment : BaseFragment<FragmentCryptoBinding>(FragmentCryptoBinding
         cryptoViewModel.showLoadingBar()
         viewLifecycleOwner.lifecycleScope.launch {
             cryptoViewModel.showLoadingViewModel.collectLatest {
-                val loadingBar = binding.progressBar
+                val loadingBar = binding.spinKit
                 if (it) {
                     loadingBar.visibility = View.VISIBLE
                 } else {

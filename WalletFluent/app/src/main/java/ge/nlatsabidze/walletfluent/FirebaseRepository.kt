@@ -32,8 +32,6 @@ class FirebaseRepository @Inject constructor(
                         val user = firebaseAuth.currentUser
                         val uid = user?.uid
 
-//                        database = FirebaseDatabase.getInstance("https://walletfluent-b2fe7-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Users")
-
                         val activeUser = User(email, name, password, balance)
                         database.child(uid!!).setValue(activeUser).addOnCompleteListener {
                             if (it.isSuccessful) {

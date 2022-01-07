@@ -2,10 +2,12 @@ package ge.nlatsabidze.walletfluent.ui.crypto.cryptoAdapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import ge.nlatsabidze.walletfluent.databinding.ExchangeItemBinding
 import ge.nlatsabidze.walletfluent.extensions.setImage
 import ge.nlatsabidze.walletfluent.model.cryptoModel.MarketsItem
+import ge.nlatsabidze.walletfluent.ui.crypto.CryptoFragmentDirections
 
 class CryptoAdapter : RecyclerView.Adapter<CryptoAdapter.CryptoItemViewHolder>() {
 
@@ -14,6 +16,8 @@ class CryptoAdapter : RecyclerView.Adapter<CryptoAdapter.CryptoItemViewHolder>()
             field = value
             notifyDataSetChanged()
         }
+
+    var onItemClick: ((MarketsItem) -> Unit)? = null
 
     inner class CryptoItemViewHolder(private val binding: ExchangeItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -27,6 +31,9 @@ class CryptoAdapter : RecyclerView.Adapter<CryptoAdapter.CryptoItemViewHolder>()
                     tvCountry.text = currentItem.name.toString()
                     tvDesc.text = currentItem.current_price.toString()
                     tvName.text = currentItem.atl_date.toString()
+                    root.setOnClickListener {
+                        onItemClick?.invoke(currentItem)
+                    }
                 }
             }
         }

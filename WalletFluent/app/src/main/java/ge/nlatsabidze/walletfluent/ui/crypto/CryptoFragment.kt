@@ -1,5 +1,6 @@
 package ge.nlatsabidze.walletfluent.ui.crypto
 
+import android.util.Log.d
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -31,6 +32,10 @@ class CryptoFragment : BaseFragment<FragmentCryptoBinding>(FragmentCryptoBinding
             cryptoViewModel.marketItems.collectLatest {
                 cryptoAdapter.cryptoExchanges = it
             }
+        }
+
+        cryptoAdapter.onItemClick = {
+            d("asdadasdasdas", it.id.toString())
         }
     }
 

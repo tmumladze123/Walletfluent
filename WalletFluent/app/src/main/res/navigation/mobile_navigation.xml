@@ -15,7 +15,11 @@
         android:id="@+id/cryptoFragment"
         android:name="ge.nlatsabidze.walletfluent.ui.crypto.CryptoFragment"
         android:label="@string/crypto"
-        tools:layout="@layout/fragment_crypto" />
+        tools:layout="@layout/fragment_crypto" >
+        <action
+            android:id="@+id/action_cryptoFragment_to_detailCryptoFragment"
+            app:destination="@id/detailCryptoFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/currencyFragment"
@@ -66,5 +70,10 @@
         android:name="ge.nlatsabidze.walletfluent.ui.personalInfo.PersonalInfoFragment"
         android:label="@string/PersonalInformation"
         tools:layout="@layout/personal_info_fragment" />
+    <fragment
+        android:id="@+id/detailCryptoFragment"
+        android:name="ge.nlatsabidze.walletfluent.ui.cryptoDetail.DetailCryptoFragment"
+        android:label="detail_crypto_fragment"
+        tools:layout="@layout/detail_crypto_fragment" />
 
 </navigation>

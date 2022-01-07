@@ -26,7 +26,9 @@ class CryptoViewModel @Inject constructor(private val cryptoService: CryptoRepos
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 cryptoService.getMarketValues().collectLatest {
-                    _marketItemsValues.emit(it.data!!)
+                    if (it.data != null) {
+                        _marketItemsValues.emit(it.data)
+                    }
                 }
             }
         }

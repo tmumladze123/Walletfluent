@@ -1,6 +1,5 @@
 package ge.nlatsabidze.walletfluent.ui.currency.currencyPages.calculatorCurrencies
 
-import android.util.Log.d
 import android.view.View
 import android.widget.AdapterView
 import androidx.core.widget.doAfterTextChanged

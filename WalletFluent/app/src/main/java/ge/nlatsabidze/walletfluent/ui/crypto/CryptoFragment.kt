@@ -4,6 +4,7 @@ import android.util.Log.d
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
@@ -35,7 +36,8 @@ class CryptoFragment : BaseFragment<FragmentCryptoBinding>(FragmentCryptoBinding
         }
 
         cryptoAdapter.onItemClick = {
-            d("asdadasdasdas", it.id.toString())
+            val action = CryptoFragmentDirections.actionCryptoFragmentToDetailCryptoFragment()
+            findNavController().navigate(action)
         }
     }
 

@@ -73,15 +73,9 @@ class CalculatorPageFragment :
             }
 
         binding.btnSwap.setOnClickListener {
-            val spinner1Index = binding.autoCompleteFrom.getSelectedItemPosition()
-            binding.autoCompleteFrom.setSelection(binding.autoCompleteTo.getSelectedItemPosition());
-            binding.autoCompleteTo.setSelection(spinner1Index);
-
-            if (binding.etNumber.text?.isNotEmpty() == true) {
-                calculatorViewModel.getConvertedValue(
-                    binding.etNumber.text.toString().toDouble(), firstValue, secondValue
-                )
-            }
+            val firstSpinnerIndex = binding.autoCompleteFrom.getSelectedItemPosition()
+            binding.autoCompleteFrom.setSelection(binding.autoCompleteTo.getSelectedItemPosition())
+            binding.autoCompleteTo.setSelection(firstSpinnerIndex)
         }
 
         binding.etNumber.doAfterTextChanged {

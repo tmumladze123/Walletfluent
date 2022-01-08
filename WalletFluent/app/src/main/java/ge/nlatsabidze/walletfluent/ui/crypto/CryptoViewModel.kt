@@ -3,6 +3,7 @@ package ge.nlatsabidze.walletfluent.ui.crypto
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import ge.nlatsabidze.walletfluent.model.cryptoModel.ChartItem
 import ge.nlatsabidze.walletfluent.model.cryptoModel.MarketsItem
 import ge.nlatsabidze.walletfluent.network.cryptoNetwork.CryptoRepository
 import kotlinx.coroutines.Dispatchers

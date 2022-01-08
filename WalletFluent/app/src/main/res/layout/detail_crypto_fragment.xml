@@ -7,4 +7,5 @@
     tools:context=".ui.crypto.CryptoFragment">
 
 
+
 </androidx.constraintlayout.widget.ConstraintLayout>

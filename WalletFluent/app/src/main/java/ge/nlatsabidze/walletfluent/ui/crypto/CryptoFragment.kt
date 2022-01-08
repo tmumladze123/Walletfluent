@@ -2,6 +2,7 @@ package ge.nlatsabidze.walletfluent.ui.crypto
 
 import android.util.Log.d
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -35,9 +36,10 @@ class CryptoFragment : BaseFragment<FragmentCryptoBinding>(FragmentCryptoBinding
             }
         }
 
-        cryptoAdapter.onItemClick = {
-            val action = CryptoFragmentDirections.actionCryptoFragmentToDetailCryptoFragment()
+        cryptoAdapter.onItemClick = { currentItem ->
+            val action = CryptoFragmentDirections.actionCryptoFragmentToDetailCryptoFragment(currentItem)
             findNavController().navigate(action)
+            Toast.makeText(requireContext(),currentItem.name.toString(),Toast.LENGTH_SHORT).show()
         }
     }
 

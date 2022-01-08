@@ -1,6 +1,7 @@
 package ge.nlatsabidze.walletfluent.network.cryptoNetwork
 
 import ge.nlatsabidze.walletfluent.Resource
+import ge.nlatsabidze.walletfluent.model.cryptoModel.ChartItem
 import ge.nlatsabidze.walletfluent.model.cryptoModel.MarketsItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -22,6 +23,15 @@ class CryptoRepository @Inject constructor(private var apiService: CryptoApi) {
             })
         }.flowOn(Dispatchers.IO)
     }
+
+    suspend fun getChartValues(): Flow<Resource<ChartItem>> {
+        return flow {
+            emit (handleResponse {
+                apiService.getChartItems()
+            })
+        }.flowOn(Dispatchers.IO)
+    }
+
 
     private suspend fun <T> handleResponse(apiCall: suspend() -> Response<T>): Resource<T> {
         _showLoading.value = true

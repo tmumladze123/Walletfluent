@@ -1,6 +1,9 @@
 package ge.nlatsabidze.walletfluent.model.cryptoModel
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class MarketsItem(
     val ath: Double?,
     val ath_change_percentage: Double?,
@@ -27,4 +30,4 @@ data class MarketsItem(
     val symbol: String?,
     val total_supply: Double?,
     val total_volume: Long?
-)
+): Parcelable

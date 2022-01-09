@@ -17,18 +17,19 @@ import javax.inject.Inject
 @HiltViewModel
 class CryptoViewModel @Inject constructor(private val cryptoService: CryptoRepository) : ViewModel() {
 
-    private val _marketItemsValues = MutableSharedFlow<List<MarketsItem>>()
-    val marketItems: MutableSharedFlow<List<MarketsItem>> get() = _marketItemsValues
-
     private var _showLoadingViewModelState = MutableStateFlow<Boolean>(false)
     val showLoadingViewModel: MutableStateFlow<Boolean> get() = _showLoadingViewModelState
+
+    private val _marketValues = MutableStateFlow<List<MarketsItem>>(listOf<MarketsItem>())
+    val marketValues: MutableStateFlow<List<MarketsItem>> get() = _marketValues
 
     fun getCryptoExchangeValues() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 cryptoService.getMarketValues().collectLatest {
                     if (it.data != null) {
-                        _marketItemsValues.emit(it.data)
+//                        _marketItemsValues.emit(it.data)
+                        _marketValues.value = it.data
                     }
                 }
             }

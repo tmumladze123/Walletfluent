@@ -31,7 +31,7 @@ class CryptoFragment : BaseFragment<FragmentCryptoBinding>(FragmentCryptoBinding
 
         cryptoViewModel.getCryptoExchangeValues()
         viewLifecycleOwner.lifecycleScope.launch {
-            cryptoViewModel.marketItems.collectLatest {
+            cryptoViewModel.marketValues.collectLatest {
                 cryptoAdapter.cryptoExchanges = it
             }
         }

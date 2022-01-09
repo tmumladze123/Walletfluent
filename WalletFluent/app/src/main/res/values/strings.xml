@@ -38,6 +38,9 @@
     <string name="VerificationDialog">Please, Verify your account using your email</string>
     <string name="ResetPasswordDialog">Please follow instructions on your Email</string>
     <string name="ResetPasswordUsingEmailDialog">Please specify your email</string>
+    <string name="DollarSign" translatable="false">$</string>
+    <string name="MarketCapRank" translatable="false">Market cap rank #</string>
+
 
 
     <string-array name="countries">

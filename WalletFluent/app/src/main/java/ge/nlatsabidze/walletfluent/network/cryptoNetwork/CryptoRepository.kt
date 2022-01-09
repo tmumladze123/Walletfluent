@@ -24,10 +24,10 @@ class CryptoRepository @Inject constructor(private var apiService: CryptoApi) {
         }.flowOn(Dispatchers.IO)
     }
 
-    suspend fun getChartValues(): Flow<Resource<ChartItem>> {
+    suspend fun getChartValues(id: String): Flow<Resource<ChartItem>> {
         return flow {
             emit (handleResponse {
-                apiService.getChartItems()
+                apiService.getChartItems(id)
             })
         }.flowOn(Dispatchers.IO)
     }

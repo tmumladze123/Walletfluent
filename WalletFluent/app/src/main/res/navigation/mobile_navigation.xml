@@ -70,13 +70,14 @@
         android:name="ge.nlatsabidze.walletfluent.ui.personalInfo.PersonalInfoFragment"
         android:label="@string/PersonalInformation"
         tools:layout="@layout/personal_info_fragment" />
+
     <fragment
         android:id="@+id/detailCryptoFragment"
         android:name="ge.nlatsabidze.walletfluent.ui.cryptoDetail.DetailCryptoFragment"
         android:label="detail_crypto_fragment"
         tools:layout="@layout/detail_crypto_fragment" >
         <argument
-            android:name="CurrentMarketItem"
+            android:name="marketItem"
             app:argType="ge.nlatsabidze.walletfluent.model.cryptoModel.MarketsItem" />
     </fragment>
 

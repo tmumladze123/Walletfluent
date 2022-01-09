@@ -29,5 +29,5 @@ data class MarketsItem(
     val price_change_percentage_24h: Double?,
     val symbol: String?,
     val total_supply: Double?,
-    val total_volume: Long?
+    val total_volume: Double?
 ): Parcelable

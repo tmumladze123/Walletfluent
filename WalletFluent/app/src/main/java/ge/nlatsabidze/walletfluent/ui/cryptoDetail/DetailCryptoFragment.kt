@@ -2,6 +2,7 @@ package ge.nlatsabidze.walletfluent.ui.cryptoDetail
 
 import android.annotation.SuppressLint
 import android.graphics.Color
+import android.util.Log.d
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -10,6 +11,7 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
@@ -40,15 +42,15 @@ class DetailCryptoFragment :
 
         currentMarketItem = args.marketItem
 
+        ratesChartSetup()
+        setInformationFromArgs()
+
         cryptoViewModel.getChartValues(currentMarketItem.id.toString())
         viewLifecycleOwner.lifecycleScope.launch {
             cryptoViewModel.chartValues.collect {
                 showChart(it)
             }
         }
-
-        ratesChartSetup()
-        setInformationFromArgs()
     }
 
     @SuppressLint("SetTextI18n")
@@ -80,7 +82,7 @@ class DetailCryptoFragment :
         binding.ratesChart.axisRight.textColor = Color.WHITE
         binding.ratesChart.xAxis.textColor = Color.WHITE
         binding.ratesChart.xAxis.labelRotationAngle = -45f
-        binding.ratesChart.xAxis.labelCount = 5
+        binding.ratesChart.xAxis.labelCount = 7
         binding.ratesChart.legend.textColor = ContextCompat.getColor(requireContext(), R.color.purple_200)
     }
 
@@ -89,7 +91,15 @@ class DetailCryptoFragment :
         arrayChart = ArrayList()
 
         repeat(item.size) { i->
-            arrayChart.add(Entry(item[i][0].toFloat(), item[i][1].toFloat()))
+            arrayChart.add(Entry(i.toFloat(), item[i][1].toFloat()))
+        }
+
+        val dates = arrayListOf<String>()
+        repeat(item.size) { i->
+            val currentDate = item[i][0].toString().replace(".", "").substring(0, 10)
+            val currentItemToLong = currentDate.toLong()
+            val convertedCurrentDate = getDateTimeFromEpocLongOfSeconds(currentItemToLong)
+            dates.add(convertedCurrentDate.substring(0, 20))
         }
 
         lineDataSet = LineDataSet(arrayChart, currentMarketItem.id.toString())
@@ -105,11 +115,30 @@ class DetailCryptoFragment :
         val dataSet = arrayListOf<ILineDataSet>()
         dataSet.add(lineDataSet)
 
+        val xAxis = binding.ratesChart.xAxis
+        xAxis.valueFormatter = XAxisValueFormatter(dates)
+
         val lineData = LineData(dataSet)
         lineData.setDrawValues(true)
 
         binding.ratesChart.data = lineData
         binding.ratesChart.axisRight.isEnabled = false
         binding.ratesChart.invalidate()
+    }
+
+
+    private class XAxisValueFormatter(private val values: List<String>) : ValueFormatter() {
+        override fun getFormattedValue(value: Float): String {
+            return values.elementAt(value.toInt())
+        }
+    }
+
+    private fun getDateTimeFromEpocLongOfSeconds(epoc: Long): String {
+        try {
+            val netDate = Date(epoc*1000)
+            return netDate.toString()
+        } catch (e: Exception) {
+            return e.toString()
+        }
     }
 }

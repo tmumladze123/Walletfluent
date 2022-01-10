@@ -69,7 +69,14 @@
         android:id="@+id/personalInfoFragment"
         android:name="ge.nlatsabidze.walletfluent.ui.personalInfo.PersonalInfoFragment"
         android:label="@string/PersonalInformation"
-        tools:layout="@layout/personal_info_fragment" />
+        tools:layout="@layout/personal_info_fragment" >
+        <action
+            android:id="@+id/action_personalInfoFragment_to_decreaseAmountFragment"
+            app:destination="@id/decreaseAmountFragment" />
+        <action
+            android:id="@+id/action_personalInfoFragment_to_increaseAmountFragment"
+            app:destination="@id/increaseAmountFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/detailCryptoFragment"
@@ -80,5 +87,21 @@
             android:name="marketItem"
             app:argType="ge.nlatsabidze.walletfluent.model.cryptoModel.MarketsItem" />
     </fragment>
+
+    <dialog
+        android:id="@+id/decreaseAmountFragment"
+        android:name="ge.nlatsabidze.walletfluent.ui.personalInfo.decreaseAmount.DecreaseAmountFragment"
+        android:label="decrease_amount_fragment"
+        tools:layout="@layout/decrease_amount_fragment" />
+
+    <dialog
+        android:id="@+id/increaseAmountFragment"
+        android:name="ge.nlatsabidze.walletfluent.ui.personalInfo.increaseAmount.IncreaseAmountFragment"
+        android:label="increase_amount_fragment"
+        tools:layout="@layout/increase_amount_fragment" >
+        <action
+            android:id="@+id/action_increaseAmountFragment_to_personalInfoFragment"
+            app:destination="@id/personalInfoFragment" />
+    </dialog>
 
 </navigation>

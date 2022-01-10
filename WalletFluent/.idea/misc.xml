@@ -54,6 +54,7 @@
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/currency_item.xml" value="0.26145833333333335" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/currency_page.xml" value="0.26145833333333335" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/currency_page_fragment.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/decrease_amount_fragment.xml" value="0.2203125" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/detail_crypto_fragment.xml" value="0.35104166666666664" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/dropdown_item.xml" value="0.2708333333333333" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/exchange_item.xml" value="0.26875" />
@@ -64,8 +65,10 @@
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/fragment_language.xml" value="0.11955420466058764" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/fragment_login.xml" value="0.25" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/fragment_register.xml" value="0.254981884057971" />
+        <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/increase_amount_fragment.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/nav_header_main.xml" value="0.254981884057971" />
-        <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/personal_info_fragment.xml" value="0.254981884057971" />
+        <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/personal_info_fragment.xml" value="0.33" />
+        <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/transactio_item.xml" value="0.33" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/menu/activity_main_drawer.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/menu/main.xml" value="0.36666666666666664" />
       </map>

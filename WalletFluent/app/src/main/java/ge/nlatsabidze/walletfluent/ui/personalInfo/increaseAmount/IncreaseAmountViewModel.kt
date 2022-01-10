@@ -1,4 +1,4 @@
-package ge.nlatsabidze.walletfluent.ui.personalInfo
+package ge.nlatsabidze.walletfluent.ui.personalInfo.increaseAmount
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -7,10 +7,10 @@ import com.google.firebase.database.DatabaseReference
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 
-class PersonalInfoViewModel : ViewModel() {
+class IncreaseAmountViewModel : ViewModel() {
 
-//    private val _setAmount = MutableSharedFlow<Int>()
-//    val setAmount: MutableSharedFlow<Int> get() = _setAmount
+    private val _setAmount = MutableSharedFlow<Int>()
+    val setAmount: MutableSharedFlow<Int> get() = _setAmount
 
     private val _balance = MutableSharedFlow<String>()
     val balance: MutableSharedFlow<String> get() = _balance
@@ -39,26 +39,20 @@ class PersonalInfoViewModel : ViewModel() {
         }
     }
 
-//    fun changeUserAmount(amount: String, operator: String, database: DatabaseReference) {
-//
-//        var convertedValueToInt = amount.dropLast(1).toInt()
-//
-//        if (operator == "+") {
-//            convertedValueToInt += 20
-//        } else {
-//            convertedValueToInt -= 20
-//        }
-//
-//        viewModelScope.launch {
-//            _setAmount.emit(convertedValueToInt)
-//        }
-//
-//        val user = HashMap<String, Any>()
-//        user.put("balance", convertedValueToInt)
-//        database.updateChildren(user).addOnCompleteListener {
-//            if (it.isSuccessful) {
-//                Log.d("sdadasdas", convertedValueToInt.toString())
-//            }
-//        }
-//    }
+    fun changeUserAmount(amount: String, database: DatabaseReference) {
+
+        var convertedValueToInt = amount.dropLast(1).toInt()
+
+        viewModelScope.launch {
+            _setAmount.emit(convertedValueToInt)
+        }
+
+        val user = HashMap<String, Any>()
+        user.put("balance", convertedValueToInt)
+        database.updateChildren(user).addOnCompleteListener {
+            if (it.isSuccessful) {
+                Log.d("sdadasdas", convertedValueToInt.toString())
+            }
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package ge.nlatsabidze.walletfluent.networkmodule
 
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.squareup.moshi.Moshi
@@ -54,5 +55,10 @@ object ApiModule {
     fun provideDatabaseReference(): DatabaseReference =
         FirebaseDatabase.getInstance("https://walletfluent-b2fe7-default-rtdb.europe-west1.firebasedatabase.app/")
             .getReference("Users")
+
+    @Provides
+    @Singleton
+    fun provideFirebaseUser(): FirebaseUser =
+        FirebaseAuth.getInstance().currentUser!!
 
 }

@@ -93,8 +93,8 @@
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/ivCoin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         app:layout_constraintStart_toStartOf="parent"

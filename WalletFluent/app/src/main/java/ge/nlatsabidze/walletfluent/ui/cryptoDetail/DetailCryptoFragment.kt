@@ -96,7 +96,7 @@ class DetailCryptoFragment :
 
         val dates = arrayListOf<String>()
         repeat(item.size) { i->
-            val currentDate = item[i][0].toString().replace(".", "").substring(0, 10)
+            val currentDate = item[i][0].toString().replace(".", "").replace("E", "0").substring(0, 10)
             val currentItemToLong = currentDate.toLong()
             val convertedCurrentDate = getDateTimeFromEpocLongOfSeconds(currentItemToLong)
             dates.add(convertedCurrentDate.substring(0, 20))
@@ -117,6 +117,7 @@ class DetailCryptoFragment :
 
         val xAxis = binding.ratesChart.xAxis
         xAxis.valueFormatter = XAxisValueFormatter(dates)
+//        xAxis.labelRotationAngle = 90f
 
         val lineData = LineData(dataSet)
         lineData.setDrawValues(true)
@@ -128,6 +129,7 @@ class DetailCryptoFragment :
 
 
     private class XAxisValueFormatter(private val values: List<String>) : ValueFormatter() {
+
         override fun getFormattedValue(value: Float): String {
             return values.elementAt(value.toInt())
         }

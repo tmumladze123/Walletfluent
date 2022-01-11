@@ -92,7 +92,11 @@
         android:id="@+id/decreaseAmountFragment"
         android:name="ge.nlatsabidze.walletfluent.ui.personalInfo.decreaseAmount.DecreaseAmountFragment"
         android:label="decrease_amount_fragment"
-        tools:layout="@layout/decrease_amount_fragment" />
+        tools:layout="@layout/decrease_amount_fragment" >
+        <action
+            android:id="@+id/action_decreaseAmountFragment_to_personalInfoFragment"
+            app:destination="@id/personalInfoFragment" />
+    </dialog>
 
     <dialog
         android:id="@+id/increaseAmountFragment"
@@ -101,7 +105,9 @@
         tools:layout="@layout/increase_amount_fragment" >
         <action
             android:id="@+id/action_increaseAmountFragment_to_personalInfoFragment"
-            app:destination="@id/personalInfoFragment" />
+            app:destination="@id/personalInfoFragment"
+            app:popUpTo="@id/personalInfoFragment"
+            app:popUpToInclusive="true" />
     </dialog>
 
 </navigation>

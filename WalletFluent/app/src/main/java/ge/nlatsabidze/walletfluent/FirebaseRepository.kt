@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import ge.nlatsabidze.walletfluent.ui.entry.userData.User
+import ge.nlatsabidze.walletfluent.ui.entry.userData.UserTransaction
 import kotlinx.coroutines.flow.MutableStateFlow
 import javax.inject.Inject
 
@@ -33,9 +34,11 @@ class FirebaseRepository @Inject constructor(
                         val uid = user?.uid
 
                         val activeUser = User(email, name, password, balance)
+                        val transaction = UserTransaction()
                         database.child(uid!!).setValue(activeUser).addOnCompleteListener {
                             if (it.isSuccessful) {
                                 _currentUser.value = true
+                                database.child(uid).push().setValue(transaction)
                             } else {
                                 _repositoryDialogError.value =
                                     application.resources.getString(R.string.NotValidInformation)

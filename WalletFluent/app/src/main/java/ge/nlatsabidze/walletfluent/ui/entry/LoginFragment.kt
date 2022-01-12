@@ -1,7 +1,6 @@
 package ge.nlatsabidze.walletfluent.ui.entry
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
@@ -15,6 +14,7 @@ import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
 import ge.nlatsabidze.walletfluent.databinding.FragmentLoginBinding
+import ge.nlatsabidze.walletfluent.extensions.setOnSafeClickListener
 import ge.nlatsabidze.walletfluent.extensions.showDialogError
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -37,13 +37,18 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         firebaseAuth = FirebaseAuth.getInstance()
         binding.tvSignUp.setOnClickListener { navigateToRegisterPage() }
 
-        binding.btnSignin.setOnClickListener { loginUser() }
+        binding.btnSignin.setOnSafeClickListener {
+            loginUser()
+        }
 
         binding.tvForgotPassword.setOnClickListener { resetPassword() }
 
         if (checkInternetConnection.isOnline(activity!!.application).toString() == "false") {
             val builder = AlertDialog.Builder(requireContext())
-            builder.showDialogError("In Order to use our application, you should be connected to internet", requireContext())
+            showDialogError(
+                "In Order to use our application, you should be connected to internet",
+                requireContext()
+            )
         }
 
         listeners()
@@ -137,7 +142,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
     private fun showDialogError(message: String) {
         val builder = AlertDialog.Builder(requireContext())
-        builder.showDialogError(message, requireContext())
+        showDialogError(message, requireContext())
     }
 
     private fun setDataFromRegisterPage() {

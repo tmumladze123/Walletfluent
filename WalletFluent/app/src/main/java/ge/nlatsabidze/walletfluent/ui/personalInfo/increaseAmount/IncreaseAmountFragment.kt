@@ -2,6 +2,7 @@ package ge.nlatsabidze.walletfluent.ui.personalInfo.increaseAmount
 
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.util.Log.d
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +17,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.databinding.IncreaseAmountFragmentBinding
+import ge.nlatsabidze.walletfluent.ui.entry.userData.UserTransaction
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -40,19 +42,28 @@ class IncreaseAmountFragment : BottomSheetDialogFragment() {
     ): View? {
         _binding = IncreaseAmountFragmentBinding.inflate(inflater, container, false)
         start()
+        observes()
         return binding.root
     }
 
     private fun start() {
+        initializeFirebase()
         binding.btnIncreaseAmount.setOnClickListener {
+            val amount = binding.etEnterAmount.text.toString().toInt()
+            val purpose = binding.etPurpose.text.toString()
+            if (binding.etEnterAmount.text!!.isNotEmpty() && binding.etPurpose.text!!.isNotEmpty()) {
+                val transaction = UserTransaction(amount, purpose)
+                database.push().setValue(transaction)
+            }
+
             val action = IncreaseAmountFragmentDirections.actionIncreaseAmountFragmentToPersonalInfoFragment()
             findNavController().navigate(action)
-
         }
 
-        initializeFirebase()
-
         increaseAmountViewModel.setInformationFromDatabase(database)
+    }
+
+    private fun observes() {
         viewLifecycleOwner.lifecycleScope.launch {
             increaseAmountViewModel.balance.collect {
                 binding.tvCurrentBalance.text = it
@@ -65,9 +76,7 @@ class IncreaseAmountFragment : BottomSheetDialogFragment() {
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseUser = firebaseAuth.currentUser!!
 
-        database =
-            FirebaseDatabase.getInstance("https://walletfluent-b2fe7-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("Users").child(firebaseUser.uid)
+        database = FirebaseDatabase.getInstance("https://walletfluent-b2fe7-default-rtdb.europe-west1.firebasedatabase.app/").getReference("Users").child(firebaseUser.uid)
     }
 
 

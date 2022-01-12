@@ -1,22 +1,17 @@
 package ge.nlatsabidze.walletfluent.ui.entry
 
-import android.util.Log.d
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.databinding.FragmentRegisterBinding
 import ge.nlatsabidze.walletfluent.extensions.showDialogError
-import ge.nlatsabidze.walletfluent.ui.entry.userData.User
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -114,7 +109,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
 
     private fun showDialogError(message: String) {
         val builder = AlertDialog.Builder(requireContext())
-        builder.showDialogError(message, requireContext())
+        showDialogError(message, requireContext())
     }
 
 

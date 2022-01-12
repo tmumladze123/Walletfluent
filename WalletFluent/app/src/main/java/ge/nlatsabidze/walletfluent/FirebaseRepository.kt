@@ -34,11 +34,11 @@ class FirebaseRepository @Inject constructor(
                         val uid = user?.uid
 
                         val activeUser = User(email, name, password, balance)
-                        val transaction = UserTransaction()
+//                        val transaction = UserTransaction(100, "only purpose")
                         database.child(uid!!).setValue(activeUser).addOnCompleteListener {
                             if (it.isSuccessful) {
                                 _currentUser.value = true
-                                database.child(uid).push().setValue(transaction)
+//                                database.child(uid).push().setValue(transaction)
                             } else {
                                 _repositoryDialogError.value =
                                     application.resources.getString(R.string.NotValidInformation)

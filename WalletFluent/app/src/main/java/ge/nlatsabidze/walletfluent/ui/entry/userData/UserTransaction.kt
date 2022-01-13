@@ -1,7 +1,4 @@
 package ge.nlatsabidze.walletfluent.ui.entry.userData
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
-
-data class UserTransaction(val amount: Int? = null,
+data class UserTransaction(val amount: Long? = null,
                            val purpose: String? = null)

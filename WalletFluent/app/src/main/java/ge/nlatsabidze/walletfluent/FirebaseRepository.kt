@@ -38,7 +38,7 @@ class FirebaseRepository @Inject constructor(
                         database.child(uid!!).setValue(activeUser).addOnCompleteListener {
                             if (it.isSuccessful) {
                                 _currentUser.value = true
-//                                database.child(uid).push().setValue(transaction)
+//                                database.child(uid).child("userTransaction").push().setValue(transaction)
                             } else {
                                 _repositoryDialogError.value =
                                     application.resources.getString(R.string.NotValidInformation)

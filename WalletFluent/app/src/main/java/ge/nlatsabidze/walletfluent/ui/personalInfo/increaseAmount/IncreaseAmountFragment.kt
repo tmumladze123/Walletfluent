@@ -49,11 +49,11 @@ class IncreaseAmountFragment : BottomSheetDialogFragment() {
     private fun start() {
         initializeFirebase()
         binding.btnIncreaseAmount.setOnClickListener {
-            val amount = binding.etEnterAmount.text.toString().toInt()
-            val purpose = binding.etPurpose.text.toString()
             if (binding.etEnterAmount.text!!.isNotEmpty() && binding.etPurpose.text!!.isNotEmpty()) {
+                val amount = binding.etEnterAmount.text.toString().toLong()
+                val purpose = binding.etPurpose.text.toString()
                 val transaction = UserTransaction(amount, purpose)
-                database.push().setValue(transaction)
+                database.child("userTransaction").push().setValue(transaction)
             }
 
             val action = IncreaseAmountFragmentDirections.actionIncreaseAmountFragmentToPersonalInfoFragment()

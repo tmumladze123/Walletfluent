@@ -4,15 +4,20 @@ import android.util.Log.d
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.databinding.PersonalInfoFragmentBinding
+import ge.nlatsabidze.walletfluent.ui.entry.userData.UserTransaction
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+
+
+const val TAG = "TAGD"
 
 @AndroidEntryPoint
 class PersonalInfoFragment :
@@ -24,29 +29,45 @@ class PersonalInfoFragment :
     @Inject lateinit var database: DatabaseReference
     @Inject lateinit var firebaseUser: FirebaseUser
 
+    private lateinit var transactionAdapter: TransactionsAdapter
+
 
     override fun start() {
 
         initializeFirebase()
+        initializeRecyclerView()
+
         personalInfoViewModel.setInformationFromDatabase(database)
 
+        val childEventListener = object : ChildEventListener {
+            override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
+                if (dataSnapshot.childrenCount > 0) {
+                    for (data in dataSnapshot.children) {
+                        val userTransaction: UserTransaction? = data.getValue(UserTransaction::class.java)
+                        transactionAdapter.userTransactions.add(userTransaction!!)
+                    }
+                    transactionAdapter.notifyDataSetChanged()
+                }
+            }
+
+            override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {}
+
+            override fun onChildRemoved(dataSnapshot: DataSnapshot) {}
+
+            override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {}
+
+            override fun onCancelled(databaseError: DatabaseError) {}
+
+        }
+        database.addChildEventListener(childEventListener)
+
+
         binding.btnIncrease.setOnClickListener {
-//            personalInfoViewModel.changeUserAmount(
-//                binding.balance.text.toString(),
-//                binding.btnIncrease.text.toString(),
-//                database
-//            )
             val actionToIncrease = PersonalInfoFragmentDirections.actionPersonalInfoFragmentToIncreaseAmountFragment()
             findNavController().navigate(actionToIncrease)
         }
 
         binding.btnDecrease.setOnClickListener {
-//            personalInfoViewModel.changeUserAmount(
-//                binding.balance.text.toString(),
-//                binding.btnDecrease.text.toString(),
-//                database
-//            )
-
             val actionToDecrease = PersonalInfoFragmentDirections.actionPersonalInfoFragmentToDecreaseAmountFragment()
             findNavController().navigate(actionToDecrease)
         }
@@ -55,11 +76,6 @@ class PersonalInfoFragment :
     }
 
     private fun observes() {
-//        viewLifecycleOwner.lifecycleScope.launch {
-//            personalInfoViewModel.setAmount.collect {
-//                binding.balance.text = it.toString() + "₾"
-//            }
-//        }
 
         viewLifecycleOwner.lifecycleScope.launch {
             personalInfoViewModel.balance.collect {
@@ -80,5 +96,11 @@ class PersonalInfoFragment :
         database =
             FirebaseDatabase.getInstance("https://walletfluent-b2fe7-default-rtdb.europe-west1.firebasedatabase.app/")
                 .getReference("Users").child(firebaseUser.uid)
+    }
+
+    private fun initializeRecyclerView() {
+        transactionAdapter = TransactionsAdapter()
+        binding.rvItems.adapter = transactionAdapter
+        binding.rvItems.layoutManager = LinearLayoutManager(requireContext())
     }
 }

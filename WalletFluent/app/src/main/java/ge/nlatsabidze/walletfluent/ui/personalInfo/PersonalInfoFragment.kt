@@ -25,41 +25,42 @@ class PersonalInfoFragment :
 
     private val personalInfoViewModel: PersonalInfoViewModel by viewModels()
 
-    @Inject lateinit var firebaseAuth: FirebaseAuth
-    @Inject lateinit var database: DatabaseReference
-    @Inject lateinit var firebaseUser: FirebaseUser
+//    @Inject lateinit var firebaseAuth: FirebaseAuth
+//    @Inject lateinit var database: DatabaseReference
+//    @Inject lateinit var firebaseUser: FirebaseUser
 
     private lateinit var transactionAdapter: TransactionsAdapter
 
 
     override fun start() {
 
-        initializeFirebase()
         initializeRecyclerView()
 
-        personalInfoViewModel.setInformationFromDatabase(database)
+        personalInfoViewModel.initializeFirebase()
+        personalInfoViewModel.setInformationFromDatabase()
+        personalInfoViewModel.addTransaction()
 
-        val childEventListener = object : ChildEventListener {
-            override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
-                if (dataSnapshot.childrenCount > 0) {
-                    for (data in dataSnapshot.children) {
-                        val userTransaction: UserTransaction? = data.getValue(UserTransaction::class.java)
-                        transactionAdapter.userTransactions.add(userTransaction!!)
-                    }
-                    transactionAdapter.notifyDataSetChanged()
-                }
-            }
-
-            override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {}
-
-            override fun onChildRemoved(dataSnapshot: DataSnapshot) {}
-
-            override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {}
-
-            override fun onCancelled(databaseError: DatabaseError) {}
-
-        }
-        database.addChildEventListener(childEventListener)
+//        val childEventListener = object : ChildEventListener {
+//            override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
+//                if (dataSnapshot.childrenCount > 0) {
+//                    for (data in dataSnapshot.children) {
+//                        val userTransaction: UserTransaction? = data.getValue(UserTransaction::class.java)
+//                        transactionAdapter.userTransactions.add(userTransaction!!)
+//                    }
+//                    transactionAdapter.notifyDataSetChanged()
+//                }
+//            }
+//
+//            override fun onChildChanged(dataSnapshot: DataSnapshot, previousChildName: String?) {}
+//
+//            override fun onChildRemoved(dataSnapshot: DataSnapshot) {}
+//
+//            override fun onChildMoved(dataSnapshot: DataSnapshot, previousChildName: String?) {}
+//
+//            override fun onCancelled(databaseError: DatabaseError) {}
+//
+//        }
+//        database.addChildEventListener(childEventListener)
 
 
         binding.btnIncrease.setOnClickListener {
@@ -87,20 +88,26 @@ class PersonalInfoFragment :
                 binding.tvName.text = it
             }
         }
+        viewLifecycleOwner.lifecycleScope.launch {
+            personalInfoViewModel.transaction.collect {
+                transactionAdapter.userTransactions.add(it)
+                transactionAdapter.notifyDataSetChanged()
+            }
+        }
     }
 
-    private fun initializeFirebase() {
-        firebaseAuth = FirebaseAuth.getInstance()
-        firebaseUser = firebaseAuth.currentUser!!
-
-        database =
-            FirebaseDatabase.getInstance("https://walletfluent-b2fe7-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("Users").child(firebaseUser.uid)
-    }
+//    private fun initializeFirebase() {
+//        firebaseAuth = FirebaseAuth.getInstance()
+//        firebaseUser = firebaseAuth.currentUser!!
+//
+//        database =
+//            FirebaseDatabase.getInstance("https://walletfluent-b2fe7-default-rtdb.europe-west1.firebasedatabase.app/")
+//                .getReference("Users").child(firebaseUser.uid)
+//    }
 
     private fun initializeRecyclerView() {
         transactionAdapter = TransactionsAdapter()
         binding.rvItems.adapter = transactionAdapter
-        binding.rvItems.layoutManager = LinearLayoutManager(requireContext())
+        binding.rvItems.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true)
     }
 }

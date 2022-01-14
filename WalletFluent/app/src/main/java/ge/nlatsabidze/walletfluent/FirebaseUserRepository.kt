@@ -1,18 +1,16 @@
 package ge.nlatsabidze.walletfluent
 
 import android.app.Application
-import android.content.Context
-import android.util.Log.d
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import ge.nlatsabidze.walletfluent.ui.entry.userData.User
-import ge.nlatsabidze.walletfluent.ui.entry.userData.UserTransaction
 import kotlinx.coroutines.flow.MutableStateFlow
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 
-class FirebaseRepository @Inject constructor(
+class FirebaseUserRepository @Inject constructor(
     private val application: Application,
     private val firebaseAuth: FirebaseAuth,
     private var database: DatabaseReference
@@ -32,13 +30,12 @@ class FirebaseRepository @Inject constructor(
 
                         val user = firebaseAuth.currentUser
                         val uid = user?.uid
+                        val userCreationDate = generateCurrentDate()
 
-                        val activeUser = User(email, name, password, balance)
-//                        val transaction = UserTransaction(100, "only purpose")
+                        val activeUser = User(email, name, password, balance, userCreationDate)
                         database.child(uid!!).setValue(activeUser).addOnCompleteListener {
                             if (it.isSuccessful) {
                                 _currentUser.value = true
-//                                database.child(uid).child("userTransaction").push().setValue(transaction)
                             } else {
                                 _repositoryDialogError.value =
                                     application.resources.getString(R.string.NotValidInformation)
@@ -93,5 +90,10 @@ class FirebaseRepository @Inject constructor(
 
     fun changeRepositoryDialogError() {
         _repositoryDialogError.value = ""
+    }
+
+    private fun generateCurrentDate(): String {
+        val currentDateFormatter = SimpleDateFormat("dd/M/yyyy")
+        return currentDateFormatter.format(Date())
     }
 }

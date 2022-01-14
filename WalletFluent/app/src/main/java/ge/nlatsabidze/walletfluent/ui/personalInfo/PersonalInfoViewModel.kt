@@ -1,6 +1,5 @@
 package ge.nlatsabidze.walletfluent.ui.personalInfo
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
@@ -13,7 +12,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PersonalInfoViewModel @Inject constructor(var firebaseAuth: FirebaseAuth,var database: DatabaseReference, var firebaseUser: FirebaseUser ) : ViewModel() {
+class PersonalInfoViewModel @Inject constructor(
+    var firebaseAuth: FirebaseAuth,
+    var database: DatabaseReference,
+    var firebaseUser: FirebaseUser
+) : ViewModel() {
 
     private val _balance = MutableSharedFlow<String>()
     val balance: MutableSharedFlow<String> get() = _balance
@@ -24,13 +27,16 @@ class PersonalInfoViewModel @Inject constructor(var firebaseAuth: FirebaseAuth,v
     private val _transaction = MutableSharedFlow<UserTransaction>()
     val transaction: MutableSharedFlow<UserTransaction> get() = _transaction
 
+    private val _expireYear = MutableSharedFlow<String>()
+    val expireYear: MutableSharedFlow<String> get() = _expireYear
+
     fun setInformationFromDatabase() {
 
         database.get().addOnCompleteListener {
             if (it.result?.exists() == true) {
 
                 val balance = it.result!!.child("balance").value.toString() + "₾"
-                val name = it.result!!.child("name").value.toString() +"'s card"
+                val name = it.result!!.child("name").value.toString() + "'s card"
 
 
                 viewModelScope.launch {
@@ -58,15 +64,14 @@ class PersonalInfoViewModel @Inject constructor(var firebaseAuth: FirebaseAuth,v
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
                 if (dataSnapshot.childrenCount > 0) {
                     for (data in dataSnapshot.children) {
-                        val userTransaction: UserTransaction? = data.getValue(UserTransaction::class.java)
-//                        transactionAdapter.userTransactions.add(userTransaction!!)
+                        val userTransaction: UserTransaction? =
+                            data.getValue(UserTransaction::class.java)
                         viewModelScope.launch {
                             if (userTransaction != null) {
                                 _transaction.emit(userTransaction)
                             }
                         }
                     }
-//                    transactionAdapter.notifyDataSetChanged()
                 }
             }
 
@@ -82,27 +87,55 @@ class PersonalInfoViewModel @Inject constructor(var firebaseAuth: FirebaseAuth,v
         database.addChildEventListener(childEventListener)
     }
 
+    fun expireDate() {
+        database.get().addOnCompleteListener {
+            if (it.result?.exists() == true) {
+                val expireDate = it.result!!.child("expireDate").value.toString() // 15/12/2022 2022/1/15
 
-//    fun changeUserAmount(amount: String, operator: String, database: DatabaseReference) {
-//
-//        var convertedValueToInt = amount.dropLast(1).toInt()
-//
-//        if (operator == "+") {
-//            convertedValueToInt += 20
-//        } else {
-//            convertedValueToInt -= 20
-//        }
-//
-//        viewModelScope.launch {
-//            _setAmount.emit(convertedValueToInt)
-//        }
-//
-//        val user = HashMap<String, Any>()
-//        user.put("balance", convertedValueToInt)
-//        database.updateChildren(user).addOnCompleteListener {
-//            if (it.isSuccessful) {
-//                Log.d("sdadasdas", convertedValueToInt.toString())
-//            }
-//        }
-//    }
+                val currentMonth = findSlashOccuriences(expireDate)
+                val expireYear = getExpireYear(expireDate)
+
+                val showExpire = currentMonth + expireYear
+
+                viewModelScope.launch {
+                    _expireYear.emit(showExpire)
+                }
+            }
+        }
+    }
+
+    private fun findSlashOccuriences(date: String): String {
+        var startSlash = 0
+        for (i in 0..date.length) {
+            if (date[i] == '/') {
+                startSlash = i
+                break
+            }
+        }
+
+        var endSlash = 0
+        for (i in date.length - 1 downTo 0) {
+            if (date[i] == '/') {
+                endSlash = i
+                break
+            }
+        }
+
+        var currentMonth = ""
+        for (i in startSlash.. endSlash) {
+            currentMonth += date[i]
+        }
+
+        currentMonth = currentMonth.drop(1)
+        return currentMonth
+
+    }
+
+    private fun getExpireYear(expireDate: String): String {
+        var year = expireDate.reversed().substring(0, 4)
+        var yearToInt = year.toInt()
+        yearToInt += 5
+        return yearToInt.toString()
+    }
+
 }

@@ -6,19 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.crypto.CryptoFragment">
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="35dp"
-        android:indeterminate="true"
-        android:visibility="gone"
-        app:indicatorColor="@color/purple_700"
-        app:layout_constraintBottom_toBottomOf="@+id/rvCrypto"
-        app:layout_constraintEnd_toEndOf="@+id/rvCrypto"
-        app:layout_constraintStart_toStartOf="@+id/rvCrypto"
-        tools:ignore="MissingConstraints" />
-
     <com.github.ybq.android.spinkit.SpinKitView
         android:id="@+id/spin_kit"
         style="@style/SpinKitView.Large.FadingCircle"
@@ -35,8 +22,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvCrypto"
-        android:layout_width="409dp"
-        android:layout_height="729dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

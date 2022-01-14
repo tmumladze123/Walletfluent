@@ -10,6 +10,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.databinding.IncreaseAmountFragmentBinding
+import ge.nlatsabidze.walletfluent.extensions.showDialogError
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -35,7 +36,10 @@ class IncreaseAmountFragment : BottomSheetDialogFragment() {
         increaseAmountViewModel.initializeFirebase()
         binding.btnIncreaseAmount.setOnClickListener {
             if (binding.etEnterAmount.text!!.isNotEmpty() && binding.etPurpose.text!!.isNotEmpty()) {
-                increaseAmountViewModel.pushTransaction(binding.etEnterAmount.text.toString().toLong(), binding.etPurpose.text.toString())
+                increaseAmountViewModel.pushTransaction(
+                    binding.etEnterAmount.text.toString().toLong(),
+                    binding.etPurpose.text.toString()
+                )
             }
             val action =
                 IncreaseAmountFragmentDirections.actionIncreaseAmountFragmentToPersonalInfoFragment()
@@ -51,18 +55,13 @@ class IncreaseAmountFragment : BottomSheetDialogFragment() {
                 binding.tvCurrentBalance.text = it
             }
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            increaseAmountViewModel.showDialogError.collect {
+                showDialogError("LESS MONEY", requireContext())
+            }
+        }
     }
-
-
-//    private fun initializeFirebase() {
-//        firebaseAuth = FirebaseAuth.getInstance()
-//        firebaseUser = firebaseAuth.currentUser!!
-//
-//        database =
-//            FirebaseDatabase.getInstance("https://walletfluent-b2fe7-default-rtdb.europe-west1.firebasedatabase.app/")
-//                .getReference("Users").child(firebaseUser.uid)
-//    }
-
 
     override fun onDestroyView() {
         super.onDestroyView()

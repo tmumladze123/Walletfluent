@@ -29,6 +29,9 @@ class IncreaseAmountViewModel @Inject constructor(
     private val _name = MutableSharedFlow<String>()
     val name: MutableSharedFlow<String> get() = _name
 
+    private val _showDialogError = MutableSharedFlow<Boolean>()
+    val showDialogError: MutableSharedFlow<Boolean> get() = _showDialogError
+
 
     fun setInformationFromDatabase() {
 
@@ -69,10 +72,22 @@ class IncreaseAmountViewModel @Inject constructor(
 
     fun pushTransaction(amount: Long, purpose: String) {
         if (amount.toString().isNotEmpty() && purpose.isNotEmpty()) {
-            val transaction = UserTransaction(amount, purpose)
-            database.child("userTransaction").push().setValue(transaction)
+            database.get().addOnCompleteListener {
+                if (it.result?.exists() == true) {
+                    val currentBalance = it.result!!.child("balance").value.toString()
+                    if (amount > currentBalance.toLong()) {
+                        viewModelScope.launch {
+                            _showDialogError.emit(true)
+                        }
+                    } else {
+                        val transaction = UserTransaction(amount, purpose)
+                        database.child("userTransaction").push().setValue(transaction)
+                    }
+                }
+            }
         }
     }
+
 
     fun initializeFirebase() {
         firebaseAuth = FirebaseAuth.getInstance()

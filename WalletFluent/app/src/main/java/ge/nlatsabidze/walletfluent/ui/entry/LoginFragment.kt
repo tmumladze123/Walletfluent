@@ -60,7 +60,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         viewLifecycleOwner.lifecycleScope.launch {
             logInViewModel.userMutableLiveFlow.collect { userLogedIn ->
                 if (userLogedIn) {
-                    navigateToPersonalPage()
+                    navigateToSettingsPage()
                     logInViewModel.changeUserValue()
                 }
             }
@@ -135,9 +135,14 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         findNavController().navigate(actionLoginFragmentToRegister)
     }
 
-    private fun navigateToPersonalPage() {
-        val actionLoginFragmentToPersonal = LoginFragmentDirections.actionLoginFragmentToPersonalInfoFragment()
-        findNavController().navigate(actionLoginFragmentToPersonal)
+//    private fun navigateToPersonalPage() {
+//        val actionLoginFragmentToPersonal = LoginFragmentDirections.actionLoginFragmentToPersonalInfoFragment()
+//        findNavController().navigate(actionLoginFragmentToPersonal)
+//    }
+
+    private fun navigateToSettingsPage() {
+        val actionLoginFragmentToSettings = LoginFragmentDirections.actionLoginFragmentToAccountSettings()
+        findNavController().navigate(actionLoginFragmentToSettings)
     }
 
     private fun showDialogError(message: String) {

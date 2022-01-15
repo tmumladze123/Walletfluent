@@ -48,6 +48,9 @@
             app:argType="string"
             app:nullable="true"
             android:defaultValue="password" />
+        <action
+            android:id="@+id/action_loginFragment_to_accountSettings"
+            app:destination="@id/accountSettings" />
 
 
     </fragment>
@@ -101,5 +104,17 @@
             app:argType="boolean"
             android:defaultValue="true" />
     </dialog>
+    <fragment
+        android:id="@+id/accountSettings"
+        android:name="ge.nlatsabidze.walletfluent.ui.personalInfo.profile.AccountSettings"
+        android:label="account_settings_fragment"
+        tools:layout="@layout/account_settings_fragment" >
+        <action
+            android:id="@+id/action_accountSettings_to_personalInfoFragment"
+            app:destination="@id/personalInfoFragment" />
+        <action
+            android:id="@+id/action_accountSettings_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </fragment>
 
 </navigation>

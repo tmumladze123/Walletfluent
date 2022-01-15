@@ -84,6 +84,10 @@ class FirebaseUserRepository @Inject constructor(
         }
     }
 
+    fun logOutUser() {
+        firebaseAuth.signOut()
+    }
+
     fun changeUserFlowValue() {
         _currentUser.value = false
     }

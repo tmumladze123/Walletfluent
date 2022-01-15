@@ -24,6 +24,7 @@ class TransactionsAdapter : RecyclerView.Adapter<TransactionsAdapter.Transaction
             binding.apply {
                 binding.tvTransactionPrice.text = currentItem.amount.toString()
                 binding.tvTransactionPurpose.text = currentItem.purpose.toString()
+                binding.tvCurrentTime.text = currentItem.currentTime.toString()
             }
         }
     }

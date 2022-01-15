@@ -36,10 +36,12 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etEnterAmount"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:gravity="center"
             android:ems="10"
+            android:maxLength="4"
             android:hint="Enter Amount"
             android:inputType="number"
             app:layout_constraintStart_toStartOf="parent"
@@ -47,11 +49,13 @@
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/etPurpose"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:gravity="center"
             android:ems="10"
             android:hint="Enter Purpose"
+            android:maxLines="1"
             android:inputType="textPersonName"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/etEnterAmount" />

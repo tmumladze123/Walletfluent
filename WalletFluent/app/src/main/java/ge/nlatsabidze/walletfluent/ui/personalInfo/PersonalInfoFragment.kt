@@ -11,6 +11,7 @@ import ge.nlatsabidze.walletfluent.BaseFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import ge.nlatsabidze.walletfluent.databinding.PersonalInfoFragmentBinding
+import ge.nlatsabidze.walletfluent.extensions.setOnSafeClickListener
 
 
 @AndroidEntryPoint
@@ -20,6 +21,7 @@ class PersonalInfoFragment :
     private val personalInfoViewModel: PersonalInfoViewModel by viewModels()
 
     private lateinit var transactionAdapter: TransactionsAdapter
+    private var defineOnClick: Boolean = false
 
     override fun start() {
 
@@ -30,15 +32,17 @@ class PersonalInfoFragment :
         personalInfoViewModel.addTransaction()
         personalInfoViewModel.expireDate()
 
-        binding.btnIncrease.setOnClickListener {
+        binding.btnIncrease.setOnSafeClickListener {
+            defineOnClick = true
             val actionToIncrease =
-                PersonalInfoFragmentDirections.actionPersonalInfoFragmentToIncreaseAmountFragment()
+                PersonalInfoFragmentDirections.actionPersonalInfoFragmentToIncreaseAmountFragment(defineOnClick)
             findNavController().navigate(actionToIncrease)
         }
 
-        binding.btnDecrease.setOnClickListener {
+        binding.btnDecrease.setOnSafeClickListener {
+            defineOnClick = false
             val actionToDecrease =
-                PersonalInfoFragmentDirections.actionPersonalInfoFragmentToDecreaseAmountFragment()
+                PersonalInfoFragmentDirections.actionPersonalInfoFragmentToIncreaseAmountFragment(defineOnClick)
             findNavController().navigate(actionToDecrease)
         }
 

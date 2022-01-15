@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class IncreaseAmountViewModel @Inject constructor(
+class TransactionsViewModel @Inject constructor(
     var firebaseAuth: FirebaseAuth,
     var database: DatabaseReference,
     var firebaseUser: FirebaseUser
@@ -29,8 +29,8 @@ class IncreaseAmountViewModel @Inject constructor(
     private val _name = MutableSharedFlow<String>()
     val name: MutableSharedFlow<String> get() = _name
 
-    private val _showDialogError = MutableSharedFlow<Boolean>()
-    val showDialogError: MutableSharedFlow<Boolean> get() = _showDialogError
+    private val _showDialogError = MutableSharedFlow<String>()
+    val showDialogError: MutableSharedFlow<String> get() = _showDialogError
 
 
     fun setInformationFromDatabase() {
@@ -53,35 +53,27 @@ class IncreaseAmountViewModel @Inject constructor(
         }
     }
 
-    fun changeUserAmount(amount: String, database: DatabaseReference) {
-
-        var convertedValueToInt = amount.dropLast(1).toInt()
-
-        viewModelScope.launch {
-            _setAmount.emit(convertedValueToInt)
-        }
-
-        val user = HashMap<String, Any>()
-        user.put("balance", convertedValueToInt)
-        database.updateChildren(user).addOnCompleteListener {
-            if (it.isSuccessful) {
-                Log.d("sdadasdas", convertedValueToInt.toString())
-            }
-        }
-    }
-
-    fun pushTransaction(amount: Long, purpose: String) {
-        if (amount.toString().isNotEmpty() && purpose.isNotEmpty()) {
+    fun pushTransaction(amount: String, purpose: String, currentTime: String, checker: Boolean) {
+        if (amount.isNotEmpty() && purpose.isNotEmpty()) {
             database.get().addOnCompleteListener {
                 if (it.result?.exists() == true) {
                     val currentBalance = it.result!!.child("balance").value.toString()
-                    if (amount > currentBalance.toLong()) {
+                    if (amount.toLong() * -1 > currentBalance.toLong() && checker) {
                         viewModelScope.launch {
-                            _showDialogError.emit(true)
+                            _showDialogError.emit("შენ ბიძია შეშინებული ხო არ ხარ")
+                        }
+                    } else if(amount.toLong() > 5000 && !checker) {
+                        viewModelScope.launch {
+                            _showDialogError.emit("ცოტა ნაკლები შეიტანე ძამია!!")
                         }
                     } else {
-                        val transaction = UserTransaction(amount, purpose)
+                        val transaction = UserTransaction(amount, purpose, currentTime)
                         database.child("userTransaction").push().setValue(transaction)
+                        var convertedBalance = currentBalance.toLong()
+                        convertedBalance += amount.toLong()
+                        val updatedBalance = HashMap<String, Any>()
+                        updatedBalance.put("balance", convertedBalance)
+                        database.updateChildren(updatedBalance)
                     }
                 }
             }

@@ -14,6 +14,8 @@ class TransactionsAdapter : RecyclerView.Adapter<TransactionsAdapter.Transaction
             notifyDataSetChanged()
         }
 
+    var onItemSelected: ((UserTransaction) -> Unit)? = null
+
     inner class TransactionItemViewHolder(private val binding: TransactioItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -25,6 +27,9 @@ class TransactionsAdapter : RecyclerView.Adapter<TransactionsAdapter.Transaction
                 binding.tvTransactionPrice.text = currentItem.amount.toString()
                 binding.tvTransactionPurpose.text = currentItem.purpose.toString()
                 binding.tvCurrentTime.text = currentItem.currentTime.toString()
+                root.setOnClickListener {
+                    onItemSelected?.invoke(currentItem)
+                }
             }
         }
     }

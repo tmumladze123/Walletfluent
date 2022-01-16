@@ -1,5 +1,6 @@
 package ge.nlatsabidze.walletfluent.ui.personalInfo.profile
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -16,6 +17,7 @@ import ge.nlatsabidze.walletfluent.databinding.AccountSettingsFragmentBinding
 import ge.nlatsabidze.walletfluent.ui.entry.LoginFragmentDirections
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.util.*
 
 @AndroidEntryPoint
 class AccountSettings : BaseFragment<AccountSettingsFragmentBinding>(AccountSettingsFragmentBinding::inflate) {
@@ -33,11 +35,13 @@ class AccountSettings : BaseFragment<AccountSettingsFragmentBinding>(AccountSett
         }
         observers()
     }
-
+    
+    @SuppressLint("SetTextI18n")
     private fun observers() {
         viewLifecycleOwner.lifecycleScope.launch {
-            accountsSettingsViewModel.userName.collect {
-                binding.tvFirebaseUser.text = it
+            accountsSettingsViewModel.userName.collect { it ->
+                val name = it.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
+                binding.tvFirebaseUser.text = "Welcome $name"
             }
         }
     }

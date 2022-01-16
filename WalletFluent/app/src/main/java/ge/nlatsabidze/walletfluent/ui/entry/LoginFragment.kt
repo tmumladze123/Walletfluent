@@ -3,6 +3,7 @@ package ge.nlatsabidze.walletfluent.ui.entry
 import android.annotation.SuppressLint
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -11,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
+import ge.nlatsabidze.walletfluent.MainActivity
 import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
 import ge.nlatsabidze.walletfluent.databinding.FragmentLoginBinding
@@ -86,6 +88,14 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
             checkInputValidation(email, password)
             logInViewModel.login(email, password)
         }
+
+//        val nonInboxOnBackCallback = object : OnBackPressedCallback(false) {
+//            override fun handleOnBackPressed() {
+//                NavigationModel.setNavigationMenuItemChecked(NavigationModel.INBOX_ID)(requireActivity() as MainActivity).navigateToHome(
+//                    R.string.navigation_inbox,
+//                    Mailbox.INBOX
+//                ); }
+//        }
     }
 
     private fun resetPassword() {

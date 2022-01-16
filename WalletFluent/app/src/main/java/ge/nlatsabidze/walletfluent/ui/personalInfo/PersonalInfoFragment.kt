@@ -46,6 +46,11 @@ class PersonalInfoFragment :
             findNavController().navigate(actionToDecrease)
         }
 
+//        transactionAdapter.onItemSelected = {
+//            transactionAdapter.userTransactions.remove(it)
+//            transactionAdapter.notifyDataSetChanged()
+//        }
+
         observes()
     }
 

@@ -30,8 +30,9 @@ class AccountSettings : BaseFragment<AccountSettingsFragmentBinding>(AccountSett
 
         binding.btnTransactions.setOnClickListener { navigateToTransactionsPage() }
         binding.btnLogout.setOnClickListener{
-            navigateBack()
             logOUT()
+            navigateBack()
+            activity?.recreate()
         }
         observers()
     }

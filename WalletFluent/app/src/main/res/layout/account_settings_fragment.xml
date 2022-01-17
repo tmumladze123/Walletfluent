@@ -18,17 +18,17 @@
 
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnLogout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="LOG out" />
-
-        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnTransactions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:text="See Transaction History" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnLogout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
-            android:text="Transactions" />
+            android:text="Log out" />
 
     </com.google.android.material.card.MaterialCardView>
 

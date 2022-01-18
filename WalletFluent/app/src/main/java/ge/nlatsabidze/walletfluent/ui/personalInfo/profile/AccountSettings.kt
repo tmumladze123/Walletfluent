@@ -32,7 +32,6 @@ class AccountSettings : BaseFragment<AccountSettingsFragmentBinding>(AccountSett
         binding.btnLogout.setOnClickListener{
             logOUT()
             navigateBack()
-            activity?.recreate()
         }
         observers()
     }

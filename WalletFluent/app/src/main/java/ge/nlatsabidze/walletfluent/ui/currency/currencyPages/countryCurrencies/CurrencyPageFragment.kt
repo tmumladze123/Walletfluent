@@ -1,5 +1,6 @@
 package ge.nlatsabidze.walletfluent.ui.currency.currencyPages.countryCurrencies
 
+import android.app.AlertDialog
 import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
@@ -15,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
 import ge.nlatsabidze.walletfluent.databinding.CurrencyPageFragmentBinding
+import ge.nlatsabidze.walletfluent.extensions.showDialogError
 import ge.nlatsabidze.walletfluent.ui.currency.currencyPages.countryCurrencies.currencyAdapter.CurrencyAdapter
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -35,8 +37,12 @@ class CurrencyPageFragment : BaseFragment<CurrencyPageFragmentBinding>(CurrencyP
         setDataFromApi()
         displayProgressBar()
 
-
-        d("dsadasdasdas", checkInternetConnection.isOnline(activity!!.application).toString())
+        if (checkInternetConnection.isOnline(activity!!.application).toString() == "false") {
+            showDialogError(
+                "In Order to use our application, you should be connected to internet",
+                requireContext()
+            )
+        }
 
     }
 

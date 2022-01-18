@@ -15,8 +15,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CurrencyPageViewModel @Inject constructor(private val currencyRepository: CurrencyRepository) : ViewModel() {
-    private val _commercialRates = MutableSharedFlow<List<CommercialRates>>()
-    val commercialRates: MutableSharedFlow<List<CommercialRates>> get() = _commercialRates
+    private val _commercialRates = MutableStateFlow<List<CommercialRates>>(listOf())
+    val commercialRates: MutableStateFlow<List<CommercialRates>> get() = _commercialRates
 
     private var _showLoadingViewModelState = MutableStateFlow<Boolean>(false)
     val showLoadingViewModel: MutableStateFlow<Boolean> get() = _showLoadingViewModelState
@@ -27,7 +27,7 @@ class CurrencyPageViewModel @Inject constructor(private val currencyRepository: 
             withContext(Dispatchers.IO) {
                 currencyRepository.getCountryCurrencies().collectLatest {
                     if (it.data?.commercialRatesList != null) {
-                        _commercialRates.emit(it.data.commercialRatesList)
+                        _commercialRates.value = it.data.commercialRatesList
                     }
                 }
             }

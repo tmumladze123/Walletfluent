@@ -39,7 +39,6 @@ class CryptoFragment : BaseFragment<FragmentCryptoBinding>(FragmentCryptoBinding
         cryptoAdapter.onItemClick = { currentItem ->
             val action = CryptoFragmentDirections.actionCryptoFragmentToDetailCryptoFragment(currentItem)
             findNavController().navigate(action)
-            Toast.makeText(requireContext(),currentItem.name.toString(),Toast.LENGTH_SHORT).show()
         }
     }
 

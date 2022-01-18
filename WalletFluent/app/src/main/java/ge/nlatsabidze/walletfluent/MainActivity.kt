@@ -19,9 +19,11 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
+import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
 import ge.nlatsabidze.walletfluent.databinding.ActivityMainBinding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
@@ -32,6 +34,9 @@ class MainActivity : AppCompatActivity() {
     private lateinit var settingsManager: SettingsManager
     private var isDarkMode = true
 
+    @Inject
+    lateinit var checkInternetConnection: CheckInternetConnection
+
     private val Context.dataStore by preferencesDataStore(name = "settings")
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -41,6 +46,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setSupportActionBar(binding.appBarMain.toolbar)
+
+        supportActionBar?.hide();
 
         settingsManager = SettingsManager(applicationContext)
         observeUiPreferences()
@@ -64,7 +71,7 @@ class MainActivity : AppCompatActivity() {
             ), drawerLayout
         )
 
-        if (FirebaseAuth.getInstance().currentUser != null) {
+        if (FirebaseAuth.getInstance().currentUser != null && checkInternetConnection.isOnline(applicationContext)) {
             navGraph.startDestination = R.id.accountSettings
         } else {
             navGraph.startDestination = R.id.loginFragment

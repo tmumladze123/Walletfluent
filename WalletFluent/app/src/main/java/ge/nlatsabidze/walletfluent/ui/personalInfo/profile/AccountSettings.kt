@@ -14,6 +14,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.databinding.AccountSettingsFragmentBinding
+import ge.nlatsabidze.walletfluent.extensions.setOnSafeClickListener
+import ge.nlatsabidze.walletfluent.extensions.showDialogError
 import ge.nlatsabidze.walletfluent.ui.entry.LoginFragmentDirections
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -33,6 +35,16 @@ class AccountSettings : BaseFragment<AccountSettingsFragmentBinding>(AccountSett
             logOUT()
             navigateBack()
         }
+
+        binding.btnUserProfileInfo.setOnClickListener {
+            val action = AccountSettingsDirections.actionAccountSettingsToUserProfileFragment()
+            findNavController().navigate(action)
+        }
+
+        binding.btnResetPassword.setOnSafeClickListener {
+            accountsSettingsViewModel.changeUserPassword()
+        }
+
         observers()
     }
     
@@ -42,6 +54,12 @@ class AccountSettings : BaseFragment<AccountSettingsFragmentBinding>(AccountSett
             accountsSettingsViewModel.userName.collect { it ->
                 val name = it.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
                 binding.tvFirebaseUser.text = "Welcome $name"
+            }
+        }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            accountsSettingsViewModel.showChangePasswordDialog.collect {
+                showDialogError(it, requireContext())
             }
         }
     }

@@ -24,6 +24,9 @@ class AccountSettingsViewModel @Inject constructor(
     private val _userName = MutableStateFlow<String>("")
     val userName: MutableStateFlow<String> get() = _userName
 
+    private val _showChangePasswordDialog = MutableSharedFlow<String>()
+    val showChangePasswordDialog: MutableSharedFlow<String> get() = _showChangePasswordDialog
+
 
     fun initializeFirebase() {
         firebaseAuth = FirebaseAuth.getInstance()
@@ -47,5 +50,19 @@ class AccountSettingsViewModel @Inject constructor(
 
     fun logOutCurrentUser() {
         firebaseRepository.logOutUser()
+    }
+
+
+    fun changeUserPassword() {
+        database.get().addOnCompleteListener {
+            if (it.result?.exists() == true) {
+                val email = it.result!!.child("email").value.toString()
+                firebaseRepository.resetUserPassword(email)
+                viewModelScope.launch {
+                    _showChangePasswordDialog.emit("Change password")
+                }
+            }
+        }
+
     }
 }

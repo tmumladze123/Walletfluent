@@ -40,7 +40,7 @@ class CurrencyRepository @Inject constructor(private var apiService: CurrencyApi
                 _showLoading.value = false
                 return Resource.Success(body)
             }
-            return Resource.Error("exception")
+            return Resource.Error(response.errorBody().toString())
 
         }catch (e: Exception) {
             return Resource.Error("exception")

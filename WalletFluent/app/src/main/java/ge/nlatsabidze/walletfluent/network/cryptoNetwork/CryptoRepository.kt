@@ -39,7 +39,7 @@ class CryptoRepository @Inject constructor(private var apiService: CryptoApi) {
                 _showLoading.emit(false)
                 return Resource.Success(body)
             }
-            return Resource.Error("exceptionMessage")
+            return Resource.Error(response.errorBody().toString())
 
         }catch (e: Exception) {
             return Resource.Error("exception")

@@ -134,6 +134,4 @@ class AccountSettings : BaseFragment<AccountSettingsFragmentBinding>(AccountSett
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
     }
 
-
-
 }

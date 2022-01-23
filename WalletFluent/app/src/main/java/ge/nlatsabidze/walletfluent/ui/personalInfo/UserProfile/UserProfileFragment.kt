@@ -1,5 +1,6 @@
 package ge.nlatsabidze.walletfluent.ui.personalInfo.UserProfile
 
+import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
@@ -19,7 +20,20 @@ class UserProfileFragment :
     @Inject
     lateinit var checkInternetConnection: CheckInternetConnection
 
+    var relatedViews: ArrayList<View> = ArrayList()
+
+
     override fun start() {
+        relatedViews.add(binding.SecondMaterial)
+        relatedViews.add(binding.firstMaterial)
+        relatedViews.add(binding.fourthMaterial)
+        relatedViews.add(binding.thirdMaterial)
+        relatedViews.add(binding.accountInfo)
+
+        if (!checkInternetConnection.isOnline(requireContext())) {
+            changeVisibility(relatedViews, View.INVISIBLE)
+            binding.progressBarProfile.visibility = View.VISIBLE
+        }
 
         if (checkInternetConnection.isOnline(requireContext())) {
             userViewModel.initializeFirebase()
@@ -54,4 +68,12 @@ class UserProfileFragment :
             }
         }
     }
+
+    private fun changeVisibility(views: List<View>, visibility: Int) {
+        for (view in views) {
+            view.visibility = visibility
+        }
+    }
+
+
 }

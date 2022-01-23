@@ -7,12 +7,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.R
+import ge.nlatsabidze.walletfluent.SettingsManager
+import ge.nlatsabidze.walletfluent.UiMode
 import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
 import ge.nlatsabidze.walletfluent.databinding.AccountSettingsFragmentBinding
 import ge.nlatsabidze.walletfluent.extensions.setOnSafeClickListener
@@ -31,7 +34,18 @@ class AccountSettings : BaseFragment<AccountSettingsFragmentBinding>(AccountSett
     @Inject
     lateinit var checkInternetConnection: CheckInternetConnection
 
+    private lateinit var settingsManager: SettingsManager
+    private var isDarkMode = true
+
     override fun start() {
+
+        settingsManager = SettingsManager(requireContext())
+
+        observeUiPreferences()
+
+        binding.switchMode.setOnClickListener {
+            setUpUi()
+        }
 
         if (checkInternetConnection.isOnline(requireContext())) {
             accountsSettingsViewModel.initializeFirebase()
@@ -85,6 +99,41 @@ class AccountSettings : BaseFragment<AccountSettingsFragmentBinding>(AccountSett
     private fun logOUT() {
         accountsSettingsViewModel.logOutCurrentUser()
     }
+
+    private fun setUpUi() {
+        lifecycleScope.launch {
+            when (isDarkMode) {
+                true -> settingsManager.setUpUiMode(UiMode.LIGHT)
+                false -> settingsManager.setUpUiMode(UiMode.DARK)
+            }
+        }
+    }
+
+    private fun observeUiPreferences() {
+        lifecycleScope.launch {
+            settingsManager.uiModeFlow.collect {
+                it.let {
+                    when (it) {
+                        UiMode.LIGHT -> onLightMode()
+                        UiMode.DARK -> onDarkMode()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun onLightMode() {
+        isDarkMode = false
+        binding.switchMode.isChecked = false
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+    }
+
+    private fun onDarkMode() {
+        isDarkMode = true
+        binding.switchMode.isChecked = true
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+    }
+
 
 
 }

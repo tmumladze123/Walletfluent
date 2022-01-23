@@ -49,12 +49,12 @@ class MainActivity : AppCompatActivity() {
 
         supportActionBar?.hide();
 
-        settingsManager = SettingsManager(applicationContext)
-        observeUiPreferences()
-
-        binding.switchView.setOnClickListener {
-            setUpUi()
-        }
+//        settingsManager = SettingsManager(applicationContext)
+//        observeUiPreferences()
+//
+//        binding.switchView.setOnClickListener {
+//            setUpUi()
+//        }
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
@@ -93,40 +93,40 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
-
-    private fun setUpUi() {
-        lifecycleScope.launch {
-            when (isDarkMode) {
-                true -> settingsManager.setUpUiMode(UiMode.LIGHT)
-                false -> settingsManager.setUpUiMode(UiMode.DARK)
-            }
-        }
-    }
-
-    private fun observeUiPreferences() {
-        lifecycleScope.launch {
-            settingsManager.uiModeFlow.collect {
-                it.let {
-                    when (it) {
-                        UiMode.LIGHT -> onLightMode()
-                        UiMode.DARK -> onDarkMode()
-                    }
-                }
-            }
-        }
-    }
-
-    private fun onLightMode() {
-        isDarkMode = false
-        binding.switchView.isChecked = false
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-    }
-
-    private fun onDarkMode() {
-        isDarkMode = true
-        binding.switchView.isChecked = true
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-    }
+//
+//    private fun setUpUi() {
+//        lifecycleScope.launch {
+//            when (isDarkMode) {
+//                true -> settingsManager.setUpUiMode(UiMode.LIGHT)
+//                false -> settingsManager.setUpUiMode(UiMode.DARK)
+//            }
+//        }
+//    }
+//
+//    private fun observeUiPreferences() {
+//        lifecycleScope.launch {
+//            settingsManager.uiModeFlow.collect {
+//                it.let {
+//                    when (it) {
+//                        UiMode.LIGHT -> onLightMode()
+//                        UiMode.DARK -> onDarkMode()
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//    private fun onLightMode() {
+//        isDarkMode = false
+//        binding.switchView.isChecked = false
+//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+//    }
+//
+//    private fun onDarkMode() {
+//        isDarkMode = true
+//        binding.switchView.isChecked = true
+//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+//    }
 
 
 //    override fun onBackPressed() {

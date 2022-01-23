@@ -10,8 +10,10 @@ import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
 import ge.nlatsabidze.walletfluent.databinding.PersonalInfoFragmentBinding
 import ge.nlatsabidze.walletfluent.extensions.setOnSafeClickListener
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
@@ -23,15 +25,20 @@ class PersonalInfoFragment :
     private lateinit var transactionAdapter: TransactionsAdapter
     private var defineOnClick: Boolean = false
 
+    @Inject
+    lateinit var checkInternetConnection: CheckInternetConnection
+
     override fun start() {
 
         initializeRecyclerView()
 
-        personalInfoViewModel.initializeFirebase()
-        personalInfoViewModel.setInformationFromDatabase()
-        personalInfoViewModel.addTransaction()
-        personalInfoViewModel.expireDate()
-
+        if (checkInternetConnection.isOnline(requireContext())) {
+            personalInfoViewModel.initializeFirebase()
+            personalInfoViewModel.setInformationFromDatabase()
+            personalInfoViewModel.addTransaction()
+            personalInfoViewModel.expireDate()
+        }
+        
         binding.btnIncrease.setOnSafeClickListener {
             defineOnClick = true
             val actionToIncrease =

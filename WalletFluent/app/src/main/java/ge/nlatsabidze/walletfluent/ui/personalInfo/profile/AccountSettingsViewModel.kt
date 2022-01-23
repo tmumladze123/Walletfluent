@@ -27,6 +27,9 @@ class AccountSettingsViewModel @Inject constructor(
     private val _showChangePasswordDialog = MutableSharedFlow<String>()
     val showChangePasswordDialog: MutableSharedFlow<String> get() = _showChangePasswordDialog
 
+    private val _showInternetErrorDialog = MutableSharedFlow<String>()
+    val showInternetErrorDialog: MutableSharedFlow<String> get() = _showInternetErrorDialog
+
 
     fun initializeFirebase() {
         firebaseAuth = FirebaseAuth.getInstance()
@@ -63,6 +66,5 @@ class AccountSettingsViewModel @Inject constructor(
                 }
             }
         }
-
     }
 }

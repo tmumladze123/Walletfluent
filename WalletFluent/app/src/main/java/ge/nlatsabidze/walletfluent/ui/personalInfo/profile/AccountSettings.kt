@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.R
+import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
 import ge.nlatsabidze.walletfluent.databinding.AccountSettingsFragmentBinding
 import ge.nlatsabidze.walletfluent.extensions.setOnSafeClickListener
 import ge.nlatsabidze.walletfluent.extensions.showDialogError
@@ -20,15 +21,22 @@ import ge.nlatsabidze.walletfluent.ui.entry.LoginFragmentDirections
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class AccountSettings : BaseFragment<AccountSettingsFragmentBinding>(AccountSettingsFragmentBinding::inflate) {
 
     private val accountsSettingsViewModel: AccountSettingsViewModel by viewModels()
 
+    @Inject
+    lateinit var checkInternetConnection: CheckInternetConnection
+
     override fun start() {
-        accountsSettingsViewModel.initializeFirebase()
-        accountsSettingsViewModel.getUserName()
+
+        if (checkInternetConnection.isOnline(requireContext())) {
+            accountsSettingsViewModel.initializeFirebase()
+            accountsSettingsViewModel.getUserName()
+        }
 
         binding.btnTransactions.setOnClickListener { navigateToTransactionsPage() }
         binding.btnLogout.setOnClickListener{
@@ -47,7 +55,7 @@ class AccountSettings : BaseFragment<AccountSettingsFragmentBinding>(AccountSett
 
         observers()
     }
-    
+
     @SuppressLint("SetTextI18n")
     private fun observers() {
         viewLifecycleOwner.lifecycleScope.launch {

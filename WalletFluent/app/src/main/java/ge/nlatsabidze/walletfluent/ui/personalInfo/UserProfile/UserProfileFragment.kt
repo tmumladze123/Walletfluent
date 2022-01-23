@@ -1,19 +1,14 @@
 package ge.nlatsabidze.walletfluent.ui.personalInfo.UserProfile
 
-import androidx.lifecycle.ViewModelProvider
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
-import ge.nlatsabidze.walletfluent.R
+import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
 import ge.nlatsabidze.walletfluent.databinding.UserProfileFragmentBinding
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class UserProfileFragment :
@@ -21,9 +16,15 @@ class UserProfileFragment :
 
     private val userViewModel: UserProfileViewModel by viewModels()
 
+    @Inject
+    lateinit var checkInternetConnection: CheckInternetConnection
+
     override fun start() {
-        userViewModel.initializeFirebase()
-        userViewModel.setInformationFromDatabase()
+
+        if (checkInternetConnection.isOnline(requireContext())) {
+            userViewModel.initializeFirebase()
+            userViewModel.setInformationFromDatabase()
+        }
 
         observeInformation()
     }

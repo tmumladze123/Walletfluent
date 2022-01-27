@@ -3,7 +3,7 @@ package ge.nlatsabidze.walletfluent.ui.entry
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import ge.nlatsabidze.walletfluent.FirebaseUserRepository
+import ge.nlatsabidze.walletfluent.ui.entry.entryRepository.FirebaseUserRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

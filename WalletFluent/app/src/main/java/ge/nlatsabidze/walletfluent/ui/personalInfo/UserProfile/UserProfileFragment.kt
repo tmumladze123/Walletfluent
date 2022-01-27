@@ -7,6 +7,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
 import ge.nlatsabidze.walletfluent.databinding.UserProfileFragmentBinding
+import ge.nlatsabidze.walletfluent.extensions.changeVisibility
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -17,11 +18,7 @@ class UserProfileFragment :
 
     private val userViewModel: UserProfileViewModel by viewModels()
 
-    @Inject
-    lateinit var checkInternetConnection: CheckInternetConnection
-
     var relatedViews: ArrayList<View> = ArrayList()
-
 
     override fun start() {
         relatedViews.add(binding.SecondMaterial)
@@ -30,12 +27,12 @@ class UserProfileFragment :
         relatedViews.add(binding.thirdMaterial)
         relatedViews.add(binding.accountInfo)
 
-        if (!checkInternetConnection.isOnline(requireContext())) {
+        if (!userViewModel.checkConnection()) {
             changeVisibility(relatedViews, View.INVISIBLE)
             binding.progressBarProfile.visibility = View.VISIBLE
         }
 
-        if (checkInternetConnection.isOnline(requireContext())) {
+        if (userViewModel.checkConnection()) {
             userViewModel.initializeFirebase()
             userViewModel.setInformationFromDatabase()
         }
@@ -68,12 +65,5 @@ class UserProfileFragment :
             }
         }
     }
-
-    private fun changeVisibility(views: List<View>, visibility: Int) {
-        for (view in views) {
-            view.visibility = visibility
-        }
-    }
-
 
 }

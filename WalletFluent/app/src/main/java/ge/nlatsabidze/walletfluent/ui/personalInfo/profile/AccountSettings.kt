@@ -31,9 +31,6 @@ class AccountSettings : BaseFragment<AccountSettingsFragmentBinding>(AccountSett
 
     private val accountsSettingsViewModel: AccountSettingsViewModel by viewModels()
 
-    @Inject
-    lateinit var checkInternetConnection: CheckInternetConnection
-
     private lateinit var settingsManager: SettingsManager
     private var isDarkMode = true
 
@@ -47,7 +44,7 @@ class AccountSettings : BaseFragment<AccountSettingsFragmentBinding>(AccountSett
             setUpUi()
         }
 
-        if (checkInternetConnection.isOnline(requireContext())) {
+        if (accountsSettingsViewModel.checkConnection()) {
             accountsSettingsViewModel.initializeFirebase()
             accountsSettingsViewModel.getUserName()
         }

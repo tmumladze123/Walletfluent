@@ -1,5 +1,7 @@
 package ge.nlatsabidze.walletfluent.ui.personalInfo.UserProfile
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
@@ -7,7 +9,9 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
 import ge.nlatsabidze.walletfluent.ui.entry.userData.UserTransaction
+import ge.nlatsabidze.walletfluent.ui.personalInfo.UserProfile.UserProfileRepository.UserProfileRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -15,9 +19,11 @@ import javax.inject.Inject
 @HiltViewModel
 class UserProfileViewModel @Inject constructor(
     var firebaseAuth: FirebaseAuth,
-    var database: DatabaseReference,
     var firebaseUser: FirebaseUser,
-): ViewModel() {
+    private val internetConnection: CheckInternetConnection,
+    application: Application,
+    var userProfileRepository: UserProfileRepository
+) : AndroidViewModel(application) {
 
     private val _balance = MutableSharedFlow<String>()
     val balance: MutableSharedFlow<String> get() = _balance
@@ -32,18 +38,12 @@ class UserProfileViewModel @Inject constructor(
     val emailHolder: MutableSharedFlow<String> get() = _email
 
     fun initializeFirebase() {
-        firebaseAuth = FirebaseAuth.getInstance()
-        firebaseUser = firebaseAuth.currentUser!!
-
-        database =
-            FirebaseDatabase.getInstance("https://walletfluent-b2fe7-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("Users").child(firebaseUser.uid)
+        userProfileRepository.initializeFirebase()
     }
 
 
     fun setInformationFromDatabase() {
-
-        database.get().addOnCompleteListener {
+        userProfileRepository.UserDatabase().get().addOnCompleteListener {
             if (it.result?.exists() == true) {
 
                 val balance = it.result!!.child("balance").value.toString() + "₾"
@@ -68,6 +68,10 @@ class UserProfileViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun checkConnection(): Boolean {
+        return internetConnection.isOnline(getApplication())
     }
 
 

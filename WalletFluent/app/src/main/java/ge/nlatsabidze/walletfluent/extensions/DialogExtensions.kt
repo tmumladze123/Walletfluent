@@ -29,3 +29,9 @@ fun View.setOnSafeClickListener(
         onSafeClick(v)
     })
 }
+
+fun changeVisibility(views: List<View>, visibility: Int) {
+    for (view in views) {
+        view.visibility = visibility
+    }
+}

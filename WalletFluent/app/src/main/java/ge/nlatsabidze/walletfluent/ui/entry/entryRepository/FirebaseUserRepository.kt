@@ -1,8 +1,9 @@
-package ge.nlatsabidze.walletfluent
+package ge.nlatsabidze.walletfluent.ui.entry.entryRepository
 
 import android.app.Application
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
+import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.ui.entry.userData.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat

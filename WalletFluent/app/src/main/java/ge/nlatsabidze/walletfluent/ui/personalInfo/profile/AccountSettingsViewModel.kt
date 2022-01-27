@@ -1,13 +1,13 @@
 package ge.nlatsabidze.walletfluent.ui.personalInfo.profile
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import ge.nlatsabidze.walletfluent.FirebaseUserRepository
+import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
+import ge.nlatsabidze.walletfluent.ui.entry.entryRepository.FirebaseUserRepository
+import ge.nlatsabidze.walletfluent.ui.personalInfo.profile.profileRepository.AccountsRepository
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -15,11 +15,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AccountSettingsViewModel @Inject constructor(
-    var firebaseAuth: FirebaseAuth,
-    var database: DatabaseReference,
-    var firebaseUser: FirebaseUser,
-    var firebaseRepository: FirebaseUserRepository
-) : ViewModel() {
+    var firebaseRepository: FirebaseUserRepository,
+    var profileRepository: AccountsRepository,
+    application: Application,
+    var checkInternetConnection: CheckInternetConnection
+) : AndroidViewModel(application) {
 
     private val _userName = MutableStateFlow<String>("")
     val userName: MutableStateFlow<String> get() = _userName
@@ -27,37 +27,12 @@ class AccountSettingsViewModel @Inject constructor(
     private val _showChangePasswordDialog = MutableSharedFlow<String>()
     val showChangePasswordDialog: MutableSharedFlow<String> get() = _showChangePasswordDialog
 
-    private val _showInternetErrorDialog = MutableSharedFlow<String>()
-    val showInternetErrorDialog: MutableSharedFlow<String> get() = _showInternetErrorDialog
-
-
     fun initializeFirebase() {
-        firebaseAuth = FirebaseAuth.getInstance()
-        firebaseUser = firebaseAuth.currentUser!!
-
-        database =
-            FirebaseDatabase.getInstance("https://walletfluent-b2fe7-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("Users").child(firebaseUser.uid)
+        profileRepository.initializeFirebaseRepo()
     }
-
-    fun getUserName() {
-        database.get().addOnCompleteListener {
-            if (it.result?.exists() == true) {
-                val name = it.result!!.child("name").value.toString()
-                viewModelScope.launch {
-                    _userName.value = name
-                }
-            }
-        }
-    }
-
-    fun logOutCurrentUser() {
-        firebaseRepository.logOutUser()
-    }
-
 
     fun changeUserPassword() {
-        database.get().addOnCompleteListener {
+        profileRepository.UserDatabase().get().addOnCompleteListener {
             if (it.result?.exists() == true) {
                 val email = it.result!!.child("email").value.toString()
                 firebaseRepository.resetUserPassword(email)
@@ -67,4 +42,24 @@ class AccountSettingsViewModel @Inject constructor(
             }
         }
     }
+
+    fun getUserName() {
+        profileRepository.UserDatabase().get().addOnCompleteListener {
+            if (it.result?.exists() == true) {
+                val userName = it.result!!.child("name").value.toString()
+                viewModelScope.launch {
+                    _userName.value = userName
+                }
+            }
+        }
+    }
+
+    fun checkConnection(): Boolean {
+        return checkInternetConnection.isOnline(getApplication())
+    }
+
+    fun logOutCurrentUser() {
+        firebaseRepository.logOutUser()
+    }
+
 }

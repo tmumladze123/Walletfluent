@@ -4,6 +4,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collect
 import android.annotation.SuppressLint
 import android.util.Log.d
+import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
@@ -12,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
 import ge.nlatsabidze.walletfluent.databinding.PersonalInfoFragmentBinding
+import ge.nlatsabidze.walletfluent.extensions.changeVisibility
 import ge.nlatsabidze.walletfluent.extensions.setOnSafeClickListener
 import javax.inject.Inject
 
@@ -28,15 +30,29 @@ class PersonalInfoFragment :
     @Inject
     lateinit var checkInternetConnection: CheckInternetConnection
 
+    var relatedViews: ArrayList<View> = ArrayList()
+
     override fun start() {
+
+        relatedViews.add(binding.recyclerCardView)
+        relatedViews.add(binding.yourCard)
+        relatedViews.add(binding.tvAvailable)
+        relatedViews.add(binding.btnIncrease)
+        relatedViews.add(binding.btnDecrease)
+        relatedViews.add(binding.balance)
 
         initializeRecyclerView()
 
-        if (checkInternetConnection.isOnline(requireContext())) {
+        if (personalInfoViewModel.checkConnection()) {
             personalInfoViewModel.initializeFirebase()
             personalInfoViewModel.setInformationFromDatabase()
             personalInfoViewModel.addTransaction()
             personalInfoViewModel.expireDate()
+        }
+
+        if (!personalInfoViewModel.checkConnection()) {
+            changeVisibility(relatedViews, View.INVISIBLE)
+            binding.progressBarInfo.visibility = View.VISIBLE
         }
         
         binding.btnIncrease.setOnSafeClickListener {
@@ -52,11 +68,6 @@ class PersonalInfoFragment :
                 PersonalInfoFragmentDirections.actionPersonalInfoFragmentToIncreaseAmountFragment(defineOnClick)
             findNavController().navigate(actionToDecrease)
         }
-
-//        transactionAdapter.onItemSelected = {
-//            transactionAdapter.userTransactions.remove(it)
-//            transactionAdapter.notifyDataSetChanged()
-//        }
 
         observes()
     }

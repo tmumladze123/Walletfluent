@@ -9,36 +9,25 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class CurrencyPageViewModel @Inject constructor(private val currencyRepository: CurrencyRepository) : ViewModel() {
-    private val _commercialRates = MutableStateFlow<List<CommercialRates>>(listOf())
-    val commercialRates: MutableStateFlow<List<CommercialRates>> get() = _commercialRates
+class CurrencyPageViewModel @Inject constructor(private val currencyRepository: CurrencyRepository) :
+    ViewModel() {
 
     private var _showLoadingViewModelState = MutableStateFlow<Boolean>(false)
     val showLoadingViewModel: MutableStateFlow<Boolean> get() = _showLoadingViewModelState
 
-
-    fun getCommercialRates() {
-        viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                currencyRepository.getCountryCurrencies().collectLatest {
-                    if (it.data?.commercialRatesList != null) {
-                        _commercialRates.value = it.data.commercialRatesList
-                    }
-                }
-            }
-        }
+    init {
+        _showLoadingViewModelState = currencyRepository.showLoadingError()
     }
 
-    fun showLoadingBar() {
-        viewModelScope.launch {
-            currencyRepository.showLoading.collectLatest {
-                _showLoadingViewModelState.value = it
-            }
-        }
-    }
+    suspend fun getCountryCurrencies() =
+        currencyRepository.getCountryCurrencies().stateIn(
+            viewModelScope
+        )
+
 }

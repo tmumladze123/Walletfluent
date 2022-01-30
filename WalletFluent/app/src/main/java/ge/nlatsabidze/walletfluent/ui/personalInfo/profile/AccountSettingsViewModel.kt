@@ -4,6 +4,9 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
 import ge.nlatsabidze.walletfluent.ui.entry.entryRepository.FirebaseUserRepository
@@ -28,30 +31,35 @@ class AccountSettingsViewModel @Inject constructor(
     val showChangePasswordDialog: MutableSharedFlow<String> get() = _showChangePasswordDialog
 
     fun initializeFirebase() {
-        profileRepository.initializeFirebaseRepo()
+        profileRepository.initializeFirebase()
     }
 
+
     fun changeUserPassword() {
-        profileRepository.UserDatabase().get().addOnCompleteListener {
-            if (it.result?.exists() == true) {
-                val email = it.result!!.child("email").value.toString()
+        profileRepository.UserDatabase().addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val email = snapshot.child("email").value.toString()
                 firebaseRepository.resetUserPassword(email)
                 viewModelScope.launch {
                     _showChangePasswordDialog.emit("Change password")
                 }
             }
-        }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 
     fun getUserName() {
-        profileRepository.UserDatabase().get().addOnCompleteListener {
-            if (it.result?.exists() == true) {
-                val userName = it.result!!.child("name").value.toString()
+        profileRepository.UserDatabase().addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val userName = snapshot.child("name").value.toString()
                 viewModelScope.launch {
                     _userName.value = userName
                 }
             }
-        }
+
+            override fun onCancelled(error: DatabaseError) {}
+        })
     }
 
     fun checkConnection(): Boolean {

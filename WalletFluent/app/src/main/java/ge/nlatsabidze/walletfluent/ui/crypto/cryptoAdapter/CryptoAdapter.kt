@@ -33,12 +33,16 @@ class CryptoAdapter : RecyclerView.Adapter<CryptoAdapter.CryptoItemViewHolder>()
                     tvCurrentPrice.text = "$" + currentItem.current_price.toString()
 
                     var currentPrice = currentItem.price_change_24h.toString()
+                    var indexOfDot = findDotOccurence(currentPrice)
+
                     if (currentItem.price_change_24h.toString()[0] == '-') {
                         tvChange.setTextColor(Color.RED)
                         currentPrice = currentPrice.drop(1)
+                        currentPrice = currentPrice.substring(0, indexOfDot + 2)
                         tvChange.text = "▼$currentPrice"
                     } else {
                         tvChange.setTextColor(Color.GREEN)
+                        currentPrice = currentPrice.substring(0, indexOfDot + 2)
                         tvChange.text = "▲$currentPrice"
                     }
                     root.setOnClickListener {
@@ -57,6 +61,16 @@ class CryptoAdapter : RecyclerView.Adapter<CryptoAdapter.CryptoItemViewHolder>()
     }
 
     override fun getItemCount(): Int = cryptoExchanges.size
+
+    fun findDotOccurence(number: String): Int {
+        var index = 0
+        for (i in number.indices) {
+            if (number[i] == '.') {
+                index = i
+            }
+        }
+        return index
+    }
 
 
 }

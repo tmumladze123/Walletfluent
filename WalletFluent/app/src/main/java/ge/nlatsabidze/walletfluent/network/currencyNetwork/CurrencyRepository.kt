@@ -13,9 +13,8 @@ import javax.inject.Inject
 class CurrencyRepository @Inject constructor(private var apiService: CurrencyApi) {
 
     private var _showLoading = MutableStateFlow<Boolean>(false)
-    val showLoading: MutableStateFlow<Boolean> get() = _showLoading
 
-    suspend fun getCountryCurrencies(): Flow<Resource<Currency>>{
+    suspend fun getCountryCurrencies(): Flow<Resource<Currency>> {
         return flow {
             emit(handleResponse {
                 apiService.getCurrencies()
@@ -45,5 +44,9 @@ class CurrencyRepository @Inject constructor(private var apiService: CurrencyApi
         }catch (e: Exception) {
             return Resource.Error("exception")
         }
+    }
+
+    fun showLoadingError(): MutableStateFlow<Boolean> {
+        return _showLoading
     }
 }

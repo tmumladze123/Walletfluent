@@ -10,6 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -20,7 +21,7 @@ class CryptoViewModel @Inject constructor(private val cryptoService: CryptoRepos
     private var _showLoadingViewModelState = MutableSharedFlow<Boolean>()
     val showLoadingViewModel: MutableSharedFlow<Boolean> get() = _showLoadingViewModelState
 
-    private val _marketValues = MutableStateFlow<List<MarketsItem>>(listOf<MarketsItem>())
+    private val _marketValues = MutableStateFlow(listOf<MarketsItem>())
     val marketValues: MutableStateFlow<List<MarketsItem>> get() = _marketValues
 
     fun getCryptoExchangeValues() {

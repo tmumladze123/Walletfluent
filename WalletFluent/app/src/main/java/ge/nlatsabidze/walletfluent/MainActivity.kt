@@ -10,6 +10,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -26,9 +27,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedListener {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var nav_Menu: Menu
+
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var settingsManager: SettingsManager
@@ -45,20 +49,21 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        binding.run {
+            findNavController(R.id.nav_host_fragment_content_main).addOnDestinationChangedListener(
+                this@MainActivity
+            )
+        }
+
         setSupportActionBar(binding.appBarMain.toolbar)
 
         supportActionBar?.hide();
 
-//        settingsManager = SettingsManager(applicationContext)
-//        observeUiPreferences()
-//
-//        binding.switchView.setOnClickListener {
-//            setUpUi()
-//        }
-
-        val drawerLayout: DrawerLayout = binding.drawerLayout
+        drawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
+
+        nav_Menu = navView.getMenu()
 
         val navGraph = navController.navInflater.inflate(R.navigation.mobile_navigation)
 
@@ -71,8 +76,12 @@ class MainActivity : AppCompatActivity() {
             ), drawerLayout
         )
 
-        if (FirebaseAuth.getInstance().currentUser != null && checkInternetConnection.isOnline(applicationContext)) {
+        if (FirebaseAuth.getInstance().currentUser != null && checkInternetConnection.isOnline(
+                applicationContext
+            ) && FirebaseAuth.getInstance().currentUser?.isEmailVerified == true
+        ) {
             navGraph.startDestination = R.id.accountSettings
+            setUnVisible()
         } else {
             navGraph.startDestination = R.id.loginFragment
         }
@@ -93,45 +102,35 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
-//
-//    private fun setUpUi() {
-//        lifecycleScope.launch {
-//            when (isDarkMode) {
-//                true -> settingsManager.setUpUiMode(UiMode.LIGHT)
-//                false -> settingsManager.setUpUiMode(UiMode.DARK)
-//            }
-//        }
-//    }
-//
-//    private fun observeUiPreferences() {
-//        lifecycleScope.launch {
-//            settingsManager.uiModeFlow.collect {
-//                it.let {
-//                    when (it) {
-//                        UiMode.LIGHT -> onLightMode()
-//                        UiMode.DARK -> onDarkMode()
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    private fun onLightMode() {
-//        isDarkMode = false
-//        binding.switchView.isChecked = false
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-//    }
-//
-//    private fun onDarkMode() {
-//        isDarkMode = true
-//        binding.switchView.isChecked = true
-//        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-//    }
+
+    fun setDisableToDrawer() {
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+    }
+
+    fun setEnableToDrawer() {
+        drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+    }
+
+    fun setUnVisible() {
+        nav_Menu.findItem(R.id.loginFragment).setVisible(false)
+    }
+
+    fun setVisible() {
+        nav_Menu.findItem(R.id.loginFragment).setVisible(true)
+    }
 
 
-//    override fun onBackPressed() {
-//        super.onBackPressed()
-//
-//        d("asdsaas", "Back pressed baby")
-//    }
+    override fun onDestinationChanged(
+        controller: NavController,
+        destination: NavDestination,
+        arguments: Bundle?
+    ) {
+        when (destination.id) {
+            R.id.accountSettings -> {
+                setEnableToDrawer()
+            }
+        }
+    }
+
+
 }

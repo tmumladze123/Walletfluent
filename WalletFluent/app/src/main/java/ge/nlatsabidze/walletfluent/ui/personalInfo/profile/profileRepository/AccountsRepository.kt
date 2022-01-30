@@ -13,7 +13,7 @@ class AccountsRepository @Inject constructor(
 ) {
 
 
-    fun initializeFirebaseRepo() {
+    fun initializeFirebase() {
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseUser = firebaseAuth.currentUser!!
 

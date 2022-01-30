@@ -39,16 +39,14 @@ class DetailCryptoFragment :
 
     override fun start() {
 
-
         currentMarketItem = args.marketItem
 
         ratesChartSetup()
         setInformationFromArgs()
 
-        cryptoViewModel.getChartValues(currentMarketItem.id.toString())
         viewLifecycleOwner.lifecycleScope.launch {
-            cryptoViewModel.chartValues.collect {
-                showChart(it)
+            cryptoViewModel.getValues(currentMarketItem.id.toString()).collect {
+                it.data?.prices?.let { it1 -> showChart(it1) }
             }
         }
     }
@@ -117,7 +115,6 @@ class DetailCryptoFragment :
 
         val xAxis = binding.ratesChart.xAxis
         xAxis.valueFormatter = XAxisValueFormatter(dates)
-//        xAxis.labelRotationAngle = 90f
 
         val lineData = LineData(dataSet)
         lineData.setDrawValues(true)

@@ -1,12 +1,13 @@
 package ge.nlatsabidze.walletfluent.ui.personalInfo.increaseAmount
 
+import android.app.Application
 import android.util.Log
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.nlatsabidze.walletfluent.ui.entry.userData.UserTransaction
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -14,11 +15,12 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class TransactionsViewModel @Inject constructor(
+class  TransactionsViewModel @Inject constructor(
     var firebaseAuth: FirebaseAuth,
     var database: DatabaseReference,
-    var firebaseUser: FirebaseUser
-) : ViewModel() {
+    var firebaseUser: FirebaseUser,
+    application: Application,
+) : AndroidViewModel(application) {
 
     private val _setAmount = MutableSharedFlow<Int>()
     val setAmount: MutableSharedFlow<Int> get() = _setAmount
@@ -35,12 +37,10 @@ class TransactionsViewModel @Inject constructor(
 
     fun setInformationFromDatabase() {
 
-        database.get().addOnCompleteListener {
-            if (it.result?.exists() == true) {
-
-                val balance = it.result!!.child("balance").value.toString() + "₾"
-                val name = it.result!!.child("name").value.toString() +"'s card"
-
+        database.addValueEventListener(object: ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val balance = snapshot.child("balance").value.toString() + "₾"
+                val name = snapshot.child("name").value.toString() +"'s card"
 
                 viewModelScope.launch {
                     _balance.emit(balance)
@@ -50,7 +50,10 @@ class TransactionsViewModel @Inject constructor(
                     _name.emit(name)
                 }
             }
-        }
+
+            override fun onCancelled(error: DatabaseError) {}
+
+        })
     }
 
     fun pushTransaction(amount: String, purpose: String, currentTime: String, checker: Boolean) {
@@ -60,11 +63,11 @@ class TransactionsViewModel @Inject constructor(
                     val currentBalance = it.result!!.child("balance").value.toString()
                     if (amount.toLong() * -1 > currentBalance.toLong() && checker) {
                         viewModelScope.launch {
-                            _showDialogError.emit("შენ ბიძია შეშინებული ხო არ ხარ")
+                            _showDialogError.emit("The amount you have entered exceeds the current balance")
                         }
                     } else if(amount.toLong() > 5000 && !checker) {
                         viewModelScope.launch {
-                            _showDialogError.emit("ცოტა ნაკლები შეიტანე ძამია!!")
+                            _showDialogError.emit("The amount you entered exceeds the norm")
                         }
                     } else {
                         val transaction = UserTransaction(amount, purpose, currentTime)

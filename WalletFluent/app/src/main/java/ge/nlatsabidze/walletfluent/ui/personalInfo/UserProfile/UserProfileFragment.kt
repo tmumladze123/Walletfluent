@@ -5,7 +5,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
-import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
+import ge.nlatsabidze.walletfluent.checkConnectivity.CheckConnection
 import ge.nlatsabidze.walletfluent.databinding.UserProfileFragmentBinding
 import ge.nlatsabidze.walletfluent.extensions.changeVisibility
 import kotlinx.coroutines.flow.collect
@@ -17,6 +17,7 @@ class UserProfileFragment :
     BaseFragment<UserProfileFragmentBinding>(UserProfileFragmentBinding::inflate) {
 
     private val userViewModel: UserProfileViewModel by viewModels()
+    @Inject lateinit var connectionManager: CheckConnection
 
     var relatedViews: ArrayList<View> = ArrayList()
 
@@ -27,14 +28,22 @@ class UserProfileFragment :
         relatedViews.add(binding.thirdMaterial)
         relatedViews.add(binding.accountInfo)
 
+        connectionManager.observe(viewLifecycleOwner, {
+            if (it) {
+                changeVisibility(relatedViews, View.VISIBLE)
+                binding.progressBarProfile.visibility = View.INVISIBLE
+                userViewModel.initializeFirebase()
+                userViewModel.setInformationFromDatabase()
+
+            } else if (!it) {
+                changeVisibility(relatedViews, View.INVISIBLE)
+                binding.progressBarProfile.visibility = View.VISIBLE
+            }
+        })
+
         if (!userViewModel.checkConnection()) {
             changeVisibility(relatedViews, View.INVISIBLE)
             binding.progressBarProfile.visibility = View.VISIBLE
-        }
-
-        if (userViewModel.checkConnection()) {
-            userViewModel.initializeFirebase()
-            userViewModel.setInformationFromDatabase()
         }
 
         observeInformation()

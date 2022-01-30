@@ -1,5 +1,6 @@
 package ge.nlatsabidze.walletfluent.ui.personalInfo
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +26,11 @@ class TransactionsAdapter : RecyclerView.Adapter<TransactionsAdapter.Transaction
             currentItem = userTransactions[bindingAdapterPosition]
             binding.apply {
                 binding.tvTransactionPrice.text = currentItem.amount.toString()
+                if (currentItem.amount?.toInt()!! < 0) {
+                    binding.tvTransactionPrice.setTextColor(Color.RED)
+                } else {
+                    binding.tvTransactionPrice.setTextColor(Color.GREEN)
+                }
                 binding.tvTransactionPurpose.text = currentItem.purpose.toString()
                 binding.tvCurrentTime.text = currentItem.currentTime.toString()
                 root.setOnClickListener {

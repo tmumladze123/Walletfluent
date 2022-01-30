@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -35,6 +36,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
     override fun start() {
 
+        onBackPressed()
 
         firebaseAuth = FirebaseAuth.getInstance()
         binding.tvSignUp.setOnClickListener { navigateToRegisterPage() }
@@ -62,6 +64,8 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         viewLifecycleOwner.lifecycleScope.launch {
             logInViewModel.userMutableLiveFlow.collect { userLogedIn ->
                 if (userLogedIn) {
+                    (activity as MainActivity).setDisableToDrawer()
+                    (activity as MainActivity).setUnVisible()
                     navigateToSettingsPage()
                     logInViewModel.changeUserValue()
                 }
@@ -88,14 +92,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
             checkInputValidation(email, password)
             logInViewModel.login(email, password)
         }
-
-//        val nonInboxOnBackCallback = object : OnBackPressedCallback(false) {
-//            override fun handleOnBackPressed() {
-//                NavigationModel.setNavigationMenuItemChecked(NavigationModel.INBOX_ID)(requireActivity() as MainActivity).navigateToHome(
-//                    R.string.navigation_inbox,
-//                    Mailbox.INBOX
-//                ); }
-//        }
     }
 
     private fun resetPassword() {
@@ -124,12 +120,14 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                 emailEditTextWrapper.helperText = ""
                 passwordEditText.setBackgroundResource(R.drawable.border)
                 emailEditText.setBackgroundResource(R.color.transparent)
+
             } else if (email.isEmpty()) {
                 emailEditTextWrapper.startAnimation(shake)
                 emailEditTextWrapper.helperText = resources.getString(R.string.invalidField);
                 passwordEditTextWrapper.helperText = ""
                 emailEditText.setBackgroundResource(R.drawable.border)
                 passwordEditText.setBackgroundResource(R.color.transparent)
+
             } else {
                 passwordEditTextWrapper.helperText = ""
                 emailEditTextWrapper.helperText = ""
@@ -145,11 +143,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         findNavController().navigate(actionLoginFragmentToRegister)
     }
 
-//    private fun navigateToPersonalPage() {
-//        val actionLoginFragmentToPersonal = LoginFragmentDirections.actionLoginFragmentToPersonalInfoFragment()
-//        findNavController().navigate(actionLoginFragmentToPersonal)
-//    }
-
     private fun navigateToSettingsPage() {
         val actionLoginFragmentToSettings = LoginFragmentDirections.actionLoginFragmentToAccountSettings()
         findNavController().navigate(actionLoginFragmentToSettings)
@@ -164,6 +157,12 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         if (args.email != "email" && args.password != "password") {
             binding.emailEditText.setText(args.email)
             binding.passwordEditText.setText(args.password)
+        }
+    }
+
+    private fun onBackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            activity?.finish()
         }
     }
 }

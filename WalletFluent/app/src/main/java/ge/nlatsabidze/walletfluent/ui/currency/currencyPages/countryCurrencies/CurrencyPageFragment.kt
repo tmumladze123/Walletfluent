@@ -18,6 +18,7 @@ import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
 import ge.nlatsabidze.walletfluent.databinding.CurrencyPageFragmentBinding
 import ge.nlatsabidze.walletfluent.extensions.showDialogError
 import ge.nlatsabidze.walletfluent.ui.currency.currencyPages.countryCurrencies.currencyAdapter.CurrencyAdapter
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -31,7 +32,6 @@ class CurrencyPageFragment : BaseFragment<CurrencyPageFragmentBinding>(CurrencyP
     @Inject lateinit var checkInternetConnection: CheckInternetConnection
 
     override fun start() {
-        ((activity))!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
 
         initAdapter()
         setDataFromApi()
@@ -47,8 +47,7 @@ class CurrencyPageFragment : BaseFragment<CurrencyPageFragmentBinding>(CurrencyP
     }
 
     private fun displayProgressBar() {
-
-        currencyPageViewModel.showLoadingBar()
+        
         viewLifecycleOwner.lifecycleScope.launch {
             currencyPageViewModel.showLoadingViewModel.collectLatest {
                 val bar = binding.spinKit
@@ -69,11 +68,11 @@ class CurrencyPageFragment : BaseFragment<CurrencyPageFragmentBinding>(CurrencyP
     }
 
     private fun setDataFromApi() {
-        currencyPageViewModel.getCommercialRates()
-
         viewLifecycleOwner.lifecycleScope.launch {
-            currencyPageViewModel.commercialRates.collectLatest {
-                currencyAdapter.currencies = it
+            currencyPageViewModel.getCountryCurrencies().collect {
+                if (it.data?.commercialRatesList != null) {
+                    currencyAdapter.currencies = it.data.commercialRatesList
+                }
             }
         }
     }

@@ -37,11 +37,10 @@ class PersonalInfoViewModel @Inject constructor(
 
     fun setInformationFromDatabase() {
 
-        database.get().addOnCompleteListener {
-            if (it.result?.exists() == true) {
-
-                val balance = it.result!!.child("balance").value.toString() + "₾"
-                val name = it.result!!.child("name").value.toString() + "'s card"
+        database.addValueEventListener(object: ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val balance = snapshot.child("balance").value.toString() + "₾"
+                val name = snapshot.child("name").value.toString() + "'s card"
 
 
                 viewModelScope.launch {
@@ -52,16 +51,17 @@ class PersonalInfoViewModel @Inject constructor(
                     _name.emit(name)
                 }
             }
-        }
+
+            override fun onCancelled(error: DatabaseError) {}
+
+        })
     }
 
     fun initializeFirebase() {
         firebaseAuth = FirebaseAuth.getInstance()
         firebaseUser = firebaseAuth.currentUser!!
 
-        database =
-            FirebaseDatabase.getInstance("https://walletfluent-b2fe7-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("Users").child(firebaseUser.uid)
+        database = database.child(firebaseUser.uid)
     }
 
     fun addTransaction() {

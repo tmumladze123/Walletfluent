@@ -8,6 +8,7 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.databinding.CalculatorPageFragmentBinding
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -79,16 +80,19 @@ class CalculatorPageFragment :
         }
 
         binding.etNumber.doAfterTextChanged {
-            val amountAsString = binding.etNumber.text.toString()
-            if (amountAsString.isNotEmpty() && amountAsString[0] == '0') {
-                binding.etConvertedNumber.setText("0");
-            } else if (amountAsString.isNotEmpty()) {
-                val amount = binding.etNumber.text.toString().toDouble()
-                calculatorViewModel.getConvertedValue(amount, firstValue, secondValue)
-            } else if (amountAsString.isEmpty() && binding.etConvertedNumber.text.toString()
-                    .isNotEmpty()
-            ) {
-                binding.etConvertedNumber.text?.clear()
+            viewLifecycleOwner.lifecycleScope.launch {
+                delay(500)
+                val amountAsString = binding.etNumber.text.toString()
+                if (amountAsString.isNotEmpty() && amountAsString[0] == '0') {
+                    binding.etConvertedNumber.setText("0");
+                } else if (amountAsString.isNotEmpty()) {
+                    val amount = binding.etNumber.text.toString().toDouble()
+                    calculatorViewModel.getConvertedValue(amount, firstValue, secondValue)
+                } else if (amountAsString.isEmpty() && binding.etConvertedNumber.text.toString()
+                        .isNotEmpty()
+                ) {
+                    binding.etConvertedNumber.text?.clear()
+                }
             }
         }
     }

@@ -10,6 +10,10 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import ge.nlatsabidze.walletfluent.constants.base.BaseUrlConstants.FIRST_BASE_URL
+import ge.nlatsabidze.walletfluent.constants.base.BaseUrlConstants.SECOND_BASE_URL
+import ge.nlatsabidze.walletfluent.constants.firebaseDatabase.FirebaseDatabase.DATABASE
+import ge.nlatsabidze.walletfluent.constants.firebaseDatabase.FirebaseDatabase.DATABASE_REFERENCE
 import ge.nlatsabidze.walletfluent.network.cryptoNetwork.CryptoApi
 import ge.nlatsabidze.walletfluent.network.currencyNetwork.CurrencyApi
 import retrofit2.Retrofit
@@ -24,7 +28,7 @@ object ApiModule {
     @Provides
     @Singleton
     fun provideRetrofitCurrency(): CurrencyApi =
-        Retrofit.Builder().baseUrl("https://test-api.tbcbank.ge/v1/")
+        Retrofit.Builder().baseUrl(FIRST_BASE_URL)
             .addConverterFactory(
                 MoshiConverterFactory.create(
                     Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
@@ -36,7 +40,7 @@ object ApiModule {
     @Provides
     @Singleton
     fun provideRetrofitCrypto(): CryptoApi =
-        Retrofit.Builder().baseUrl("https://api.coingecko.com/api/v3/")
+        Retrofit.Builder().baseUrl(SECOND_BASE_URL)
             .addConverterFactory(
                 MoshiConverterFactory.create(
                     Moshi.Builder().addLast(KotlinJsonAdapterFactory()).build()
@@ -52,9 +56,7 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideDatabaseReference(): DatabaseReference =
-        FirebaseDatabase.getInstance("https://walletfluent-b2fe7-default-rtdb.europe-west1.firebasedatabase.app/")
-            .getReference("Users")
+    fun provideDatabaseReference(): DatabaseReference = FirebaseDatabase.getInstance(DATABASE).getReference(DATABASE_REFERENCE)
 
     @Provides
     @Singleton

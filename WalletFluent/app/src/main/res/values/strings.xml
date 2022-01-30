@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">WalletFluent</string>
     <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
@@ -24,15 +24,14 @@
     <string name="forgot_password"><u>Forgot Password</u></string>
     <string name="create_account" translatable="false">Create\nAccount</string>
     <string name="name">Name</string>
-    <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="balance">Current Balance</string>
     <string name="welcome">welcome</string>
     <string name="english" translatable="false">English</string>
     <string name="georgian" translatable="false">Georgian</string>
     <string name="application_language" translatable="false">Application Language</string>
-    <string name="buy">buy : </string>
-    <string name="sell">sell : </string>
+    <string name="buy">buy: </string>
+    <string name="sell">sell: </string>
     <string name="InvalidRegistration">Sorry, Invalid Email or password</string>
     <string name="NotValidInformation">Sorry, Data you have entered is invalid</string>
     <string name="VerificationDialog">Please, Verify your account using your email</string>
@@ -40,7 +39,19 @@
     <string name="ResetPasswordUsingEmailDialog">Please specify your email</string>
     <string name="DollarSign" translatable="false">$</string>
     <string name="MarketCapRank" translatable="false">Market cap rank #</string>
-
+    <string name="AmountExceed" translatable="false">The amount you enter exceeds the current balance</string>
+    <string name="log_out" translatable="false">LOG OUT</string>
+    <string name="profile" translatable="false">Profile</string>
+    <string name="welcome_user" translatable="false">Welcome User</string>
+    <string name="change_password" translatable="false">Change Password</string>
+    <string name="transactions" translatable="false">Transactions</string>
+    <string name="switch_mode" translatable="false">Switch Mode</string>
+    <string name="enter_purpose" translatable="false">Enter Purpose</string>
+    <string name="add_item" translatable="false">Add Item</string>
+    <string name="email">Email</string>
+    <string name="account_info" translatable="false">Account Info</string>
+    <string name="date" translatable="false">Date</string>
+    <string name="UserBalance" translatable="false">Balance</string>
 
 
     <string-array name="countries">

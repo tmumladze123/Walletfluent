@@ -18,10 +18,7 @@ class FirebaseUserRepository @Inject constructor(
 ) {
 
     private var _currentUser = MutableStateFlow<Boolean>(false)
-    val currentUser: MutableStateFlow<Boolean> get() = _currentUser
-
     private var _repositoryDialogError = MutableStateFlow("")
-    val repositoryDialog: MutableStateFlow<String> get() = _repositoryDialogError
 
     fun register(email: String?, password: String?, name: String, balance: Int) {
         if (email!!.isNotEmpty() && password!!.isNotEmpty()) {
@@ -85,8 +82,12 @@ class FirebaseUserRepository @Inject constructor(
         }
     }
 
-    fun logOutUser() {
-        firebaseAuth.signOut()
+    fun getRegisteredValue(): MutableStateFlow<Boolean> {
+        return _currentUser
+    }
+
+    fun getDialogErrorValue(): MutableStateFlow<String> {
+        return _repositoryDialogError
     }
 
     fun changeUserFlowValue() {
@@ -95,6 +96,10 @@ class FirebaseUserRepository @Inject constructor(
 
     fun changeRepositoryDialogError() {
         _repositoryDialogError.value = ""
+    }
+
+    fun logOutUser() {
+        firebaseAuth.signOut()
     }
 
     private fun generateCurrentDate(): String {

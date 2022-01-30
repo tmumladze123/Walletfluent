@@ -12,10 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
-import ge.nlatsabidze.walletfluent.BaseFragment
-import ge.nlatsabidze.walletfluent.R
-import ge.nlatsabidze.walletfluent.SettingsManager
-import ge.nlatsabidze.walletfluent.UiMode
+import ge.nlatsabidze.walletfluent.*
 import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
 import ge.nlatsabidze.walletfluent.databinding.AccountSettingsFragmentBinding
 import ge.nlatsabidze.walletfluent.extensions.setOnSafeClickListener
@@ -31,12 +28,10 @@ class AccountSettings : BaseFragment<AccountSettingsFragmentBinding>(AccountSett
 
     private val accountsSettingsViewModel: AccountSettingsViewModel by viewModels()
 
-    private lateinit var settingsManager: SettingsManager
+    @Inject lateinit var settingsManager: SettingsManager
     private var isDarkMode = true
 
     override fun start() {
-
-        settingsManager = SettingsManager(requireContext())
 
         observeUiPreferences()
 
@@ -52,6 +47,7 @@ class AccountSettings : BaseFragment<AccountSettingsFragmentBinding>(AccountSett
         binding.btnTransactions.setOnClickListener { navigateToTransactionsPage() }
         binding.btnLogout.setOnClickListener{
             logOUT()
+            (activity as MainActivity).setVisible()
             navigateBack()
         }
 

@@ -30,8 +30,8 @@
     <string name="english" translatable="false">English</string>
     <string name="georgian" translatable="false">Georgian</string>
     <string name="application_language" translatable="false">Application Language</string>
-    <string name="buy">buy: </string>
-    <string name="sell">sell: </string>
+    <string name="buy">buy:  </string>
+    <string name="sell">sell:  </string>
     <string name="InvalidRegistration">Sorry, Invalid Email or password</string>
     <string name="NotValidInformation">Sorry, Data you have entered is invalid</string>
     <string name="VerificationDialog">Please, Verify your account using your email</string>
@@ -43,7 +43,7 @@
     <string name="log_out" translatable="false">LOG OUT</string>
     <string name="profile" translatable="false">Profile</string>
     <string name="welcome_user" translatable="false">Welcome User</string>
-    <string name="change_password" translatable="false">Change Password</string>
+    <string name="change_password" translatable="false">Edit Password</string>
     <string name="transactions" translatable="false">Transactions</string>
     <string name="switch_mode" translatable="false">Switch Mode</string>
     <string name="enter_purpose" translatable="false">Enter Purpose</string>

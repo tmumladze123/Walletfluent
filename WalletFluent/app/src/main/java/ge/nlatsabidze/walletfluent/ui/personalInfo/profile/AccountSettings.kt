@@ -48,6 +48,7 @@ class AccountSettings : BaseFragment<AccountSettingsFragmentBinding>(AccountSett
         binding.btnLogout.setOnClickListener{
             logOUT()
             (activity as MainActivity).setVisible()
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             navigateBack()
         }
 

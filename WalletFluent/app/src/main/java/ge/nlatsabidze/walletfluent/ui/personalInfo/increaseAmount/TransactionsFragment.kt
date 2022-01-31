@@ -71,7 +71,7 @@ class TransactionsFragment : BottomSheetDialogFragment() {
     }
 
     private fun getCurrentTime(): String {
-        val currentFormatter = SimpleDateFormat("hh:mm:ss")
+        val currentFormatter = SimpleDateFormat("dd/M/yyyy hh:mm:ss")
         return currentFormatter.format(Date())
     }
 

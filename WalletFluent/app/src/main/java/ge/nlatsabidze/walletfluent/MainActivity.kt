@@ -76,6 +76,8 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             ), drawerLayout
         )
 
+        nav_Menu.findItem(R.id.languageFragment).setVisible(false)
+
         if (FirebaseAuth.getInstance().currentUser != null && checkInternetConnection.isOnline(
                 applicationContext
             ) && FirebaseAuth.getInstance().currentUser?.isEmailVerified == true

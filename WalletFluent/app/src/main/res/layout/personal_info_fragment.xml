@@ -113,6 +113,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="20dp"
         android:text="@string/balance"
+        android:textStyle="bold"
         android:textSize="20sp"
         app:fontFamily="@font/beauty"
         app:layout_constraintStart_toStartOf="parent"

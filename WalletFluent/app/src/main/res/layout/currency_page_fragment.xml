@@ -10,26 +10,26 @@
         android:layout_height="match_parent"
         tools:context=".ui.currency.currencyPages.countryCurrencies.CurrencyPageFragment">
 
+        <TextView
+            android:id="@+id/tvLatest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="LAST UPDATED"
+            android:fontFamily="@font/beauty"
+            android:textSize="20sp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             android:layout_marginBottom="20dp"
             android:indeterminate="true"
+            android:visibility="gone"
             app:indicatorColor="@color/purple_700"
-            app:layout_constraintBottom_toBottomOf="@+id/rvCurrency"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:ignore="MissingConstraints" />
-
-        <com.github.ybq.android.spinkit.SpinKitView
-            android:id="@+id/spin_kit"
-            style="@style/SpinKitView.Large.FadingCircle"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_gravity="center"
-            app:SpinKit_Color="@color/purple_700"
             app:layout_constraintBottom_toBottomOf="@+id/rvCurrency"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +44,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/tvLatest" />
+
+        <ProgressBar
+            android:id="@+id/spin_kit"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="@+id/rvCurrency"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/rvCurrency" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

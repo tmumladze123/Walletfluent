@@ -12,7 +12,7 @@ import androidx.lifecycle.LiveData
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class CheckConnection @Inject constructor(@ApplicationContext context: Context): LiveData<Boolean>() {
+class CheckLiveConnection @Inject constructor(@ApplicationContext context: Context): LiveData<Boolean>() {
 
     private lateinit var networkCallback: ConnectivityManager.NetworkCallback
     private val cm = context.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager

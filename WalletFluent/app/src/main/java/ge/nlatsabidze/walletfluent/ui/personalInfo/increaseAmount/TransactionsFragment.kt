@@ -10,12 +10,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import ge.nlatsabidze.walletfluent.checkConnectivity.CheckLiveConnection
 import ge.nlatsabidze.walletfluent.databinding.TransactionsFragmentBinding
 import ge.nlatsabidze.walletfluent.extensions.showDialogError
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class TransactionsFragment : BottomSheetDialogFragment() {
@@ -26,6 +28,9 @@ class TransactionsFragment : BottomSheetDialogFragment() {
     private val transactionsViewModel: TransactionsViewModel by viewModels()
 
     private val args: TransactionsFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var connectionManager: CheckLiveConnection
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,6 +45,7 @@ class TransactionsFragment : BottomSheetDialogFragment() {
     private fun start() {
 
         transactionsViewModel.initializeFirebase()
+
         binding.btnIncreaseAmount.setOnClickListener {
             if (binding.etEnterAmount.text!!.isNotEmpty() && binding.etPurpose.text!!.isNotEmpty()) {
                 if (args.defineClickType) {

@@ -1,8 +1,12 @@
 package ge.nlatsabidze.walletfluent.model.cryptoModel
 
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 
+@Entity(tableName = "marketItem")
 @Parcelize
 data class MarketsItem(
     val ath: Double?,
@@ -30,4 +34,7 @@ data class MarketsItem(
     val symbol: String?,
     val total_supply: Double?,
     val total_volume: Double?
-): Parcelable
+): Parcelable {
+    @IgnoredOnParcel
+    @PrimaryKey(autoGenerate = true) var id1: Int = 0
+}

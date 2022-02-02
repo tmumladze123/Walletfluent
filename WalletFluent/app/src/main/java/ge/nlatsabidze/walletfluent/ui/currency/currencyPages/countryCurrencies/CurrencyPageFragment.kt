@@ -10,6 +10,8 @@ import android.util.Log.d
 import android.view.View
 import android.view.WindowManager
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
@@ -63,7 +65,7 @@ class CurrencyPageFragment :
     private fun displayProgressBar() {
 
         viewLifecycleOwner.lifecycleScope.launch {
-            currencyPageViewModel.showLoadingViewModel.collectLatest {
+            currencyPageViewModel.showLoadingViewModel.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collectLatest {
                 val bar = binding.spinKit
                 if (it) {
                     bar.visibility = View.VISIBLE
@@ -84,7 +86,7 @@ class CurrencyPageFragment :
     private fun setDataFromApi() {
         currencyPageViewModel.getCommercialRates()
         viewLifecycleOwner.lifecycleScope.launch {
-            currencyPageViewModel.commercialRates.collect {
+            currencyPageViewModel.commercialRates.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect {
                 currencyAdapter.currencies = it
             }
         }

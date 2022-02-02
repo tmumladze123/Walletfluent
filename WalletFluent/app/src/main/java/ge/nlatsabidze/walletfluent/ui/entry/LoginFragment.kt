@@ -7,6 +7,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -62,7 +64,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     private fun listeners() {
 
         viewLifecycleOwner.lifecycleScope.launch {
-            logInViewModel.userMutableLiveFlow.collect { userLogedIn ->
+            logInViewModel.userMutableLiveFlow.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect { userLogedIn ->
                 if (userLogedIn) {
                     (activity as MainActivity).setDisableToDrawer()
                     (activity as MainActivity).setUnVisible()
@@ -73,7 +75,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            logInViewModel.dialogError.collect { showResetPasswordError ->
+            logInViewModel.dialogError.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect { showResetPasswordError ->
                 if (showResetPasswordError != "") {
                     showDialogError(showResetPasswordError)
                     logInViewModel.changeRepositoryValue()

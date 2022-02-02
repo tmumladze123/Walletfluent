@@ -6,6 +6,8 @@ import android.annotation.SuppressLint
 import android.util.Log.d
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
@@ -76,26 +78,26 @@ class PersonalInfoFragment :
     private fun observes() {
 
         viewLifecycleOwner.lifecycleScope.launch {
-            personalInfoViewModel.balance.collect {
+            personalInfoViewModel.balance.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect {
                 binding.balance.text = it
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            personalInfoViewModel.name.collect {
+            personalInfoViewModel.name.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect {
                 binding.tvName.text = it
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            personalInfoViewModel.transaction.collect {
+            personalInfoViewModel.transaction.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect {
                 transactionAdapter.userTransactions.add(it)
                 transactionAdapter.notifyDataSetChanged()
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            personalInfoViewModel.expireYear.collect {
+            personalInfoViewModel.expireYear.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect {
                 binding.tvDate.text = it
             }
         }

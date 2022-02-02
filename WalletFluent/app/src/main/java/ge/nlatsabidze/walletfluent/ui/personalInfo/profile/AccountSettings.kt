@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -67,7 +69,7 @@ class AccountSettings : BaseFragment<AccountSettingsFragmentBinding>(AccountSett
     @SuppressLint("SetTextI18n")
     private fun observers() {
         viewLifecycleOwner.lifecycleScope.launch {
-            accountsSettingsViewModel.userName.collect { it ->
+            accountsSettingsViewModel.userName.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect { it ->
                 val name = it.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
                 binding.tvFirebaseUser.text = "Welcome $name"
             }

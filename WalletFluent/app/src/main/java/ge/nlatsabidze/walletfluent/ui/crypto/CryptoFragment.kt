@@ -39,7 +39,7 @@ class CryptoFragment : BaseFragment<FragmentCryptoBinding>(FragmentCryptoBinding
                 requireContext()
             )
             viewLifecycleOwner.lifecycleScope.launch {
-                cryptoViewModel.getCryptoValues.collectLatest {
+                cryptoViewModel.getCryptoValues.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collectLatest {
                     if (it.isNotEmpty()) {
                         cryptoAdapter.cryptoExchanges = it
                         binding.spinKit.visibility = View.GONE

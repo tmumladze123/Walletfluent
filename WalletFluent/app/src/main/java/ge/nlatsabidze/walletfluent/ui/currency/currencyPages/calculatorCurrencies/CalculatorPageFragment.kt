@@ -4,6 +4,8 @@ import android.view.View
 import android.widget.AdapterView
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
@@ -99,7 +101,7 @@ class CalculatorPageFragment :
 
     private fun setValueToResult() {
         viewLifecycleOwner.lifecycleScope.launch {
-            calculatorViewModel.convertedValue.collectLatest {
+            calculatorViewModel.convertedValue.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collectLatest {
                 var convertedValue = it.value.toString()
                 convertedValue = convertedValue.dropLast(2)
                 if (binding.etNumber.text?.isNotEmpty() == true && binding.autoCompleteFrom.selectedItem.toString() == binding.autoCompleteTo.selectedItem.toString()) {

@@ -2,6 +2,8 @@ package ge.nlatsabidze.walletfluent.ui.personalInfo.UserProfile
 
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
@@ -51,25 +53,25 @@ class UserProfileFragment :
 
     private fun observeInformation() {
         viewLifecycleOwner.lifecycleScope.launch {
-            userViewModel.name.collect {
+            userViewModel.name.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect {
                 binding.tvName.text = it
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            userViewModel.currentData.collect {
+            userViewModel.currentData.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect {
                 binding.tvDate.text = it
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            userViewModel.emailHolder.collect {
+            userViewModel.emailHolder.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect {
                 binding.tvEmail.text = it
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            userViewModel.balance.collect {
+            userViewModel.balance.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect {
                 binding.tvBalance.text = it
             }
         }

@@ -4,6 +4,8 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
@@ -46,7 +48,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
 
     private fun observervers() {
         viewLifecycleOwner.lifecycleScope.launch {
-            loginViewModel.userMutableLiveFlow.collect { userLogedIn ->
+            loginViewModel.userMutableLiveFlow.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect { userLogedIn ->
                 if (userLogedIn) {
                     navigateToSignInPage(
                         binding.emailEditText.text.toString(),
@@ -58,7 +60,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            loginViewModel.dialogError.collect { showDialogError ->
+            loginViewModel.dialogError.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect { showDialogError ->
                 if (showDialogError != "") {
                     showDialogError(showDialogError)
                     loginViewModel.changeRepositoryValue()

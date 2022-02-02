@@ -5,6 +5,8 @@ import android.graphics.Color
 import android.util.Log.d
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import com.github.mikephil.charting.components.XAxis
@@ -45,7 +47,7 @@ class DetailCryptoFragment :
         setInformationFromArgs()
 
         viewLifecycleOwner.lifecycleScope.launch {
-            cryptoViewModel.getValues(currentMarketItem.id.toString()).collect {
+            cryptoViewModel.getValues(currentMarketItem.id.toString()).flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect {
                 it.data?.prices?.let { it1 -> showChart(it1) }
             }
         }

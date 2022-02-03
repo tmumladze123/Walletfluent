@@ -49,6 +49,7 @@
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/drawable/ic_currency.xml" value="0.3828125" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/drawable/ic_email.xml" value="0.28541666666666665" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/drawable/ic_language.xml" value="0.3828125" />
+        <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/drawable/ic_launcher_background.xml" value="0.21302083333333333" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/drawable/ic_menu_gallery.xml" value="0.3828125" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/drawable/ic_right.xml" value="0.3728205128205128" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/drawable/splash_screen_background.xml" value="0.3828125" />
@@ -82,6 +83,9 @@
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/user_profile_fragment.xml" value="0.33" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/menu/activity_main_drawer.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/menu/main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.26979166666666665" />
+        <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.30364583333333334" />
+        <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/mipmap-anydpi-v26/launcher_icon.xml" value="0.25104166666666666" />
       </map>
     </option>
   </component>

@@ -20,6 +20,8 @@ class CalculatorPageViewModel @Inject constructor(private val currencyRepository
     private val _convertedValue = MutableSharedFlow<Converter>()
     val convertedValue: MutableSharedFlow<Converter> get() = _convertedValue
 
+    private val listOfCharacter = mutableListOf<Char>(',', ' ', '-')
+
     fun getConvertedValue(amount: Double, from: String, to: String) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -31,4 +33,15 @@ class CalculatorPageViewModel @Inject constructor(private val currencyRepository
             }
         }
     }
+
+    fun containsError(number: String): Boolean {
+        var result = false
+        for (i in number.indices) {
+            if (listOfCharacter.contains(number[i])) {
+                result = true
+            }
+        }
+        return result
+    }
+
 }

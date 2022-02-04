@@ -47,10 +47,10 @@
     <string name="transactions" translatable="false">Transactions</string>
     <string name="switch_mode" translatable="false">Switch Mode</string>
     <string name="enter_purpose" translatable="false">Enter Purpose</string>
-    <string name="add_item" translatable="false">Add Item</string>
+    <string name="add_item" translatable="false">Add History</string>
     <string name="email">Email</string>
     <string name="account_info" translatable="false">Account Info</string>
-    <string name="date" translatable="false">Date</string>
+    <string name="date" translatable="false">Account Created</string>
     <string name="UserBalance" translatable="false">Balance</string>
 
 

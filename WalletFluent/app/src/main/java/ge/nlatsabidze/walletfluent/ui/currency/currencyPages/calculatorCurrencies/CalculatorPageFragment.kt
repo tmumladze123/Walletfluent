@@ -85,9 +85,9 @@ class CalculatorPageFragment :
             viewLifecycleOwner.lifecycleScope.launch {
                 delay(500)
                 val amountAsString = binding.etNumber.text.toString()
-                if (amountAsString.isNotEmpty() && amountAsString[0] == '0') {
-                    binding.etConvertedNumber.setText("0");
-                } else if (amountAsString.isNotEmpty()) {
+                if (amountAsString.isNotEmpty() && amountAsString[0] == '0' && calculatorViewModel.containsError(amountAsString)) {
+                    binding.etConvertedNumber.setText("0")
+                } else if (amountAsString.isNotEmpty() && !calculatorViewModel.containsError(amountAsString)) {
                     val amount = binding.etNumber.text.toString().toDouble()
                     calculatorViewModel.getConvertedValue(amount, firstValue, secondValue)
                 } else if (amountAsString.isEmpty() && binding.etConvertedNumber.text.toString()

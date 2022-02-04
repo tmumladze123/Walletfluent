@@ -18,7 +18,6 @@ import javax.inject.Inject
 class PersonalInfoViewModel @Inject constructor(
     var firebaseAuth: FirebaseAuth,
     var database: DatabaseReference,
-    var firebaseUser: FirebaseUser,
     var checkInternetConnection: CheckInternetConnection,
     application: Application
 ) : AndroidViewModel(application) {
@@ -58,9 +57,7 @@ class PersonalInfoViewModel @Inject constructor(
     }
 
     fun initializeFirebase() {
-        firebaseAuth = FirebaseAuth.getInstance()
-        firebaseUser = firebaseAuth.currentUser!!
-
+        var firebaseUser = firebaseAuth.currentUser!!
         database = database.child(firebaseUser.uid)
     }
 

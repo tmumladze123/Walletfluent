@@ -30,7 +30,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
     private val logInViewModel: LoginRegisterViewModel by activityViewModels()
 
-    private lateinit var firebaseAuth: FirebaseAuth
+    @Inject lateinit var firebaseAuth: FirebaseAuth
     private val args: LoginFragmentArgs by navArgs()
 
     @Inject
@@ -40,7 +40,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
         onBackPressed()
 
-        firebaseAuth = FirebaseAuth.getInstance()
         binding.tvSignUp.setOnClickListener { navigateToRegisterPage() }
 
         binding.btnSignin.setOnSafeClickListener {
@@ -50,18 +49,17 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         binding.tvForgotPassword.setOnClickListener { resetPassword() }
 
         if (checkInternetConnection.isOnline(activity!!.application).toString() == "false") {
-            val builder = AlertDialog.Builder(requireContext())
             showDialogError(
                 "In Order to use our application, you should be connected to internet",
                 requireContext()
             )
         }
 
-        listeners()
+        observes()
         setDataFromRegisterPage()
     }
 
-    private fun listeners() {
+    private fun observes() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             logInViewModel.userMutableLiveFlow.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect { userLogedIn ->
@@ -119,22 +117,17 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
             } else if (password.isEmpty()) {
                 passwordEditTextWrapper.startAnimation(shake)
                 passwordEditTextWrapper.helperText = resources.getString(R.string.invalidField)
-                emailEditTextWrapper.helperText = ""
                 passwordEditText.setBackgroundResource(R.drawable.border)
-                emailEditText.setBackgroundResource(R.color.transparent)
 
             } else if (email.isEmpty()) {
                 emailEditTextWrapper.startAnimation(shake)
                 emailEditTextWrapper.helperText = resources.getString(R.string.invalidField);
-                passwordEditTextWrapper.helperText = ""
                 emailEditText.setBackgroundResource(R.drawable.border)
-                passwordEditText.setBackgroundResource(R.color.transparent)
 
             } else {
                 passwordEditTextWrapper.helperText = ""
                 emailEditTextWrapper.helperText = ""
                 emailEditText.setBackgroundResource(R.color.transparent)
-                passwordEditText.setBackgroundResource(R.color.transparent)
                 passwordEditText.setBackgroundResource(R.color.transparent)
             }
         }

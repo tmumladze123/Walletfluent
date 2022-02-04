@@ -58,9 +58,4 @@ object ApiModule {
     @Singleton
     fun provideDatabaseReference(): DatabaseReference = FirebaseDatabase.getInstance(DATABASE).getReference(DATABASE_REFERENCE)
 
-    @Provides
-    @Singleton
-    fun provideFirebaseUser(): FirebaseUser =
-        FirebaseAuth.getInstance().currentUser!!
-
 }

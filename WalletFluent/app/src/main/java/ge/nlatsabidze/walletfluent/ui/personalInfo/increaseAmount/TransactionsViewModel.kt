@@ -18,7 +18,6 @@ import javax.inject.Inject
 class  TransactionsViewModel @Inject constructor(
     var firebaseAuth: FirebaseAuth,
     var database: DatabaseReference,
-    var firebaseUser: FirebaseUser,
     application: Application,
 ) : AndroidViewModel(application) {
 
@@ -85,11 +84,7 @@ class  TransactionsViewModel @Inject constructor(
 
 
     fun initializeFirebase() {
-        firebaseAuth = FirebaseAuth.getInstance()
-        firebaseUser = firebaseAuth.currentUser!!
-
-        database =
-            FirebaseDatabase.getInstance("https://walletfluent-b2fe7-default-rtdb.europe-west1.firebasedatabase.app/")
-                .getReference("Users").child(firebaseUser.uid)
+        var firebaseUser = firebaseAuth.currentUser!!
+        database = database.child(firebaseUser.uid)
     }
 }

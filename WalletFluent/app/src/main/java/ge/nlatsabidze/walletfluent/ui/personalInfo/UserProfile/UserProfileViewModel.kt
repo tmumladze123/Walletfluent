@@ -18,8 +18,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserProfileViewModel @Inject constructor(
-    var firebaseAuth: FirebaseAuth,
-    var firebaseUser: FirebaseUser,
     private val internetConnection: CheckInternetConnection,
     application: Application,
     var userProfileRepository: UserProfileRepository

@@ -9,13 +9,12 @@ import javax.inject.Inject
 class AccountsRepository @Inject constructor(
     var firebaseAuth: FirebaseAuth,
     var database: DatabaseReference,
-    var firebaseUser: FirebaseUser
+//    var firebaseUser: FirebaseUser
 ) {
 
 
     fun initializeFirebase() {
-        firebaseAuth = FirebaseAuth.getInstance()
-        firebaseUser = firebaseAuth.currentUser!!
+        var firebaseUser = firebaseAuth.currentUser!!
 
         database =
             FirebaseDatabase.getInstance("https://walletfluent-b2fe7-default-rtdb.europe-west1.firebasedatabase.app/")

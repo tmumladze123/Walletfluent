@@ -21,7 +21,7 @@
         android:id="@+id/tvLatest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="LAST UPDATED"
+        android:text="Last Updated Values"
         android:textSize="20sp"
         android:fontFamily="@font/beauty"
         android:visibility="gone"

@@ -14,5 +14,13 @@ It is possible to see cryptocurrency details, understand current and past prices
 ● Firebase Authentification<br />
 ● Firebase Realtime Database<br />
 ● Dagger-hilt<br />
+● Datastore<br />
+
+# Screenshots
+![Screenshot_14](https://user-images.githubusercontent.com/55893091/152593496-287b60eb-db83-4e1c-b228-dba5f2043452.png)
+
+![Screenshot_13](https://user-images.githubusercontent.com/55893091/152593473-e9a986dd-0da0-4c4e-9a5e-acb13c84e294.png), 
+
+
 
 

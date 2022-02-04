@@ -5,14 +5,14 @@ It is possible to see cryptocurrency details, understand current and past prices
 # Features
 
 ● Kotlin<br />
-● MVVM design pattern
-● View Binding
-● Retrofit2
-● Kotlin Coroutine
-● Kotlin Flows
-● Room persistance library
-● Firebase Authentification
-● Firebase Realtime Database
-● Dagger-hilt
+● MVVM design pattern<br />
+● View Binding<br />
+● Retrofit2<br />
+● Kotlin Coroutine<br />
+● Kotlin Flows<br />
+● Room persistance library<br />
+● Firebase Authentification<br />
+● Firebase Realtime Database<br />
+● Dagger-hilt<br />
 
 

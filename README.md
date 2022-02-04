@@ -24,8 +24,15 @@ It is possible to see cryptocurrency details, understand current and past prices
 # User Account
 ![Screenshot_20](https://user-images.githubusercontent.com/55893091/152593860-07755f68-7acc-4f90-b7d9-b2de486ab17b.png), ![Screenshot_21](https://user-images.githubusercontent.com/55893091/152593962-1e77ab5d-6928-472e-93f1-3ff3be0325e3.png)<br />
 
-![Screenshot_26](https://user-images.githubusercontent.com/55893091/152594410-ab6ab5cf-7f5b-4b30-8684-3785f4499265.png)&nbsp
+![Screenshot_26](https://user-images.githubusercontent.com/55893091/152594410-ab6ab5cf-7f5b-4b30-8684-3785f4499265.png)
 ![Screenshot_27](https://user-images.githubusercontent.com/55893091/152594419-dd49febb-bd1a-49cf-a997-fa51d3c6201b.png)
+
+# Currencies And Crypto
+
+![Screenshot_16](https://user-images.githubusercontent.com/55893091/152594850-72aeb36e-2dcd-4ec0-8512-682ca1499844.png),![Screenshot_26](https://user-images.githubusercontent.com/55893091/152594952-e353e23a-82d4-4470-8403-55b1c14073d8.png)<br />
+
+![Screenshot_27](https://user-images.githubusercontent.com/55893091/152595032-fe262772-b9c2-4acd-b9ad-e0b27ff6e5f4.png),
+![Screenshot_31](https://user-images.githubusercontent.com/55893091/152595077-18f55523-027c-4734-926c-b66ef726d997.png)
 
 
 

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/loginFragment">
+    app:startDestination="@id/userProfileFragment">
 
     <fragment
         android:id="@+id/languageFragment"
@@ -15,7 +15,13 @@
         android:id="@+id/cryptoFragment"
         android:name="ge.nlatsabidze.walletfluent.ui.crypto.CryptoFragment"
         android:label="@string/crypto"
-        tools:layout="@layout/fragment_crypto" />
+        tools:layout="@layout/fragment_crypto" >
+        <action
+            android:id="@+id/action_cryptoFragment_to_detailCryptoFragment"
+            app:destination="@id/detailCryptoFragment"
+            app:enterAnim="@anim/from_right"
+            app:exitAnim="@anim/to_left" />
+    </fragment>
 
     <fragment
         android:id="@+id/currencyFragment"
@@ -44,6 +50,11 @@
             app:argType="string"
             app:nullable="true"
             android:defaultValue="password" />
+        <action
+            android:id="@+id/action_loginFragment_to_accountSettings"
+            app:destination="@id/accountSettings"
+            app:popUpTo="@id/mobile_navigation"
+            app:popUpToInclusive="true" />
 
 
     </fragment>
@@ -58,6 +69,8 @@
             app:popUpTo="@id/loginFragment" />
         <action
             android:id="@+id/action_registerFragment_to_loginFragment2"
+            app:popUpTo="@id/registerFragment"
+            app:popUpToInclusive="true"
             app:destination="@id/loginFragment" />
     </fragment>
 
@@ -65,6 +78,59 @@
         android:id="@+id/personalInfoFragment"
         android:name="ge.nlatsabidze.walletfluent.ui.personalInfo.PersonalInfoFragment"
         android:label="@string/PersonalInformation"
-        tools:layout="@layout/personal_info_fragment" />
+        tools:layout="@layout/personal_info_fragment" >
+        <action
+            android:id="@+id/action_personalInfoFragment_to_increaseAmountFragment"
+            app:destination="@id/transactionsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailCryptoFragment"
+        android:name="ge.nlatsabidze.walletfluent.ui.cryptoDetail.DetailCryptoFragment"
+        android:label="detail_crypto_fragment"
+        tools:layout="@layout/detail_crypto_fragment" >
+        <argument
+            android:name="marketItem"
+            app:argType="ge.nlatsabidze.walletfluent.model.cryptoModel.MarketsItem" />
+    </fragment>
+
+
+    <dialog
+        android:id="@+id/transactionsFragment"
+        android:name="ge.nlatsabidze.walletfluent.ui.personalInfo.increaseAmount.TransactionsFragment"
+        android:label="increase_amount_fragment"
+        tools:layout="@layout/transactions_fragment" >
+        <action
+            android:id="@+id/action_increaseAmountFragment_to_personalInfoFragment"
+            app:destination="@id/personalInfoFragment"
+            app:popUpTo="@id/personalInfoFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="defineClickType"
+            app:argType="boolean"
+            android:defaultValue="true" />
+    </dialog>
+    <fragment
+        android:id="@+id/accountSettings"
+        android:name="ge.nlatsabidze.walletfluent.ui.personalInfo.profile.AccountSettings"
+        android:label="account_settings_fragment"
+        tools:layout="@layout/account_settings_fragment" >
+        <action
+            android:id="@+id/action_accountSettings_to_personalInfoFragment"
+            app:destination="@id/personalInfoFragment" />
+        <action
+            android:id="@+id/action_accountSettings_to_loginFragment"
+            app:popUpTo="@id/mobile_navigation"
+            app:popUpToInclusive="true"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_accountSettings_to_userProfileFragment"
+            app:destination="@id/userProfileFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/userProfileFragment"
+        android:name="ge.nlatsabidze.walletfluent.ui.personalInfo.UserProfile.UserProfileFragment"
+        android:label="user_profile_fragment"
+        tools:layout="@layout/user_profile_fragment" />
 
 </navigation>

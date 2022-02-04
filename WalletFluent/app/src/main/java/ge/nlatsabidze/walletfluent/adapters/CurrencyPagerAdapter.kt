@@ -4,6 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
 import ge.nlatsabidze.walletfluent.ui.currency.currencyPages.calculatorCurrencies.CalculatorPageFragment
 import ge.nlatsabidze.walletfluent.ui.currency.currencyPages.countryCurrencies.CurrencyPageFragment
 

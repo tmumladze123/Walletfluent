@@ -4,6 +4,7 @@ import ge.nlatsabidze.walletfluent.model.valuteModel.Converter
 import ge.nlatsabidze.walletfluent.model.valuteModel.Currency
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import retrofit2.Response
@@ -11,7 +12,9 @@ import javax.inject.Inject
 
 class CurrencyRepository @Inject constructor(private var apiService: CurrencyApi) {
 
-    suspend fun getCountryCurrencies(): Flow<Resource<Currency>>{
+    private var _showLoading = MutableStateFlow<Boolean>(false)
+
+    suspend fun getCountryCurrencies(): Flow<Resource<Currency>> {
         return flow {
             emit(handleResponse {
                 apiService.getCurrencies()
@@ -28,16 +31,22 @@ class CurrencyRepository @Inject constructor(private var apiService: CurrencyApi
     }
 
     private suspend fun <T> handleResponse(apiCall: suspend() -> Response<T>): Resource<T> {
+        _showLoading.value = true
         try {
             val response = apiCall()
             val body = response.body()
             if (response.isSuccessful && body != null) {
+                _showLoading.value = false
                 return Resource.Success(body)
             }
-            return Resource.Error("exception")
+            return Resource.Error(response.errorBody().toString())
 
         }catch (e: Exception) {
             return Resource.Error("exception")
         }
+    }
+
+    fun showLoadingError(): MutableStateFlow<Boolean> {
+        return _showLoading
     }
 }

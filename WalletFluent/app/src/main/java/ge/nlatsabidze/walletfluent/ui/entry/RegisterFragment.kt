@@ -4,6 +4,8 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
@@ -26,33 +28,39 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
     override fun start() {
 
         firebaseAuth = FirebaseAuth.getInstance()
+        binding.btnSignUp.setOnClickListener {
 
-        binding.btnSignUp.setOnClickListener { registerUser() }
+            registerUser()
+        }
 
-        listeners()
+        observervers()
     }
 
     private fun registerUser() {
         with(binding) {
+            val name = nameEditText.text.toString()
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
             checkInputValidation(email, password)
-            loginViewModel.register(email, password)
+            loginViewModel.register(email, password, name, 1000)
         }
     }
 
-    private fun listeners() {
+    private fun observervers() {
         viewLifecycleOwner.lifecycleScope.launch {
-            loginViewModel.userMutableLiveFlow.collect { userLogedIn ->
+            loginViewModel.userMutableLiveFlow.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect { userLogedIn ->
                 if (userLogedIn) {
-                    navigateToSignInPage(binding.emailEditText.text.toString(), binding.passwordEditText.text.toString())
+                    navigateToSignInPage(
+                        binding.emailEditText.text.toString(),
+                        binding.passwordEditText.text.toString()
+                    )
                     loginViewModel.changeUserValue()
                 }
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            loginViewModel.dialogError.collect { showDialogError ->
+            loginViewModel.dialogError.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect { showDialogError ->
                 if (showDialogError != "") {
                     showDialogError(showDialogError)
                     loginViewModel.changeRepositoryValue()
@@ -66,22 +74,22 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
             val shake: Animation = AnimationUtils.loadAnimation(requireContext(), R.anim.vibrate)
             if (email.isEmpty() && password.isEmpty()) {
                 emailEditTextWrapper.startAnimation(shake)
-                emailEditTextWrapper.helperText = "ველი არ არის შევსებული"
+                emailEditTextWrapper.helperText = resources.getString(R.string.invalidField)
                 emailEditText.setBackgroundResource(R.drawable.border)
 
                 passwordEditTextWrapper.startAnimation(shake)
-                passwordEditTextWrapper.helperText = "ველი არ არის შევსებული"
+                passwordEditTextWrapper.helperText = resources.getString(R.string.invalidField)
                 passwordEditText.setBackgroundResource(R.drawable.border)
 
             } else if (password.isEmpty()) {
                 passwordEditTextWrapper.startAnimation(shake)
-                passwordEditTextWrapper.helperText = "ველი არ არის შევსებული"
+                passwordEditTextWrapper.helperText = resources.getString(R.string.invalidField)
                 emailEditTextWrapper.helperText = ""
                 passwordEditText.setBackgroundResource(R.drawable.border)
                 emailEditText.setBackgroundResource(R.color.transparent)
             } else if (email.isEmpty()) {
                 emailEditTextWrapper.startAnimation(shake)
-                emailEditTextWrapper.helperText = "ველი არ არის შევსებული"
+                emailEditTextWrapper.helperText = resources.getString(R.string.invalidField)
                 passwordEditTextWrapper.helperText = ""
                 emailEditText.setBackgroundResource(R.drawable.border)
                 passwordEditText.setBackgroundResource(R.color.transparent)
@@ -103,6 +111,8 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
 
     private fun showDialogError(message: String) {
         val builder = AlertDialog.Builder(requireContext())
-        builder.showDialogError(message, requireContext())
+        showDialogError(message, requireContext())
     }
+
+
 }

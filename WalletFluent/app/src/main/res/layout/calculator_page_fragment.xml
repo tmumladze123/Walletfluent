@@ -1,108 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.currency.currencyPages.countryCurrencies.CurrencyPageFragment">
+    app:cardElevation="10dp">
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".ui.currency.currencyPages.countryCurrencies.CurrencyPageFragment">
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/etNumber"
-        android:layout_width="150dp"
-        android:textSize="30sp"
-        android:maxLength="7"
-        android:layout_height="80dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:inputType="number"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etNumber"
+            android:layout_width="150dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:inputType="number"
+            android:maxLength="5"
+            android:textSize="30sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/etConvertedNumber"
-        android:layout_width="150dp"
-        android:layout_height="80dp"
-        android:textSize="30sp"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
-        android:inputType="number"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/etConvertedNumber"
+            android:layout_width="150dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:inputType="number"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayoutWrapper"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="115dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="148dp"
-        android:layout_marginEnd="32dp"
-        android:hint="Countries"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <AutoCompleteTextView
+        <Spinner
             android:id="@+id/autoCompleteFrom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:inputType="none"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:text="GEL"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="165dp" />
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="60dp"
+            android:entries="@array/countries"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etNumber" />
 
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/secondTextInputLayoutWrapper"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-        android:layout_width="115dp"
-        android:layout_height="70dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="148dp"
-        android:layout_marginEnd="32dp"
-        android:hint="Countries"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <AutoCompleteTextView
+        <Spinner
             android:id="@+id/autoCompleteTo"
-            android:layout_width="match_parent"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="60dp"
+            android:layout_marginEnd="15dp"
+            android:entries="@array/countries"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/etConvertedNumber" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:inputType="none"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:text="USD"
-            tools:layout_editor_absoluteX="0dp"
-            tools:layout_editor_absoluteY="165dp" />
+            app:layout_constraintBottom_toTopOf="@+id/autoCompleteFrom"
+            app:layout_constraintEnd_toStartOf="@+id/etConvertedNumber"
+            app:layout_constraintStart_toEndOf="@+id/etNumber"
+            app:layout_constraintTop_toBottomOf="@+id/etNumber"
+            app:layout_constraintVertical_bias="0.149">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <androidx.appcompat.widget.AppCompatImageButton
+                android:id="@+id/btn_swap"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/swap_values"/>
 
-    <Button
-        android:id="@+id/btnConverter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Convert here"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textInputLayoutWrapper" />
+        </com.google.android.material.card.MaterialCardView>
 
-    <Button
-        android:id="@+id/btnSwap"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="swap values"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnConverter" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.google.android.material.card.MaterialCardView>

@@ -1,32 +1,51 @@
 package ge.nlatsabidze.walletfluent.ui.crypto
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import ge.nlatsabidze.walletfluent.model.cryptoModel.Exchanges
-import ge.nlatsabidze.walletfluent.model.valuteModel.Converter
+import ge.nlatsabidze.walletfluent.model.cryptoModel.MarketsItem
 import ge.nlatsabidze.walletfluent.network.cryptoNetwork.CryptoRepository
+import ge.nlatsabidze.walletfluent.roomDatabase.CurrencyRoomRepository.CryptoRoomRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class CryptoViewModel @Inject constructor(private val cryptoService: CryptoRepository) : ViewModel() {
+class CryptoViewModel @Inject constructor(
+    private val cryptoService: CryptoRepository,
+    private val currencyRoomRepository: CryptoRoomRepository
+) : ViewModel() {
 
-    private val _cryptoExchangedValues = MutableSharedFlow<List<Exchanges>>()
-    val cryptoExchangedValues: MutableSharedFlow<List<Exchanges>> get() = _cryptoExchangedValues
+    private var _showLoadingViewModelState = MutableStateFlow<Boolean>(false)
+    val showLoadingViewModel: MutableStateFlow<Boolean> get() = _showLoadingViewModelState
+
+    private val _marketValues = MutableStateFlow(listOf<MarketsItem>())
+    val marketValues: MutableStateFlow<List<MarketsItem>> get() = _marketValues
+
+    val getCryptoValues = currencyRoomRepository.cryptoValues
 
     fun getCryptoExchangeValues() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                cryptoService.getCryptoExchanges().collectLatest {
-                    _cryptoExchangedValues.emit(it.data!!)
+                cryptoService.getMarketValues().collectLatest {
+                    if (it.data != null) {
+                        _marketValues.value = it.data
+                        currencyRoomRepository.deleteAll()
+                        currencyRoomRepository.insert(it.data)
+                    }
                 }
+            }
+        }
+    }
+
+    fun showLoadingBar() {
+        viewModelScope.launch {
+            cryptoService.showLoading.collectLatest {
+                _showLoadingViewModelState.value = it
             }
         }
     }

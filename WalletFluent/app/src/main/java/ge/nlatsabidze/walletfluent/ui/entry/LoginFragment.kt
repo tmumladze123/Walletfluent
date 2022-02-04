@@ -3,54 +3,77 @@ package ge.nlatsabidze.walletfluent.ui.entry
 import android.annotation.SuppressLint
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
+import ge.nlatsabidze.walletfluent.MainActivity
 import ge.nlatsabidze.walletfluent.R
+import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
 import ge.nlatsabidze.walletfluent.databinding.FragmentLoginBinding
+import ge.nlatsabidze.walletfluent.extensions.setOnSafeClickListener
 import ge.nlatsabidze.walletfluent.extensions.showDialogError
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::inflate) {
 
     private val logInViewModel: LoginRegisterViewModel by activityViewModels()
 
-    private lateinit var firebaseAuth: FirebaseAuth
+    @Inject lateinit var firebaseAuth: FirebaseAuth
     private val args: LoginFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var checkInternetConnection: CheckInternetConnection
 
     override fun start() {
 
-        firebaseAuth = FirebaseAuth.getInstance()
+        onBackPressed()
+
         binding.tvSignUp.setOnClickListener { navigateToRegisterPage() }
 
-        binding.btnSignin.setOnClickListener { loginUser() }
+        binding.btnSignin.setOnSafeClickListener {
+            loginUser()
+        }
 
         binding.tvForgotPassword.setOnClickListener { resetPassword() }
 
-        listeners()
+        if (checkInternetConnection.isOnline(activity!!.application).toString() == "false") {
+            showDialogError(
+                "In Order to use our application, you should be connected to internet",
+                requireContext()
+            )
+        }
+
+        observes()
         setDataFromRegisterPage()
     }
 
-    private fun listeners() {
+    private fun observes() {
 
         viewLifecycleOwner.lifecycleScope.launch {
-            logInViewModel.userMutableLiveFlow.collect { userLogedIn ->
+            logInViewModel.userMutableLiveFlow.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect { userLogedIn ->
                 if (userLogedIn) {
-                    navigateToPersonalPage()
+                    (activity as MainActivity).setDisableToDrawer()
+                    (activity as MainActivity).setUnVisible()
+                    navigateToSettingsPage()
                     logInViewModel.changeUserValue()
                 }
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            logInViewModel.dialogError.collect { showResetPasswordError ->
+            logInViewModel.dialogError.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect { showResetPasswordError ->
                 if (showResetPasswordError != "") {
                     showDialogError(showResetPasswordError)
                     logInViewModel.changeRepositoryValue()
@@ -84,30 +107,27 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
             val shake: Animation = AnimationUtils.loadAnimation(requireContext(), R.anim.vibrate)
             if (email.isEmpty() && password.isEmpty()) {
                 emailEditTextWrapper.startAnimation(shake)
-                emailEditTextWrapper.helperText = "ველი არ არის შევსებული"
+                emailEditTextWrapper.helperText = resources.getString(R.string.invalidField)
                 emailEditText.setBackgroundResource(R.drawable.border)
 
                 passwordEditTextWrapper.startAnimation(shake)
-                passwordEditTextWrapper.helperText = "ველი არ არის შევსებული"
+                passwordEditTextWrapper.helperText = resources.getString(R.string.invalidField)
                 passwordEditText.setBackgroundResource(R.drawable.border)
 
             } else if (password.isEmpty()) {
                 passwordEditTextWrapper.startAnimation(shake)
-                passwordEditTextWrapper.helperText = "ველი არ არის შევსებული"
-                emailEditTextWrapper.helperText = ""
+                passwordEditTextWrapper.helperText = resources.getString(R.string.invalidField)
                 passwordEditText.setBackgroundResource(R.drawable.border)
-                emailEditText.setBackgroundResource(R.color.transparent)
+
             } else if (email.isEmpty()) {
                 emailEditTextWrapper.startAnimation(shake)
-                emailEditTextWrapper.helperText = "ველი არ არის შევსებული"
-                passwordEditTextWrapper.helperText = ""
+                emailEditTextWrapper.helperText = resources.getString(R.string.invalidField);
                 emailEditText.setBackgroundResource(R.drawable.border)
-                passwordEditText.setBackgroundResource(R.color.transparent)
+
             } else {
                 passwordEditTextWrapper.helperText = ""
                 emailEditTextWrapper.helperText = ""
                 emailEditText.setBackgroundResource(R.color.transparent)
-                passwordEditText.setBackgroundResource(R.color.transparent)
                 passwordEditText.setBackgroundResource(R.color.transparent)
             }
         }
@@ -118,20 +138,26 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         findNavController().navigate(actionLoginFragmentToRegister)
     }
 
-    private fun navigateToPersonalPage() {
-        val actionLoginFragmentToPersonal = LoginFragmentDirections.actionLoginFragmentToPersonalInfoFragment()
-        findNavController().navigate(actionLoginFragmentToPersonal)
+    private fun navigateToSettingsPage() {
+        val actionLoginFragmentToSettings = LoginFragmentDirections.actionLoginFragmentToAccountSettings()
+        findNavController().navigate(actionLoginFragmentToSettings)
     }
 
     private fun showDialogError(message: String) {
         val builder = AlertDialog.Builder(requireContext())
-        builder.showDialogError(message, requireContext())
+        showDialogError(message, requireContext())
     }
 
     private fun setDataFromRegisterPage() {
         if (args.email != "email" && args.password != "password") {
             binding.emailEditText.setText(args.email)
             binding.passwordEditText.setText(args.password)
+        }
+    }
+
+    private fun onBackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            activity?.finish()
         }
     }
 }

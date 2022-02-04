@@ -19,7 +19,16 @@ It is possible to see cryptocurrency details, understand current and past prices
 # Screenshots
 # Authentication
 
-![Screenshot_13](https://user-images.githubusercontent.com/55893091/152593473-e9a986dd-0da0-4c4e-9a5e-acb13c84e294.png), ![Screenshot_14](https://user-images.githubusercontent.com/55893091/152593496-287b60eb-db83-4e1c-b228-dba5f2043452.png)
+![Screenshot_13](https://user-images.githubusercontent.com/55893091/152593473-e9a986dd-0da0-4c4e-9a5e-acb13c84e294.png), ![Screenshot_14](https://user-images.githubusercontent.com/55893091/152593496-287b60eb-db83-4e1c-b228-dba5f2043452.png)<br />
+
+# User Account
+![Screenshot_20](https://user-images.githubusercontent.com/55893091/152593860-07755f68-7acc-4f90-b7d9-b2de486ab17b.png), ![Screenshot_21](https://user-images.githubusercontent.com/55893091/152593962-1e77ab5d-6928-472e-93f1-3ff3be0325e3.png)<br />
+
+![Screenshot_24](https://user-images.githubusercontent.com/55893091/152594100-ba616da1-371c-4571-90c9-8306fc8af929.png),
+![Screenshot_25](https://user-images.githubusercontent.com/55893091/152594182-29268905-017a-4153-b481-d04dafa45a47.png)
+
+
+
 
 
 

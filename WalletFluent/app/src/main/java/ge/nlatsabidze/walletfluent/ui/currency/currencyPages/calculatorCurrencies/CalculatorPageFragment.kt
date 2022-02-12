@@ -83,7 +83,6 @@ class CalculatorPageFragment :
 
         binding.etNumber.doAfterTextChanged {
             viewLifecycleOwner.lifecycleScope.launch {
-                delay(500)
                 val amountAsString = binding.etNumber.text.toString()
                 if (amountAsString.isNotEmpty() && amountAsString[0] == '0' && calculatorViewModel.containsError(amountAsString)) {
                     binding.etConvertedNumber.setText("0")

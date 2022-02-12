@@ -1,4 +1,4 @@
-package ge.nlatsabidze.walletfluent.extensions
+package ge.nlatsabidze.walletfluent.util
 
 import android.os.SystemClock
 import android.view.View

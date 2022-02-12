@@ -11,8 +11,10 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
+import ge.nlatsabidze.walletfluent.MainActivity
 import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.databinding.FragmentRegisterBinding
+import ge.nlatsabidze.walletfluent.extensions.setOnSafeClickListener
 import ge.nlatsabidze.walletfluent.extensions.showDialogError
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -28,8 +30,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
     override fun start() {
 
         firebaseAuth = FirebaseAuth.getInstance()
-        binding.btnSignUp.setOnClickListener {
-
+        binding.btnSignUp.setOnSafeClickListener {
             registerUser()
         }
 
@@ -50,6 +51,7 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
         viewLifecycleOwner.lifecycleScope.launch {
             loginViewModel.userMutableLiveFlow.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect { userLogedIn ->
                 if (userLogedIn) {
+                    (activity as MainActivity).setDisableToDrawer()
                     navigateToSignInPage(
                         binding.emailEditText.text.toString(),
                         binding.passwordEditText.text.toString()
@@ -110,7 +112,6 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
     }
 
     private fun showDialogError(message: String) {
-        val builder = AlertDialog.Builder(requireContext())
         showDialogError(message, requireContext())
     }
 

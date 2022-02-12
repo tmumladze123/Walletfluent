@@ -4,6 +4,7 @@ import androidx.appcompat.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.view.View
+import ge.nlatsabidze.walletfluent.util.SafeClickListener
 
 
 fun showDialogError(message: String, context: Context) {

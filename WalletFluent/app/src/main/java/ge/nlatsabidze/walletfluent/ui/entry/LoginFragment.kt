@@ -48,7 +48,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
         binding.tvForgotPassword.setOnClickListener { resetPassword() }
 
-        if (checkInternetConnection.isOnline(activity!!.application).toString() == "false") {
+        if (!checkInternetConnection.isOnline(requireContext())) {
             showDialogError(
                 "In Order to use our application, you should be connected to internet",
                 requireContext()

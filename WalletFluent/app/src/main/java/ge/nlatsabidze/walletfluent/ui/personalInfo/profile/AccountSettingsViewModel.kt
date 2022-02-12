@@ -41,7 +41,7 @@ class AccountSettingsViewModel @Inject constructor(
                 val email = snapshot.child("email").value.toString()
                 firebaseRepository.resetUserPassword(email)
                 viewModelScope.launch {
-                    _showChangePasswordDialog.emit("Change password")
+                    _showChangePasswordDialog.emit("Follow the instructions in the email.")
                 }
             }
 

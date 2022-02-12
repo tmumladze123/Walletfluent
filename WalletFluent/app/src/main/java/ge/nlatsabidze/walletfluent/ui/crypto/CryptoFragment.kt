@@ -35,7 +35,7 @@ class CryptoFragment : BaseFragment<FragmentCryptoBinding>(FragmentCryptoBinding
 
         if (!checkInternetConnection.isOnline(requireContext())) {
             showDialogError(
-                "In Order to use our application, you should be connected to internet",
+                "In order to get latest updates, you should be connected to internet",
                 requireContext()
             )
             viewLifecycleOwner.lifecycleScope.launch {

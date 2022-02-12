@@ -5,17 +5,16 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.nlatsabidze.walletfluent.model.valuteModel.Converter
 import ge.nlatsabidze.walletfluent.network.currencyNetwork.CurrencyRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class CalculatorPageViewModel @Inject constructor(private val currencyRepository: CurrencyRepository): ViewModel() {
+
+    private var job: Job? = null
 
     private val _convertedValue = MutableSharedFlow<Converter>()
     val convertedValue: MutableSharedFlow<Converter> get() = _convertedValue
@@ -23,7 +22,9 @@ class CalculatorPageViewModel @Inject constructor(private val currencyRepository
     private val listOfCharacter = mutableListOf<Char>(',', ' ', '-')
 
     fun getConvertedValue(amount: Double, from: String, to: String) {
-        viewModelScope.launch {
+        job?.cancel()
+        job = viewModelScope.launch {
+            delay(300)
             withContext(Dispatchers.IO) {
                 currencyRepository.getConvertedValues(amount, from, to).collect {
                     if (it.data != null) {

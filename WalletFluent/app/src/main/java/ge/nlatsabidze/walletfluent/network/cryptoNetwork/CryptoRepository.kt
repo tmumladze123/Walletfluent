@@ -10,8 +10,8 @@ import javax.inject.Inject
 
 class CryptoRepository @Inject constructor(private var apiService: CryptoApi) {
 
-    private var _showLoading = MutableSharedFlow<Boolean>()
-    val showLoading: MutableSharedFlow<Boolean> get() = _showLoading
+    private var _showLoading = MutableStateFlow<Boolean>(false)
+    val showLoading: MutableStateFlow<Boolean> get() = _showLoading
 
     suspend fun getMarketValues(): Flow<Resource<List<MarketsItem>>> {
         return flow {
@@ -31,12 +31,12 @@ class CryptoRepository @Inject constructor(private var apiService: CryptoApi) {
 
 
     private suspend fun <T> handleResponse(apiCall: suspend() -> Response<T>): Resource<T> {
-        _showLoading.emit(true)
+        _showLoading.value = true
         try {
             val response = apiCall()
             val body = response.body()
             if (response.isSuccessful && body != null) {
-                _showLoading.emit(false)
+                _showLoading.value = false
                 return Resource.Success(body)
             }
             return Resource.Error(response.errorBody().toString())

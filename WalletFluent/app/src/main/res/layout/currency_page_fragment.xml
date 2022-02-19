@@ -10,18 +10,6 @@
         android:layout_height="match_parent"
         tools:context=".ui.currency.currencyPages.countryCurrencies.CurrencyPageFragment">
 
-        <TextView
-            android:id="@+id/tvLatest"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="LAST UPDATED"
-            android:fontFamily="@font/beauty"
-            android:textSize="20sp"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <com.google.android.material.progressindicator.CircularProgressIndicator
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
@@ -44,7 +32,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tvLatest" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ProgressBar
             android:id="@+id/spin_kit"

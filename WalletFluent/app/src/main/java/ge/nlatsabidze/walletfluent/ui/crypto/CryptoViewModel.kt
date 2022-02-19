@@ -4,10 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.nlatsabidze.walletfluent.model.cryptoModel.MarketsItem
-import ge.nlatsabidze.walletfluent.network.cryptoNetwork.CryptoRepository
+import ge.nlatsabidze.walletfluent.network.cryptoNetwork.CryptoRepositoryImpl
 import ge.nlatsabidze.walletfluent.roomDatabase.CurrencyRoomRepository.CryptoRoomRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -16,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CryptoViewModel @Inject constructor(
-    private val cryptoService: CryptoRepository,
+    private val cryptoService: CryptoRepositoryImpl,
     private val currencyRoomRepository: CryptoRoomRepository
 ) : ViewModel() {
 

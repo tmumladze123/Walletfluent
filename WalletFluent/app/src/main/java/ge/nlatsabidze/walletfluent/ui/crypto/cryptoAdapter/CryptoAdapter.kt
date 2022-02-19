@@ -27,7 +27,7 @@ class CryptoAdapter : RecyclerView.Adapter<CryptoAdapter.CryptoItemViewHolder>()
             currentItem = cryptoExchanges[bindingAdapterPosition]
             with(binding) {
                 with(currentItem) {
-                    imCrypto.setImage(image)
+                    imCryptoWrapper.setImage(image)
                     tvName.text = currentItem.name.toString()
                     tvSymbol.text = currentItem.symbol.toString().uppercase(Locale.getDefault())
                     tvCurrentPrice.text = "$" + currentItem.current_price.toString()

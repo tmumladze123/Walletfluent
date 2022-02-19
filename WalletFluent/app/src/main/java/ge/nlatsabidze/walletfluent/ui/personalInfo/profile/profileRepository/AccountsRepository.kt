@@ -8,8 +8,7 @@ import javax.inject.Inject
 
 class AccountsRepository @Inject constructor(
     var firebaseAuth: FirebaseAuth,
-    var database: DatabaseReference,
-//    var firebaseUser: FirebaseUser
+    var database: DatabaseReference
 ) {
 
 

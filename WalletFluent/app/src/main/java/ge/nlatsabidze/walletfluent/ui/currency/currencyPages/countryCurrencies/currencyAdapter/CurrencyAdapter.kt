@@ -1,14 +1,11 @@
 package ge.nlatsabidze.walletfluent.ui.currency.currencyPages.countryCurrencies.currencyAdapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.navigation.fragment.NavHostFragment.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import ge.nlatsabidze.walletfluent.databinding.CurrencyItemBinding
 import ge.nlatsabidze.walletfluent.model.valuteModel.CommercialRates
-import ge.nlatsabidze.walletfluent.ui.entry.LoginFragment
-import ge.nlatsabidze.walletfluent.ui.entry.LoginFragmentDirections
 
 
 class CurrencyAdapter : RecyclerView.Adapter<CurrencyAdapter.CurrencyItemViewHolder>() {
@@ -26,8 +23,12 @@ class CurrencyAdapter : RecyclerView.Adapter<CurrencyAdapter.CurrencyItemViewHol
         fun onBind() {
             item = currencies[bindingAdapterPosition]
             binding.tvName.text = item.currency.toString()
+
             binding.tvBuyAmount.text = item.buy.toString()
+            binding.tvBuyAmount.setTextColor(Color.GREEN)
+
             binding.tvSellAmount.text = item.sell.toString()
+            binding.tvSellAmount.setTextColor(Color.RED)
         }
     }
 

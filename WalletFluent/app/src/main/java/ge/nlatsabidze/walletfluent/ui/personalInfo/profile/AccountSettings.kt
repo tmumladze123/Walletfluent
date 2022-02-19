@@ -121,12 +121,14 @@ class AccountSettings : BaseFragment<AccountSettingsFragmentBinding>(AccountSett
     private fun onLightMode() {
         isDarkMode = false
         binding.switchMode.isChecked = false
+        binding.switchMode.text = resources.getString(R.string.SwitchToDark)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
     }
 
     private fun onDarkMode() {
         isDarkMode = true
         binding.switchMode.isChecked = true
+        binding.switchMode.text = resources.getString(R.string.SwitchToLight)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
     }
 

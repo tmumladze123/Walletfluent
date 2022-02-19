@@ -82,19 +82,16 @@ class CalculatorPageFragment :
         }
 
         binding.etNumber.doAfterTextChanged {
-            viewLifecycleOwner.lifecycleScope.launch {
-                val amountAsString = binding.etNumber.text.toString()
-                if (amountAsString.isNotEmpty() && amountAsString[0] == '0' && calculatorViewModel.containsError(amountAsString)) {
+            val amountAsString = binding.etNumber.text.toString()
+            if (amountAsString.isNotEmpty() && amountAsString[0] == '0' && calculatorViewModel.containsError(amountAsString)) {
                     binding.etConvertedNumber.setText("0")
-                } else if (amountAsString.isNotEmpty() && !calculatorViewModel.containsError(amountAsString)) {
-                    val amount = binding.etNumber.text.toString().toDouble()
-                    calculatorViewModel.getConvertedValue(amount, firstValue, secondValue)
-                } else if (amountAsString.isEmpty() && binding.etConvertedNumber.text.toString()
-                        .isNotEmpty()
-                ) {
+            } else if (amountAsString.isNotEmpty() && !calculatorViewModel.containsError(amountAsString)) {
+                val amount = binding.etNumber.text.toString().toDouble()
+                calculatorViewModel.getConvertedValue(amount, firstValue, secondValue)
+            } else if (amountAsString.isEmpty() && binding.etConvertedNumber.text.toString()
+                    .isNotEmpty()) {
                     binding.etConvertedNumber.text?.clear()
                 }
-            }
         }
     }
 

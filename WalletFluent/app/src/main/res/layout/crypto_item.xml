@@ -8,36 +8,21 @@
     android:layout_marginTop="15dp"
     android:layout_marginRight="15dp"
     app:cardCornerRadius="15dp"
-    app:cardElevation="25dp">
+    app:cardElevation="5dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.google.android.material.card.MaterialCardView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/imCryptoWrapper"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp"
-            android:elevation="10dp"
-            android:text="@string/crypto"
-            android:textSize="30sp"
-            app:cardCornerRadius="100dp"
+            android:layout_marginStart="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="MissingConstraints">
-
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/imCrypto"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:text="Crypto"
-                android:textSize="30sp" />
-        </com.google.android.material.card.MaterialCardView>
-
+            tools:src="@drawable/ic_language" />
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/tvSymbol"

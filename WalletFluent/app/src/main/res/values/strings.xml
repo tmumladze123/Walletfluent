@@ -30,8 +30,8 @@
     <string name="english" translatable="false">English</string>
     <string name="georgian" translatable="false">Georgian</string>
     <string name="application_language" translatable="false">Application Language</string>
-    <string name="buy">buy:  </string>
-    <string name="sell">sell:  </string>
+    <string name="buy">Buy </string>
+    <string name="sell">Sell  </string>
     <string name="InvalidRegistration">Sorry, Invalid Email or password</string>
     <string name="NotValidInformation">Sorry, Data you have entered is invalid</string>
     <string name="VerificationDialog">Please, Verify your account using your email</string>
@@ -40,7 +40,7 @@
     <string name="DollarSign" translatable="false">$</string>
     <string name="MarketCapRank" translatable="false">Market cap rank #</string>
     <string name="AmountExceed" translatable="false">The amount you enter exceeds the current balance</string>
-    <string name="log_out" translatable="false">LOG OUT</string>
+    <string name="log_out" translatable="false">Log Out</string>
     <string name="profile" translatable="false">Profile</string>
     <string name="welcome_user" translatable="false">Welcome User</string>
     <string name="change_password" translatable="false">Edit Password</string>
@@ -52,6 +52,9 @@
     <string name="account_info" translatable="false">Account Info</string>
     <string name="date" translatable="false">Account Created</string>
     <string name="UserBalance" translatable="false">Balance</string>
+    <string name="NoInternetConnection" translatable="false">In order to get latest updates, you should be connected to internet</string>
+    <string name="SwitchToDark" translatable="false">Switch To Dark</string>
+    <string name="SwitchToLight" translatable="false">Switch To Light</string>
 
 
     <string-array name="countries">

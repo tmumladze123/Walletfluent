@@ -4,15 +4,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.nlatsabidze.walletfluent.model.valuteModel.Converter
-import ge.nlatsabidze.walletfluent.network.currencyNetwork.CurrencyRepository
+import ge.nlatsabidze.walletfluent.network.currencyNetwork.CurrencyRepositoryImpl
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.collectLatest
 import javax.inject.Inject
 
 @HiltViewModel
-class CalculatorPageViewModel @Inject constructor(private val currencyRepository: CurrencyRepository): ViewModel() {
+class CalculatorPageViewModel @Inject constructor(private val currencyRepository: CurrencyRepositoryImpl): ViewModel() {
 
     private var job: Job? = null
 

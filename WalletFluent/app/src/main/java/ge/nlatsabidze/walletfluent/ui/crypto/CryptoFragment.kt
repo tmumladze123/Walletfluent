@@ -9,6 +9,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
+import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.checkConnectivity.CheckLiveConnection
 import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
 import ge.nlatsabidze.walletfluent.databinding.FragmentCryptoBinding
@@ -35,7 +36,7 @@ class CryptoFragment : BaseFragment<FragmentCryptoBinding>(FragmentCryptoBinding
 
         if (!checkInternetConnection.isOnline(requireContext())) {
             showDialogError(
-                "In order to get latest updates, you should be connected to internet",
+                resources.getString(R.string.NoInternetConnection),
                 requireContext()
             )
             viewLifecycleOwner.lifecycleScope.launch {
@@ -43,7 +44,6 @@ class CryptoFragment : BaseFragment<FragmentCryptoBinding>(FragmentCryptoBinding
                     if (it.isNotEmpty()) {
                         cryptoAdapter.cryptoExchanges = it
                         binding.spinKit.visibility = View.GONE
-                        binding.tvLatest.visibility = View.VISIBLE
                     } else {
                         binding.spinKit.visibility = View.VISIBLE
                     }

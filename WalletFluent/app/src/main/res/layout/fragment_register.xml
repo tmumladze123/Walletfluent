@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.core.widget.NestedScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -33,16 +32,16 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="120dp"
             android:layout_marginRight="20dp"
-            app:startIconDrawable="@drawable/ic_name"
-            app:layout_constraintTop_toBottomOf="@+id/tvCreateAccount">
+            app:layout_constraintTop_toBottomOf="@+id/tvCreateAccount"
+            app:startIconDrawable="@drawable/ic_name">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/nameEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/transparent"
-                android:inputType="textEmailAddress"
-                android:hint="@string/name" />
+                android:hint="@string/name"
+                android:inputType="textEmailAddress" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -53,16 +52,16 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
-            app:startIconDrawable="@drawable/ic_email"
-            app:layout_constraintTop_toBottomOf="@+id/nameEditTextWrapper">
+            app:layout_constraintTop_toBottomOf="@+id/nameEditTextWrapper"
+            app:startIconDrawable="@drawable/ic_email">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/emailEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/transparent"
-                android:inputType="textEmailAddress"
-                android:hint="@string/email" />
+                android:hint="@string/email"
+                android:inputType="textEmailAddress" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -73,17 +72,17 @@
             android:layout_marginLeft="20dp"
             android:layout_marginTop="20dp"
             android:layout_marginRight="20dp"
-            app:endIconMode="password_toggle"
             android:hint="Password"
-            app:startIconDrawable="@drawable/ic_lock"
-            app:layout_constraintTop_toBottomOf="@+id/emailEditTextWrapper">
+            app:endIconMode="password_toggle"
+            app:layout_constraintTop_toBottomOf="@+id/emailEditTextWrapper"
+            app:startIconDrawable="@drawable/ic_lock">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/passwordEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="textPassword"
-                android:background="@color/transparent" />
+                android:background="@color/transparent"
+                android:inputType="textPassword" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -95,9 +94,9 @@
             android:fontFamily="@font/beauty"
             android:text="@string/signup"
             android:textColor="@color/white"
-            android:visibility="invisible"
             android:textSize="30sp"
             android:textStyle="bold"
+            android:visibility="invisible"
             app:layout_constraintStart_toStartOf="@+id/passwordEditTextWrapper"
             app:layout_constraintTop_toBottomOf="@+id/passwordEditTextWrapper" />
 
@@ -105,12 +104,11 @@
             android:id="@+id/btnSignUp"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:layout_marginLeft="150dp"
             android:layout_marginTop="50dp"
+            android:layout_marginEnd="20dp"
             android:src="@drawable/ic_arrow"
             app:fabCustomSize="60dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tvSignup"
             app:layout_constraintTop_toBottomOf="@+id/passwordEditTextWrapper" />
 
 

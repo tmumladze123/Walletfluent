@@ -4,8 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.nlatsabidze.walletfluent.model.valuteModel.CommercialRates
-import ge.nlatsabidze.walletfluent.network.currencyNetwork.CurrencyRepository
-import ge.nlatsabidze.walletfluent.roomDatabase.CurrencyRoomRepository.CryptoRoomRepository
+import ge.nlatsabidze.walletfluent.network.currencyNetwork.CurrencyRepositoryImpl
 import ge.nlatsabidze.walletfluent.roomDatabase.CurrencyRoomRepository.CurrencyRoomRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CurrencyPageViewModel @Inject constructor(
-    private val currencyRepository: CurrencyRepository,
+    private val currencyRepository: CurrencyRepositoryImpl,
     private val currencyRoomRepository: CurrencyRoomRepo
 ) :
     ViewModel() {

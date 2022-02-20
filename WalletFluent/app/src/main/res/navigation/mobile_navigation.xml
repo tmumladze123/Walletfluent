@@ -6,12 +6,6 @@
     app:startDestination="@id/userProfileFragment">
 
     <fragment
-        android:id="@+id/languageFragment"
-        android:name="ge.nlatsabidze.walletfluent.ui.language.LanguageFragment"
-        android:label="@string/language"
-        tools:layout="@layout/fragment_language" />
-
-    <fragment
         android:id="@+id/cryptoFragment"
         android:name="ge.nlatsabidze.walletfluent.ui.crypto.CryptoFragment"
         android:label="@string/crypto"

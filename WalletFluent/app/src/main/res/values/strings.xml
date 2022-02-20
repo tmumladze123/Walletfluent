@@ -55,6 +55,7 @@
     <string name="NoInternetConnection" translatable="false">In order to get latest updates, you should be connected to internet</string>
     <string name="SwitchToDark" translatable="false">Switch To Dark</string>
     <string name="SwitchToLight" translatable="false">Switch To Light</string>
+    <string name="CheckConnection" translatable="false">In Order to use application, you should be connected to internet</string>
 
 
     <string-array name="countries">

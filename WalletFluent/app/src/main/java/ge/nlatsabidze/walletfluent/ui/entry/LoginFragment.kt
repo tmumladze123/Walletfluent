@@ -29,8 +29,6 @@ import javax.inject.Inject
 class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::inflate) {
 
     private val logInViewModel: LoginRegisterViewModel by activityViewModels()
-
-    @Inject lateinit var firebaseAuth: FirebaseAuth
     private val args: LoginFragmentArgs by navArgs()
 
     @Inject
@@ -50,7 +48,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
         if (!checkInternetConnection.isOnline(requireContext())) {
             showDialogError(
-                "In Order to use our application, you should be connected to internet",
+                resources.getString(R.string.CheckConnection),
                 requireContext()
             )
         }

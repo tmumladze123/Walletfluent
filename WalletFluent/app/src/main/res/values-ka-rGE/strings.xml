@@ -17,7 +17,7 @@
     <string name="email">მეილი</string>
     <string name="password">პაროლი</string>
     <string name="balance">მიმდინარე ბალანსი</string>
-    <string name="welcome">მოგესალმებით</string>
+    <string name="welcome">გამარჯობა</string>
     <string name="buy">ყიდვა: </string>
     <string name="sell">გაყიდვა: </string>
     <string name="InvalidRegistration">ვწუხვართ, მითითებული მეილი და პაროლი არასწორია</string>

@@ -1,5 +1,6 @@
 package ge.nlatsabidze.walletfluent.ui.personalInfo.UserProfile
 
+import android.graphics.Color
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -83,7 +84,7 @@ class UserProfileFragment :
                 userViewModel.setInformationFromDatabase()
 
             } else if (!it) {
-                onSnack(binding.root, "Internet Connection Required")
+                onSnack(binding.root, "Internet Connection Required", Color.RED)
             }
         }
     }

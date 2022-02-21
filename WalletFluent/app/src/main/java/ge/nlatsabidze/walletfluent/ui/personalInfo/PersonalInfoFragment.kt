@@ -3,6 +3,7 @@ package ge.nlatsabidze.walletfluent.ui.personalInfo
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.collect
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.util.Log.d
 import android.view.View
 import androidx.fragment.app.viewModels
@@ -40,7 +41,7 @@ class PersonalInfoFragment :
     var relatedViews: ArrayList<View> = ArrayList()
 
     override fun start() {
-
+        observers()
         checkLiveConnection()
 
         relatedViews.add(binding.recyclerCardView)
@@ -81,8 +82,6 @@ class PersonalInfoFragment :
                 )
             findNavController().navigate(actionToDecrease)
         }
-
-        observers()
     }
 
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
@@ -137,14 +136,7 @@ class PersonalInfoFragment :
     private fun checkLiveConnection() {
         checkLiveConnection.observe(viewLifecycleOwner) {
             if (!it) {
-                onSnack(binding.root, "Internet Connection Required")
-            } else {
-                personalInfoViewModel.initializeFirebase()
-                personalInfoViewModel.setInformationFromDatabase()
-                personalInfoViewModel.addTransaction()
-                personalInfoViewModel.expireDate()
-                binding.progressBarInfo.visibility = View.INVISIBLE
-                changeVisibility(relatedViews, View.VISIBLE)
+                onSnack(binding.root, "Internet Connection Required", Color.RED)
             }
         }
     }

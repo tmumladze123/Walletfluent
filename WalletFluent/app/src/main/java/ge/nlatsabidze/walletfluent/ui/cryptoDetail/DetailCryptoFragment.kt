@@ -31,8 +31,8 @@ class DetailCryptoFragment :
 
 
     private val cryptoViewModel: DetailCryptoViewModel by viewModels()
-
     private val args: DetailCryptoFragmentArgs by navArgs()
+
     private lateinit var currentMarketItem: MarketsItem
 
     private lateinit var arrayChart: ArrayList<Entry>
@@ -40,17 +40,11 @@ class DetailCryptoFragment :
     private lateinit var lineData: LineData
 
     override fun start() {
-
         currentMarketItem = args.marketItem
 
         ratesChartSetup()
         setInformationFromArgs()
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            cryptoViewModel.getValues(currentMarketItem.id.toString()).flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect {
-                it.data?.prices?.let { it1 -> showChart(it1) }
-            }
-        }
+        setValuesToLineChart()
     }
 
     @SuppressLint("SetTextI18n")
@@ -136,10 +130,18 @@ class DetailCryptoFragment :
 
     private fun getDateTimeFromEpocLongOfSeconds(epoc: Long): String {
         try {
-            val netDate = Date(epoc*1000)
+            val netDate = Date(epoc * 1000)
             return netDate.toString()
         } catch (e: Exception) {
             return e.toString()
+        }
+    }
+
+    private fun setValuesToLineChart() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            cryptoViewModel.getValues(currentMarketItem.id.toString()).flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect {
+                it.data?.prices?.let { it1 -> showChart(it1) }
+            }
         }
     }
 }

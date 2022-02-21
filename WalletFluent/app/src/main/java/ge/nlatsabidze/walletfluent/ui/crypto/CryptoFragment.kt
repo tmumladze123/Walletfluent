@@ -29,49 +29,24 @@ class CryptoFragment : BaseFragment<FragmentCryptoBinding>(FragmentCryptoBinding
     lateinit var checkInternetConnection: CheckInternetConnection
 
     override fun start() {
-
-        displayProgressBar()
-
         initRecycler()
+        displayProgressBar()
+        navigateToDetails()
 
-        if (!checkInternetConnection.isOnline(requireContext())) {
-            showDialogError(
-                resources.getString(R.string.NoInternetConnection),
-                requireContext()
-            )
-            viewLifecycleOwner.lifecycleScope.launch {
-                cryptoViewModel.getCryptoValues.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collectLatest {
-                    if (it.isNotEmpty()) {
-                        cryptoAdapter.cryptoExchanges = it
-                        binding.spinKit.visibility = View.GONE
-                    } else {
-                        binding.spinKit.visibility = View.VISIBLE
-                    }
-                }
-            }
-        }
+        getCryptoValuesFromLocalDatabase()
+    }
 
-
-        cryptoViewModel.getCryptoExchangeValues()
-        viewLifecycleOwner.lifecycleScope.launch {
-            cryptoViewModel.marketValues.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collectLatest {
-                if (it.isNotEmpty()) {
-                    binding.spinKit.visibility = View.GONE
-                }
-                cryptoAdapter.cryptoExchanges = it
-            }
-        }
-
-        cryptoAdapter.onItemClick = { currentItem ->
-            val action = CryptoFragmentDirections.actionCryptoFragmentToDetailCryptoFragment(currentItem)
-            findNavController().navigate(action)
-        }
+    override fun observes() {
+        observeCryptoValues()
     }
 
     private fun displayProgressBar() {
         cryptoViewModel.showLoadingBar()
         viewLifecycleOwner.lifecycleScope.launch {
-            cryptoViewModel.showLoadingViewModel.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collectLatest {
+            cryptoViewModel.showLoadingViewModel.flowWithLifecycle(
+                viewLifecycleOwner.lifecycle,
+                Lifecycle.State.STARTED
+            ).collectLatest {
                 val loadingBar = binding.spinKit
                 if (it) {
                     loadingBar.visibility = View.VISIBLE
@@ -86,6 +61,51 @@ class CryptoFragment : BaseFragment<FragmentCryptoBinding>(FragmentCryptoBinding
         cryptoAdapter = CryptoAdapter()
         binding.rvCrypto.adapter = cryptoAdapter
         binding.rvCrypto.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    private fun navigateToDetails() {
+        cryptoAdapter.onItemClick = { currentItem ->
+            val action =
+                CryptoFragmentDirections.actionCryptoFragmentToDetailCryptoFragment(currentItem)
+            findNavController().navigate(action)
+        }
+    }
+
+    private fun observeCryptoValues() {
+        cryptoViewModel.getCryptoExchangeValues()
+        viewLifecycleOwner.lifecycleScope.launch {
+            cryptoViewModel.marketValues.flowWithLifecycle(
+                viewLifecycleOwner.lifecycle,
+                Lifecycle.State.STARTED
+            ).collectLatest {
+                if (it.isNotEmpty()) {
+                    binding.spinKit.visibility = View.GONE
+                }
+                cryptoAdapter.cryptoExchanges = it
+            }
+        }
+    }
+
+    private fun getCryptoValuesFromLocalDatabase() {
+        if (!checkInternetConnection.isOnline(requireContext())) {
+            showDialogError(
+                resources.getString(R.string.NoInternetConnection),
+                requireContext()
+            )
+            viewLifecycleOwner.lifecycleScope.launch {
+                cryptoViewModel.getCryptoValues.flowWithLifecycle(
+                    viewLifecycleOwner.lifecycle,
+                    Lifecycle.State.STARTED
+                ).collectLatest {
+                    if (it.isNotEmpty()) {
+                        cryptoAdapter.cryptoExchanges = it
+                        binding.spinKit.visibility = View.GONE
+                    } else {
+                        binding.spinKit.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
     }
 }
 

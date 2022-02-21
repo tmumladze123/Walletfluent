@@ -37,16 +37,16 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
     override fun start() {
 
-//        onBackPressed()
-
-        binding.tvSignUp.setOnClickListener { navigateToRegisterPage() }
+        binding.tvSignUp.setOnSafeClickListener { navigateToRegisterPage() }
         binding.btnSignin.setOnSafeClickListener { loginUser() }
-        binding.tvForgotPassword.setOnClickListener { resetPassword() }
+        binding.tvForgotPassword.setOnSafeClickListener { resetPassword() }
 
         showErrorOnConnection()
-
-        observers()
         setDataFromRegisterPage()
+    }
+
+    override fun observes() {
+        observers()
     }
 
     private fun observers() {

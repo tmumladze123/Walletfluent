@@ -39,11 +39,45 @@ class CurrencyPageFragment :
 
 
     override fun start() {
-
         initAdapter()
-        setDataFromApi()
-        displayProgressBar()
+        collectDataFromLocalDataBase()
+    }
 
+    override fun observes() {
+        displayProgressBar()
+        setDataFromApi()
+    }
+
+    private fun initAdapter() {
+        binding.rvCurrency.apply {
+            adapter = currencyAdapter
+            layoutManager = LinearLayoutManager(requireContext())
+        }
+    }
+
+    private fun displayProgressBar() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            currencyPageViewModel.showLoadingViewModel.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collectLatest {
+                val bar = binding.spinKit
+                if (it) {
+                    bar.visibility = View.VISIBLE
+                } else {
+                    bar.visibility = View.INVISIBLE
+                }
+            }
+        }
+    }
+
+    private fun setDataFromApi() {
+        currencyPageViewModel.getCommercialRates()
+        viewLifecycleOwner.lifecycleScope.launch {
+            currencyPageViewModel.commercialRates.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect {
+                currencyAdapter.currencies = it
+            }
+        }
+    }
+
+    private fun collectDataFromLocalDataBase() {
         if (!checkInternetConnection.isOnline(requireContext())) {
             showDialogError(
                 resources.getString(R.string.NoInternetConnection),
@@ -58,36 +92,6 @@ class CurrencyPageFragment :
                         binding.spinKit.visibility = View.VISIBLE
                     }
                 }
-            }
-        }
-    }
-
-    private fun displayProgressBar() {
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            currencyPageViewModel.showLoadingViewModel.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collectLatest {
-                val bar = binding.spinKit
-                if (it) {
-                    bar.visibility = View.VISIBLE
-                } else {
-                    bar.visibility = View.INVISIBLE
-                }
-            }
-        }
-    }
-
-    private fun initAdapter() {
-        binding.rvCurrency.apply {
-            adapter = currencyAdapter
-            layoutManager = LinearLayoutManager(requireContext())
-        }
-    }
-
-    private fun setDataFromApi() {
-        currencyPageViewModel.getCommercialRates()
-        viewLifecycleOwner.lifecycleScope.launch {
-            currencyPageViewModel.commercialRates.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect {
-                currencyAdapter.currencies = it
             }
         }
     }

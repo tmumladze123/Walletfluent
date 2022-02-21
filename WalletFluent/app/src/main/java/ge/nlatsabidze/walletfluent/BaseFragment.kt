@@ -21,10 +21,12 @@ abstract class BaseFragment<VB : ViewBinding>(private val inflate: Inflate<VB>) 
     ): View? {
         _binding = inflate.invoke(inflater, container, false)
         start()
+        observes()
         return binding.root
     }
 
     abstract fun start()
+    open fun observes() {}
 
     override fun onDestroyView() {
         super.onDestroyView()

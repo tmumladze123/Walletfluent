@@ -3,7 +3,6 @@ package ge.nlatsabidze.walletfluent.ui.entry
 import android.annotation.SuppressLint
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
@@ -12,12 +11,12 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.MainActivity
 import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
+import ge.nlatsabidze.walletfluent.checkConnectivity.CheckLiveConnection
 import ge.nlatsabidze.walletfluent.databinding.FragmentLoginBinding
 import ge.nlatsabidze.walletfluent.extensions.setOnSafeClickListener
 import ge.nlatsabidze.walletfluent.extensions.showDialogError
@@ -33,31 +32,24 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
 
     @Inject
     lateinit var checkInternetConnection: CheckInternetConnection
+    @Inject
+    lateinit var liveConnection: CheckLiveConnection
 
     override fun start() {
 
-        onBackPressed()
+//        onBackPressed()
 
         binding.tvSignUp.setOnClickListener { navigateToRegisterPage() }
-
-        binding.btnSignin.setOnSafeClickListener {
-            loginUser()
-        }
-
+        binding.btnSignin.setOnSafeClickListener { loginUser() }
         binding.tvForgotPassword.setOnClickListener { resetPassword() }
 
-        if (!checkInternetConnection.isOnline(requireContext())) {
-            showDialogError(
-                resources.getString(R.string.CheckConnection),
-                requireContext()
-            )
-        }
+        showErrorOnConnection()
 
-        observes()
+        observers()
         setDataFromRegisterPage()
     }
 
-    private fun observes() {
+    private fun observers() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             logInViewModel.userMutableLiveFlow.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect { userLogedIn ->
@@ -156,6 +148,15 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     private fun onBackPressed() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             activity?.finish()
+        }
+    }
+
+    private fun showErrorOnConnection() {
+        if (!checkInternetConnection.isOnline(requireContext())) {
+            showDialogError(
+                resources.getString(R.string.CheckConnection),
+                requireContext()
+            )
         }
     }
 }

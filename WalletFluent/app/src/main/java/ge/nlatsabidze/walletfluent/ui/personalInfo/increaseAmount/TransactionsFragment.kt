@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
 import ge.nlatsabidze.walletfluent.checkConnectivity.CheckLiveConnection
 import ge.nlatsabidze.walletfluent.databinding.TransactionsFragmentBinding
 import ge.nlatsabidze.walletfluent.extensions.showDialogError
@@ -34,6 +35,9 @@ class TransactionsFragment : BottomSheetDialogFragment() {
     @Inject
     lateinit var connectionManager: CheckLiveConnection
 
+    @Inject
+    lateinit var checkInternetConnection: CheckInternetConnection
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,16 +53,30 @@ class TransactionsFragment : BottomSheetDialogFragment() {
         transactionsViewModel.initializeFirebase()
 
         binding.btnIncreaseAmount.setOnClickListener {
-            if (binding.etEnterAmount.text!!.isNotEmpty() && binding.etPurpose.text!!.isNotEmpty()) {
-                if (args.defineClickType) {
-                    transactionsViewModel.pushTransaction("-" + binding.etEnterAmount.text.toString(), binding.etPurpose.text.toString(), getCurrentTime(), args.defineClickType)
-                } else {
-                    transactionsViewModel.pushTransaction(binding.etEnterAmount.text.toString(), binding.etPurpose.text.toString(), getCurrentTime(), args.defineClickType)
+            if (checkInternetConnection.isOnline(requireContext())) {
+                if (binding.etEnterAmount.text!!.isNotEmpty() && binding.etPurpose.text!!.isNotEmpty()) {
+                    if (args.defineClickType) {
+                        transactionsViewModel.pushTransaction(
+                            "-" + binding.etEnterAmount.text.toString(),
+                            binding.etPurpose.text.toString(),
+                            getCurrentTime(),
+                            args.defineClickType
+                        )
+                    } else {
+                        transactionsViewModel.pushTransaction(
+                            binding.etEnterAmount.text.toString(),
+                            binding.etPurpose.text.toString(),
+                            getCurrentTime(),
+                            args.defineClickType
+                        )
+                    }
                 }
+                val action =
+                    TransactionsFragmentDirections.actionIncreaseAmountFragmentToPersonalInfoFragment()
+                findNavController().navigate(action)
+            } else {
+                showDialogError("No Internet Connection!", requireContext())
             }
-            val action =
-                TransactionsFragmentDirections.actionIncreaseAmountFragmentToPersonalInfoFragment()
-            findNavController().navigate(action)
         }
 
         transactionsViewModel.setInformationFromDatabase()
@@ -66,13 +84,19 @@ class TransactionsFragment : BottomSheetDialogFragment() {
 
     private fun observes() {
         viewLifecycleOwner.lifecycleScope.launch {
-            transactionsViewModel.balance.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect {
+            transactionsViewModel.balance.flowWithLifecycle(
+                viewLifecycleOwner.lifecycle,
+                Lifecycle.State.STARTED
+            ).collect {
                 binding.tvCurrentBalance.text = it
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            transactionsViewModel.showDialogError.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect {
+            transactionsViewModel.showDialogError.flowWithLifecycle(
+                viewLifecycleOwner.lifecycle,
+                Lifecycle.State.STARTED
+            ).collect {
                 showDialogError(it, requireContext())
             }
         }

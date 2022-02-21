@@ -14,8 +14,10 @@ import ge.nlatsabidze.walletfluent.BaseFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
+import ge.nlatsabidze.walletfluent.checkConnectivity.CheckLiveConnection
 import ge.nlatsabidze.walletfluent.databinding.PersonalInfoFragmentBinding
 import ge.nlatsabidze.walletfluent.extensions.changeVisibility
+import ge.nlatsabidze.walletfluent.extensions.onSnack
 import ge.nlatsabidze.walletfluent.extensions.setOnSafeClickListener
 import javax.inject.Inject
 
@@ -32,9 +34,14 @@ class PersonalInfoFragment :
     @Inject
     lateinit var checkInternetConnection: CheckInternetConnection
 
+    @Inject
+    lateinit var checkLiveConnection: CheckLiveConnection
+
     var relatedViews: ArrayList<View> = ArrayList()
 
     override fun start() {
+
+        checkLiveConnection()
 
         relatedViews.add(binding.recyclerCardView)
         relatedViews.add(binding.yourCard)
@@ -56,48 +63,64 @@ class PersonalInfoFragment :
             changeVisibility(relatedViews, View.INVISIBLE)
             binding.progressBarInfo.visibility = View.VISIBLE
         }
-        
+
         binding.btnIncrease.setOnSafeClickListener {
             defineOnClick = true
             val actionToIncrease =
-                PersonalInfoFragmentDirections.actionPersonalInfoFragmentToIncreaseAmountFragment(defineOnClick)
+                PersonalInfoFragmentDirections.actionPersonalInfoFragmentToIncreaseAmountFragment(
+                    defineOnClick
+                )
             findNavController().navigate(actionToIncrease)
         }
 
         binding.btnDecrease.setOnSafeClickListener {
             defineOnClick = false
             val actionToDecrease =
-                PersonalInfoFragmentDirections.actionPersonalInfoFragmentToIncreaseAmountFragment(defineOnClick)
+                PersonalInfoFragmentDirections.actionPersonalInfoFragmentToIncreaseAmountFragment(
+                    defineOnClick
+                )
             findNavController().navigate(actionToDecrease)
         }
 
-        observes()
+        observers()
     }
 
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
-    private fun observes() {
+    private fun observers() {
 
         viewLifecycleOwner.lifecycleScope.launch {
-            personalInfoViewModel.balance.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect {
+            personalInfoViewModel.balance.flowWithLifecycle(
+                viewLifecycleOwner.lifecycle,
+                Lifecycle.State.STARTED
+            ).collect {
                 binding.balance.text = it
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            personalInfoViewModel.name.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect {
+            personalInfoViewModel.name.flowWithLifecycle(
+                viewLifecycleOwner.lifecycle,
+                Lifecycle.State.STARTED
+            ).collect {
                 binding.tvName.text = it
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            personalInfoViewModel.transaction.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect {
-                transactionAdapter.userTransactions.add(it)
+            personalInfoViewModel.transaction.flowWithLifecycle(
+                viewLifecycleOwner.lifecycle,
+                Lifecycle.State.STARTED
+            ).collect {
+                transactionAdapter.userTransactions.add(0, it)
                 transactionAdapter.notifyDataSetChanged()
             }
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            personalInfoViewModel.expireYear.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect {
+            personalInfoViewModel.expireYear.flowWithLifecycle(
+                viewLifecycleOwner.lifecycle,
+                Lifecycle.State.STARTED
+            ).collect {
                 binding.tvDate.text = it
             }
         }
@@ -109,5 +132,20 @@ class PersonalInfoFragment :
         binding.rvItems.adapter = transactionAdapter
         binding.rvItems.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+    }
+
+    private fun checkLiveConnection() {
+        checkLiveConnection.observe(viewLifecycleOwner) {
+            if (!it) {
+                onSnack(binding.root, "Internet Connection Required")
+            } else {
+                personalInfoViewModel.initializeFirebase()
+                personalInfoViewModel.setInformationFromDatabase()
+                personalInfoViewModel.addTransaction()
+                personalInfoViewModel.expireDate()
+                binding.progressBarInfo.visibility = View.INVISIBLE
+                changeVisibility(relatedViews, View.VISIBLE)
+            }
+        }
     }
 }

@@ -95,7 +95,7 @@ class PersonalInfoViewModel @Inject constructor(
     fun expireDate() {
         database.get().addOnCompleteListener {
             if (it.result?.exists() == true) {
-                val expireDate = it.result!!.child("expireDate").value.toString() // 15/12/2022 2022/1/15
+                val expireDate = it.result!!.child("expireDate").value.toString()
 
                 val currentMonth = findSlashOccuriences(expireDate)
                 val expireYear = getExpireYear(expireDate)

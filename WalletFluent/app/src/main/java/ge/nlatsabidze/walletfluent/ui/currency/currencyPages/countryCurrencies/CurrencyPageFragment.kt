@@ -73,24 +73,34 @@ class CurrencyPageFragment :
         viewLifecycleOwner.lifecycleScope.launch {
             currencyPageViewModel.commercialRates.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect {
                 currencyAdapter.currencies = it
+                binding.rvCurrency.startLayoutAnimation()
             }
         }
     }
 
     private fun collectDataFromLocalDataBase() {
         if (!checkInternetConnection.isOnline(requireContext())) {
-            showDialogError(
-                resources.getString(R.string.NoInternetConnection),
-                requireContext()
-            )
-            viewLifecycleOwner.lifecycleScope.launch {
-                currencyPageViewModel.currencyValues.collectLatest {
-                    if (it.isNotEmpty()) {
-                        currencyAdapter.currencies = it
-                        binding.spinKit.visibility = View.GONE
-                    } else {
-                        binding.spinKit.visibility = View.VISIBLE
-                    }
+            showDialogConnection()
+            collectValues()
+        }
+    }
+
+    private fun showDialogConnection() {
+        showDialogError(
+            resources.getString(R.string.NoInternetConnection),
+            requireContext()
+        )
+    }
+
+    private fun collectValues() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            currencyPageViewModel.currencyValues.collectLatest {
+                if (it.isNotEmpty()) {
+                    binding.spinKit.visibility = View.GONE
+                    currencyAdapter.currencies = it
+                    binding.rvCurrency.startLayoutAnimation()
+                } else {
+                    binding.spinKit.visibility = View.VISIBLE
                 }
             }
         }

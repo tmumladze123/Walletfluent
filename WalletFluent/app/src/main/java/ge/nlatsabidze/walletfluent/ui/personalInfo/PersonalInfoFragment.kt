@@ -14,6 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
 import ge.nlatsabidze.walletfluent.checkConnectivity.CheckLiveConnection
 import ge.nlatsabidze.walletfluent.databinding.PersonalInfoFragmentBinding
@@ -52,13 +53,6 @@ class PersonalInfoFragment :
         relatedViews.add(binding.balance)
 
         initializeRecyclerView()
-
-        if (personalInfoViewModel.checkConnection()) {
-            personalInfoViewModel.initializeFirebase()
-            personalInfoViewModel.setInformationFromDatabase()
-            personalInfoViewModel.addTransaction()
-            personalInfoViewModel.expireDate()
-        }
 
         if (!personalInfoViewModel.checkConnection()) {
             changeVisibility(relatedViews, View.INVISIBLE)
@@ -111,6 +105,7 @@ class PersonalInfoFragment :
                 Lifecycle.State.STARTED
             ).collect {
                 transactionAdapter.userTransactions.add(0, it)
+                binding.rvItems.startLayoutAnimation()
                 transactionAdapter.notifyDataSetChanged()
             }
         }
@@ -136,7 +131,14 @@ class PersonalInfoFragment :
     private fun checkLiveConnection() {
         checkLiveConnection.observe(viewLifecycleOwner) {
             if (!it) {
-                onSnack(binding.root, "Internet Connection Required", Color.RED)
+                onSnack(binding.root, resources.getString(R.string.InternetRequired), Color.RED)
+            } else {
+                binding.progressBarInfo.visibility = View.INVISIBLE
+                changeVisibility(relatedViews, View.VISIBLE)
+                personalInfoViewModel.initializeFirebase()
+                personalInfoViewModel.setInformationFromDatabase()
+                personalInfoViewModel.getTransactions()
+                personalInfoViewModel.expireDate()
             }
         }
     }

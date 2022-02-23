@@ -2,10 +2,8 @@ package ge.nlatsabidze.walletfluent.ui.personalInfo
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
@@ -33,6 +31,8 @@ class PersonalInfoViewModel @Inject constructor(
 
     private val _expireYear = MutableSharedFlow<String>()
     val expireYear: MutableSharedFlow<String> get() = _expireYear
+
+    var counter: Long = 0
 
     fun setInformationFromDatabase() {
 
@@ -64,11 +64,12 @@ class PersonalInfoViewModel @Inject constructor(
                 .getReference("Users").child(firebaseUser.uid)
     }
 
-    fun addTransaction() {
+    fun getTransactions() {
         val childEventListener = object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
-                if (dataSnapshot.childrenCount > 0) {
+                if (dataSnapshot.childrenCount > 0 && counter != dataSnapshot.childrenCount) {
                     for (data in dataSnapshot.children) {
+                        counter++
                         val userTransaction: UserTransaction? =
                             data.getValue(UserTransaction::class.java)
                         viewModelScope.launch {

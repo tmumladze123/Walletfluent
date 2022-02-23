@@ -7,14 +7,17 @@
         <item
             android:id="@+id/loginFragment"
             android:icon="@drawable/ic_login"
+            android:menuCategory = "alternative"
             android:title="@string/login" />
         <item
             android:id="@+id/currencyFragment"
             android:icon="@drawable/ic_currency"
+            android:menuCategory = "alternative"
             android:title="@string/currency" />
         <item
             android:id="@+id/cryptoFragment"
             android:icon="@drawable/ic_crypto"
+            android:menuCategory = "alternative"
             android:title="@string/crypto" />
         <item
             android:id="@+id/languageFragment"

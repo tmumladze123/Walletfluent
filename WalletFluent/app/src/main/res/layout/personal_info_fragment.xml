@@ -6,14 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".ui.currency.currencyPages.countryCurrencies.CurrencyPageFragment">
 
-
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/yourCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="30dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginRight="20dp"
         app:cardCornerRadius="30dp"
         app:cardElevation="5dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -45,7 +44,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="25dp"
                 android:textColor="@color/white"
-                android:textSize="20dp"
+                android:textSize="20sp"
                 app:fontFamily="@font/beauty"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tvName"
@@ -58,7 +57,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="40dp"
-                android:text="**** **** **** 2022"
+                android:text="@string/_2022"
                 android:textColor="@color/white"
                 android:textSize="25sp"
                 android:textStyle="bold"
@@ -79,8 +78,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginTop="4dp"
-        android:text="00.00 ₾"
+        android:text="@string/_00_00"
         android:textSize="25sp"
+        android:textStyle="bold"
         app:fontFamily="@font/beauty"
         app:layout_constraintBottom_toBottomOf="@+id/btnIncrease"
         app:layout_constraintStart_toStartOf="parent"
@@ -92,7 +92,8 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="4dp"
-        android:text="Add Transaction"
+        android:text="@string/add_expense"
+        android:textAllCaps="false"
         app:layout_constraintEnd_toStartOf="@+id/btnDecrease"
         app:layout_constraintStart_toEndOf="@+id/balance"
         app:layout_constraintTop_toBottomOf="@+id/tvAvailable" />
@@ -102,7 +103,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="Enter amount"
+        android:layout_marginEnd="4dp"
+        android:text="@string/add_income"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="@+id/btnIncrease"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvAvailable" />
 
@@ -113,8 +117,8 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="20dp"
         android:text="@string/balance"
-        android:textStyle="bold"
         android:textSize="20sp"
+        android:textStyle="bold"
         app:fontFamily="@font/beauty"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/yourCard" />
@@ -133,7 +137,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvItems"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:layoutAnimation="@anim/crypto_layout_animation" />
     </com.google.android.material.card.MaterialCardView>
 
     <ProgressBar

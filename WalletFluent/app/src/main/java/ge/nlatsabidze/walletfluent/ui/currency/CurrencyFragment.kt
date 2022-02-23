@@ -1,10 +1,9 @@
 package ge.nlatsabidze.walletfluent.ui.currency
 
-import androidx.fragment.app.viewModels
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
-import ge.nlatsabidze.walletfluent.adapters.CurrencyPagerAdapter
+import ge.nlatsabidze.walletfluent.ui.currency.currencyViewPager.CurrencyPagerAdapter
 import ge.nlatsabidze.walletfluent.databinding.FragmentCurrencyBinding
 
 

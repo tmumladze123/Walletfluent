@@ -7,9 +7,13 @@ import javax.inject.Inject
 
 class CurrencyRoomRepo @Inject constructor(private val currencyDao: CurrencyDao) {
 
-    suspend fun insert(commercialRates: List<CommercialRates>) = currencyDao.insertCurrency(commercialRates)
+    fun deleteAll() {
+        currencyDao.deleteAllFromCurrency()
+    }
+
+    suspend fun insert(commercialRates: List<CommercialRates>) {
+        currencyDao.insertCurrency(commercialRates)
+    }
 
     val currencyValues = currencyDao.getCurrencyValues()
-
-    fun deleteAll() = currencyDao.deleteAllFromCurrency()
 }

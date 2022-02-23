@@ -1,6 +1,7 @@
 package ge.nlatsabidze.walletfluent.ui.currency.currencyPages.calculatorCurrencies
 
 import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.AdapterView
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.viewModels
@@ -9,6 +10,7 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
+import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.databinding.CalculatorPageFragmentBinding
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -25,7 +27,7 @@ class CalculatorPageFragment :
         makeResultEditTextNotClickable()
         convertValues()
         setValueToResult()
-
+        vibrateImageView()
     }
 
     private fun convertValues() {
@@ -82,6 +84,7 @@ class CalculatorPageFragment :
         }
 
         binding.etNumber.doAfterTextChanged {
+            binding.imageView.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.vibrate));
             val amountAsString = binding.etNumber.text.toString()
             if (amountAsString.isNotEmpty() && amountAsString[0] == '0' && calculatorViewModel.containsError(amountAsString)) {
                     binding.etConvertedNumber.setText("0")
@@ -111,5 +114,11 @@ class CalculatorPageFragment :
 
     private fun makeResultEditTextNotClickable() {
         binding.etConvertedNumber.isEnabled = false
+    }
+
+    private fun vibrateImageView() {
+        binding.imageView.setOnClickListener {
+            binding.imageView.startAnimation(AnimationUtils.loadAnimation(requireContext(), R.anim.vibrate));
+        }
     }
 }

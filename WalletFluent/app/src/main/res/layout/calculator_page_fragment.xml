@@ -67,9 +67,19 @@
                 android:id="@+id/btn_swap"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/swap_values"/>
+                android:src="@drawable/swap_values" />
 
         </com.google.android.material.card.MaterialCardView>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/autoCompleteFrom"
+            app:srcCompat="@mipmap/moneybag" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

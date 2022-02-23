@@ -4,6 +4,7 @@ import android.app.Application
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import ge.nlatsabidze.walletfluent.R
+import ge.nlatsabidze.walletfluent.extensions.isEmailValid
 import ge.nlatsabidze.walletfluent.ui.entry.userData.User
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
@@ -35,13 +36,11 @@ class FirebaseUserRepository @Inject constructor(
                             if (it.isSuccessful) {
                                 _currentUser.value = true
                             } else {
-                                _repositoryDialogError.value =
-                                    application.resources.getString(R.string.NotValidInformation)
+                                _repositoryDialogError.value = it.exception?.message.toString()
                             }
                         }
                     } else {
-                        _repositoryDialogError.value =
-                            application.resources.getString(R.string.InvalidRegistration)
+                        _repositoryDialogError.value = task.exception?.message.toString()
                     }
                 }
         }
@@ -60,15 +59,14 @@ class FirebaseUserRepository @Inject constructor(
                             application.resources.getString(R.string.VerificationDialog)
                     }
                 } else {
-                    _repositoryDialogError.value =
-                        application.resources.getString(R.string.InvalidRegistration)
+                    _repositoryDialogError.value = Task.exception?.message.toString()
                 }
             }
         }
     }
 
     fun resetUserPassword(email: String?) {
-        if (email!!.isNotEmpty()) {
+        if (email!!.isNotEmpty() && email.isEmailValid()) {
             firebaseAuth.sendPasswordResetEmail(email)
                 .addOnCompleteListener { userEmail ->
                     if (userEmail.isSuccessful) {

@@ -1,5 +1,6 @@
 package ge.nlatsabidze.walletfluent.ui.entry
 
+import android.graphics.Color
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AlertDialog
@@ -14,6 +15,7 @@ import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.MainActivity
 import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.databinding.FragmentRegisterBinding
+import ge.nlatsabidze.walletfluent.extensions.onSnack
 import ge.nlatsabidze.walletfluent.extensions.setOnSafeClickListener
 import ge.nlatsabidze.walletfluent.extensions.showDialogError
 import kotlinx.coroutines.flow.collect
@@ -38,12 +40,19 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
     }
 
     private fun registerUser() {
+        val shake: Animation = AnimationUtils.loadAnimation(requireContext(), R.anim.vibrate)
         with(binding) {
             val name = nameEditText.text.toString()
             val email = emailEditText.text.toString()
             val password = passwordEditText.text.toString()
             checkInputValidation(email, password)
-            loginViewModel.register(email, password, name, 1000)
+            if (name.isNotEmpty()) {
+                loginViewModel.register(email, password, name, 1000)
+            } else {
+                nameEditTextWrapper.startAnimation(shake)
+                nameEditTextWrapper.helperText = resources.getString(R.string.invalidField)
+                nameEditText.setBackgroundResource(R.drawable.border)
+            }
         }
     }
 

@@ -8,9 +8,13 @@ import javax.inject.Inject
 
 class CryptoRoomRepository @Inject constructor(private val currencyDao: CurrencyDao) {
 
-    suspend fun insert(marketItem: List<MarketsItem>) = currencyDao.insert(marketItem)
+    fun deleteAll() {
+        currencyDao.deleteAll()
+    }
+
+    suspend fun insert(marketItem: List<MarketsItem>) {
+        currencyDao.insert(marketItem)
+    }
 
     val cryptoValues = currencyDao.getCryptoValues()
-
-    fun deleteAll() = currencyDao.deleteAll()
 }

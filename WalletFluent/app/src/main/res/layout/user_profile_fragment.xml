@@ -18,9 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            app:cardCornerRadius="20dp"
-            app:cardElevation="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="15dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="MissingConstraints">
@@ -43,8 +41,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="50dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="5dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/accountInfo"
             tools:ignore="MissingConstraints">
@@ -102,8 +98,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="35dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="5dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/firstMaterial"
             tools:ignore="MissingConstraints">
@@ -162,8 +156,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="35dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="5dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/SecondMaterial"
             tools:ignore="MissingConstraints">
@@ -221,8 +213,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
             android:layout_marginTop="35dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="5dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/thirdMaterial"
             tools:ignore="MissingConstraints">

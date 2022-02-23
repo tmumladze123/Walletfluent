@@ -16,7 +16,7 @@
     <string name="register">რეგისტრაცია</string>
     <string name="PersonalInformation">პერსონალური მონაცემები</string>
     <string name="username">Username</string>
-    <string name="invalidField">Field is not filled</string>
+    <string name="invalidField">This field should not be left empty</string>
     <string name="signin">Sign in</string>
     <string name="sign_in"><u>Sign in</u></string>
     <string name="sign_up" translatable="false"><u>Sign up</u></string>
@@ -36,7 +36,7 @@
     <string name="NotValidInformation">Sorry, Data you have entered is invalid</string>
     <string name="VerificationDialog">Please, Verify your account using your email</string>
     <string name="ResetPasswordDialog">Please follow instructions on your Email</string>
-    <string name="ResetPasswordUsingEmailDialog">Please specify your email</string>
+    <string name="ResetPasswordUsingEmailDialog">Please specify correct email</string>
     <string name="DollarSign" translatable="false">$</string>
     <string name="MarketCapRank" translatable="false">Market cap rank #</string>
     <string name="AmountExceed" translatable="false">The amount you enter exceeds the current balance</string>
@@ -46,7 +46,7 @@
     <string name="change_password" translatable="false">Edit Password</string>
     <string name="transactions" translatable="false">Transactions</string>
     <string name="switch_mode" translatable="false">Switch Mode</string>
-    <string name="enter_purpose" translatable="false">Enter Purpose</string>
+    <string name="enter_purpose" translatable="false">Enter Description</string>
     <string name="add_item" translatable="false">Add History</string>
     <string name="email">Email</string>
     <string name="account_info" translatable="false">Account Info</string>
@@ -56,6 +56,14 @@
     <string name="SwitchToDark" translatable="false">Switch To Dark</string>
     <string name="SwitchToLight" translatable="false">Switch To Light</string>
     <string name="CheckConnection" translatable="false">In Order to use application, you should be connected to internet</string>
+    <string name="InternetRequired" translatable="false">Internet Connection Required!</string>
+    <string name="enter_amount" translatable="false">Enter Amount</string>
+    <string name="_2022" translatable="false">**** **** **** 2022</string>
+    <string name="_00_00" translatable="false">00.00 ₾</string>
+    <string name="current_balance" translatable="false">Current Balance</string>
+    <string name="userCurrentBalance" translatable="false">00.00₾</string>
+    <string name="add_expense" translatable="false">Add Expense</string>
+    <string name="add_income" translatable="false">Add Income</string>
 
 
     <string-array name="countries">

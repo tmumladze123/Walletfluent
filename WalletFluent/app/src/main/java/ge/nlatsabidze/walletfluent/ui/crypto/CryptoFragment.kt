@@ -82,6 +82,7 @@ class CryptoFragment : BaseFragment<FragmentCryptoBinding>(FragmentCryptoBinding
                     binding.spinKit.visibility = View.GONE
                 }
                 cryptoAdapter.cryptoExchanges = it
+                binding.rvCrypto.startLayoutAnimation()
             }
         }
     }
@@ -99,6 +100,7 @@ class CryptoFragment : BaseFragment<FragmentCryptoBinding>(FragmentCryptoBinding
                 ).collectLatest {
                     if (it.isNotEmpty()) {
                         cryptoAdapter.cryptoExchanges = it
+                        binding.rvCrypto.startLayoutAnimation()
                         binding.spinKit.visibility = View.GONE
                     } else {
                         binding.spinKit.visibility = View.VISIBLE

@@ -1,3 +1,8 @@
+# Demo
+
+
+https://user-images.githubusercontent.com/55893091/155425084-b510b0fd-e0dd-49d8-9251-c0106d8775e3.mp4
+
 # Walletfluent
 
 walletFluent is a daily application that will provide you with information on cryptocurrency and non-crypto currency, will count the amounts, if the relevant currency is specified. At the same time, it is used to store information of performed transactions, account balance, and personal information.
@@ -15,10 +20,6 @@ It is possible to see cryptocurrency details, understand current and past prices
 - [DataStore](https://developer.android.com/topic/libraries/architecture/datastore) - DataStore Part of Android Jetpack. Jetpack DataStore is a data storage solution that allows you to store key-value pairs or typed objects with protocol buffers. DataStore uses Kotlin coroutines and Flow to store data asynchronously, consistently, and transactionally.
 - [MpChart](https://github.com/PhilJay/MPAndroidChart) - A powerful & easy to use chart library for Android
 
-# Demo
-
-
-https://user-images.githubusercontent.com/55893091/155425084-b510b0fd-e0dd-49d8-9251-c0106d8775e3.mp4
 
 
 

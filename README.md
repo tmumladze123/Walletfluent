@@ -4,7 +4,7 @@ walletFluent is a daily application that will provide you with information on cr
 It is possible to see cryptocurrency details, understand current and past prices, and calculate the non-cryptocurrency conversion.
 # Features
 
-● Kotlin<br />
+- [AngularJS](https://breakdance.github.io/breakdance/) - HTML enhanced for web apps!
 ● MVVM design pattern<br />
 ● View Binding<br />
 ● Retrofit2<br />

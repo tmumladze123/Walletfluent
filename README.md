@@ -7,7 +7,7 @@ It is possible to see cryptocurrency details, understand current and past prices
 - [MVVM Design Pattern](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel) -Model-View-ViewModel (MVVM) is a structural design pattern that separates objects into three distinct groups: Models hold application data. They're usually structs or simple classes. Views display visual elements and controls on the screen
 - [View Binding](https://developer.android.com/topic/libraries/view-binding) - View binding is a feature that allows you to more easily write code that interacts with views. Once view binding is enabled in a module, it generates a binding class for each XML layout file present in that module. An instance of a binding class contains direct references to all views that have an ID in the corresponding layout.
 - [Retrofit2](https://square.github.io/retrofit/) - Retrofit is a type-safe REST client for Android, Java and Kotlin developed by Square. The library provides a powerful framework for authenticating and interacting with APIs and sending network requests with OkHttp. ... This library makes downloading JSON or XML data from a web API fairly straightforward.
-● Retrofit2<br />
+- [Kotlin Coroutines](https://developer.android.com/kotlin/coroutines#:~:text=A%20coroutine%20is%20a%20concurrency,simplify%20code%20that%20executes%20asynchronously.&text=On%20Android%2C%20coroutines%20help%20to,your%20app%20to%20become%20unresponsive.) - A coroutine is a concurrency design pattern that you can use on Android to simplify code that executes asynchronously. Coroutines were added to Kotlin in version 1.3 and are based on established concepts from other languages
 ● Kotlin Coroutine<br />
 ● Kotlin Flows<br />
 ● Room persistance library<br />

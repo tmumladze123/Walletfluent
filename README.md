@@ -38,6 +38,10 @@ It is possible to see cryptocurrency details, understand current and past prices
 
 
 
+https://user-images.githubusercontent.com/55893091/155418784-84d3a140-4ed5-43dd-83be-5bc06028a9fb.mp4
+
+
+
 
 
 

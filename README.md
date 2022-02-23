@@ -14,6 +14,13 @@ It is possible to see cryptocurrency details, understand current and past prices
 - [Dagger-Hilt](https://developer.android.com/training/dependency-injection/hilt-android) - Hilt provides a standard way to incorporate Dagger dependency injection into an Android application. The goals of Hilt are: To simplify Dagger-related infrastructure for Android apps. To create a standard set of components and scopes to ease setup, readability/understanding, and code sharing between apps.
 - [DataStore](https://developer.android.com/topic/libraries/architecture/datastore) - DataStore Part of Android Jetpack. Jetpack DataStore is a data storage solution that allows you to store key-value pairs or typed objects with protocol buffers. DataStore uses Kotlin coroutines and Flow to store data asynchronously, consistently, and transactionally.
 
+# Demo
+
+
+https://user-images.githubusercontent.com/55893091/155425084-b510b0fd-e0dd-49d8-9251-c0106d8775e3.mp4
+
+
+
 
 
 

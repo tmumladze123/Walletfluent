@@ -13,6 +13,7 @@ It is possible to see cryptocurrency details, understand current and past prices
 - [Firebase](https://firebase.google.com/docs) - Firebase is a Backend-as-a-Service (BaaS) app development platform that provides hosted backend services such as a realtime database, cloud storage, authentication, crash reporting, machine learning, remote configuration, and hosting for your static files.
 - [Dagger-Hilt](https://developer.android.com/training/dependency-injection/hilt-android) - Hilt provides a standard way to incorporate Dagger dependency injection into an Android application. The goals of Hilt are: To simplify Dagger-related infrastructure for Android apps. To create a standard set of components and scopes to ease setup, readability/understanding, and code sharing between apps.
 - [DataStore](https://developer.android.com/topic/libraries/architecture/datastore) - DataStore Part of Android Jetpack. Jetpack DataStore is a data storage solution that allows you to store key-value pairs or typed objects with protocol buffers. DataStore uses Kotlin coroutines and Flow to store data asynchronously, consistently, and transactionally.
+- [MpChart](https://github.com/PhilJay/MPAndroidChart) - A powerful & easy to use chart library for Android
 
 # Demo
 

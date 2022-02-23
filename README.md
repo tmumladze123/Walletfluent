@@ -4,7 +4,7 @@ walletFluent is a daily application that will provide you with information on cr
 It is possible to see cryptocurrency details, understand current and past prices, and calculate the non-cryptocurrency conversion.
 # Features
 
-- [AngularJS](https://breakdance.github.io/breakdance/) - HTML enhanced for web apps!
+- [MVVM Design Pattern](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel) -Model-View-ViewModel (MVVM) is a structural design pattern that separates objects into three distinct groups: Models hold application data. They're usually structs or simple classes. Views display visual elements and controls on the screen
 ● MVVM design pattern<br />
 ● View Binding<br />
 ● Retrofit2<br />

@@ -6,7 +6,7 @@
     <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
     <string name="nav_header_desc" translatable="false">Navigation header</string>
     <string name="action_settings" translatable="false">Settings</string>
-    <string name="login">log In</string>
+    <string name="login">logIn</string>
     <string name="currency">Currencies</string>
     <string name="language">ენა/Language</string>
     <string name="crypto">Crypto</string>
@@ -21,7 +21,7 @@
     <string name="sign_in"><u>Sign in</u></string>
     <string name="sign_up" translatable="false"><u>Sign up</u></string>
     <string name="signup" translatable="false">Sign up</string>
-    <string name="forgot_password"><u>Forgot Password</u></string>
+    <string name="forgot_password"><u>Forgot Password?</u></string>
     <string name="create_account" translatable="false">Create\nAccount</string>
     <string name="name">Name</string>
     <string name="password">Password</string>

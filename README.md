@@ -5,7 +5,7 @@ It is possible to see cryptocurrency details, understand current and past prices
 # Features
 
 - [MVVM Design Pattern](https://en.wikipedia.org/wiki/Model%E2%80%93view%E2%80%93viewmodel) -Model-View-ViewModel (MVVM) is a structural design pattern that separates objects into three distinct groups: Models hold application data. They're usually structs or simple classes. Views display visual elements and controls on the screen
-● MVVM design pattern<br />
+- [View Binding](https://developer.android.com/topic/libraries/view-binding) - View binding is a feature that allows you to more easily write code that interacts with views. Once view binding is enabled in a module, it generates a binding class for each XML layout file present in that module. An instance of a binding class contains direct references to all views that have an ID in the corresponding layout.
 ● View Binding<br />
 ● Retrofit2<br />
 ● Kotlin Coroutine<br />

@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.nlatsabidze.walletfluent.model.valuteModel.CommercialRates
 import ge.nlatsabidze.walletfluent.network.currencyNetwork.CurrencyRepositoryImpl
-import ge.nlatsabidze.walletfluent.roomDatabase.CurrencyRoomRepository.CurrencyRoomRepo
+import ge.nlatsabidze.walletfluent.roomDatabase.CurrencyRoomRepository.CurrencyRoomRepoImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CurrencyPageViewModel @Inject constructor(
     private val currencyRepository: CurrencyRepositoryImpl,
-    private val currencyRoomRepository: CurrencyRoomRepo
+    private val currencyRoomRepository: CurrencyRoomRepoImpl
 ) :
     ViewModel() {
 
@@ -38,8 +38,8 @@ class CurrencyPageViewModel @Inject constructor(
                 currencyRepository.getCountryCurrencies().collectLatest {
                     if (it.data?.commercialRatesList != null) {
                         _commercialRates.value = it.data.commercialRatesList
-                        currencyRoomRepository.deleteAll()
-                        currencyRoomRepository.insert(it.data.commercialRatesList)
+                        currencyRoomRepository.deleteAllValues()
+                        currencyRoomRepository.insertValues(it.data.commercialRatesList)
                     }
                 }
             }

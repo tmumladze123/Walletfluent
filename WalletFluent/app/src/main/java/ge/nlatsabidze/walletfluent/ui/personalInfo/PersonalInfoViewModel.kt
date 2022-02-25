@@ -67,9 +67,8 @@ class PersonalInfoViewModel @Inject constructor(
     fun getTransactions() {
         val childEventListener = object : ChildEventListener {
             override fun onChildAdded(dataSnapshot: DataSnapshot, previousChildName: String?) {
-                if (dataSnapshot.childrenCount > 0 && counter != dataSnapshot.childrenCount) {
+                if (dataSnapshot.childrenCount > 0) {
                     for (data in dataSnapshot.children) {
-                        counter++
                         val userTransaction: UserTransaction? =
                             data.getValue(UserTransaction::class.java)
                         viewModelScope.launch {

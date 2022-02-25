@@ -8,6 +8,7 @@ import android.util.Log.d
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
@@ -34,30 +35,26 @@ class PersonalInfoFragment :
     private var defineOnClick: Boolean = false
 
     @Inject
-    lateinit var checkInternetConnection: CheckInternetConnection
-
-    @Inject
     lateinit var checkLiveConnection: CheckLiveConnection
 
     var relatedViews: ArrayList<View> = ArrayList()
 
     override fun start() {
-        observers()
+
+        personalInfoViewModel.initializeFirebase()
+        personalInfoViewModel.setInformationFromDatabase()
+        personalInfoViewModel.getTransactions()
+        personalInfoViewModel.expireDate()
+
+        setViews()
         checkLiveConnection()
 
-        relatedViews.add(binding.recyclerCardView)
-        relatedViews.add(binding.yourCard)
-        relatedViews.add(binding.tvAvailable)
-        relatedViews.add(binding.btnIncrease)
-        relatedViews.add(binding.btnDecrease)
-        relatedViews.add(binding.balance)
+        initRecycler()
 
-        initializeRecyclerView()
-
-        if (!personalInfoViewModel.checkConnection()) {
-            changeVisibility(relatedViews, View.INVISIBLE)
-            binding.progressBarInfo.visibility = View.VISIBLE
-        }
+//        if (!personalInfoViewModel.checkConnection()) {
+//            changeVisibility(relatedViews, View.INVISIBLE)
+//            binding.progressBarInfo.visibility = View.VISIBLE
+//        }
 
         binding.btnIncrease.setOnSafeClickListener {
             defineOnClick = true
@@ -76,6 +73,10 @@ class PersonalInfoFragment :
                 )
             findNavController().navigate(actionToDecrease)
         }
+    }
+
+    override fun observes() {
+        observers()
     }
 
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
@@ -121,7 +122,7 @@ class PersonalInfoFragment :
 
     }
 
-    private fun initializeRecyclerView() {
+    private fun initRecycler() {
         transactionAdapter = TransactionsAdapter()
         binding.rvItems.adapter = transactionAdapter
         binding.rvItems.layoutManager =
@@ -129,17 +130,32 @@ class PersonalInfoFragment :
     }
 
     private fun checkLiveConnection() {
-        checkLiveConnection.observe(viewLifecycleOwner) {
-            if (!it) {
-                onSnack(binding.root, resources.getString(R.string.InternetRequired), Color.RED)
-            } else {
-                binding.progressBarInfo.visibility = View.INVISIBLE
-                changeVisibility(relatedViews, View.VISIBLE)
-                personalInfoViewModel.initializeFirebase()
-                personalInfoViewModel.setInformationFromDatabase()
-                personalInfoViewModel.getTransactions()
-                personalInfoViewModel.expireDate()
-            }
+        viewLifecycleOwner.lifecycleScope.launch {
+            checkLiveConnection.asFlow()
+                .flowWithLifecycle(
+                    viewLifecycleOwner.lifecycle,
+                    Lifecycle.State.STARTED
+                ).collect {
+                    if (!it) {
+                        onSnack(
+                            binding.root,
+                            resources.getString(R.string.InternetRequired),
+                            Color.RED
+                        )
+                    } else {
+                        binding.progressBarInfo.visibility = View.INVISIBLE
+                        changeVisibility(relatedViews, View.VISIBLE)
+                    }
+                }
         }
+    }
+
+    private fun setViews() {
+        relatedViews.add(binding.recyclerCardView)
+        relatedViews.add(binding.yourCard)
+        relatedViews.add(binding.tvAvailable)
+        relatedViews.add(binding.btnIncrease)
+        relatedViews.add(binding.btnDecrease)
+        relatedViews.add(binding.balance)
     }
 }

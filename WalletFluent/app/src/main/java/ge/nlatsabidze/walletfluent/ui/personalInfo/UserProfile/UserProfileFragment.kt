@@ -4,10 +4,12 @@ import android.graphics.Color
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
+import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.checkConnectivity.CheckLiveConnection
 import ge.nlatsabidze.walletfluent.databinding.UserProfileFragmentBinding
 import ge.nlatsabidze.walletfluent.extensions.changeVisibility
@@ -23,14 +25,17 @@ class UserProfileFragment :
     private val userViewModel: UserProfileViewModel by viewModels()
 
     @Inject
-    lateinit var connectionManager: CheckLiveConnection
+    lateinit var checkLiveConnection: CheckLiveConnection
 
     var relatedViews: ArrayList<View> = ArrayList()
 
     override fun start() {
+        userViewModel.initializeFirebase()
+        userViewModel.setInformationFromDatabase()
+
         setViewToList()
         checkLiveConnection()
-        checkStableConnection()
+//        checkStableConnection()
     }
 
     override fun observes() {
@@ -76,17 +81,22 @@ class UserProfileFragment :
     }
 
     private fun checkLiveConnection() {
-        connectionManager.observe(viewLifecycleOwner) {
-            if (it) {
-                changeVisibility(relatedViews, View.VISIBLE)
-                binding.progressBarProfile.visibility = View.INVISIBLE
-                userViewModel.initializeFirebase()
-                userViewModel.setInformationFromDatabase()
+        viewLifecycleOwner.lifecycleScope.launch {
+            checkLiveConnection.asFlow()
+                .flowWithLifecycle(
+                    viewLifecycleOwner.lifecycle,
+                    Lifecycle.State.STARTED
+                ).collect {
+                    if (it) {
+                        changeVisibility(relatedViews, View.VISIBLE)
+                        binding.progressBarProfile.visibility = View.INVISIBLE
 
-            } else if (!it) {
-                onSnack(binding.root, "Internet Connection Required", Color.RED)
-            }
+                    } else if (!it) {
+                        onSnack(binding.root, "Internet Connection Required", Color.RED)
+                    }
+                }
         }
+
     }
 
     private fun checkStableConnection() {

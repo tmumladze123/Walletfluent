@@ -5,14 +5,17 @@ import android.content.Context
 import android.content.Context.CONNECTIVITY_SERVICE
 import android.net.ConnectivityManager
 import android.net.Network
+import android.net.NetworkCapabilities
 import android.net.NetworkCapabilities.NET_CAPABILITY_INTERNET
 import android.net.NetworkRequest
+import android.os.Build
 import android.util.Log
 import androidx.lifecycle.LiveData
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class CheckLiveConnection @Inject constructor(@ApplicationContext context: Context): LiveData<Boolean>() {
+class CheckLiveConnection @Inject constructor(@ApplicationContext context: Context) :
+    LiveData<Boolean>() {
 
     private lateinit var networkCallback: ConnectivityManager.NetworkCallback
     private val cm = context.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -26,7 +29,17 @@ class CheckLiveConnection @Inject constructor(@ApplicationContext context: Conte
         networkCallback = createNetworkCallback()
         val networkRequest = NetworkRequest.Builder()
             .addCapability(NET_CAPABILITY_INTERNET)
+            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
             .build()
+
+        val checkInitialNet = cm.getNetworkCapabilities(cm.activeNetwork)
+            ?.hasCapability(NET_CAPABILITY_INTERNET) == true
+
+        if (!checkInitialNet) {
+            postValue(false)
+        }
+
         cm.registerNetworkCallback(networkRequest, networkCallback)
     }
 

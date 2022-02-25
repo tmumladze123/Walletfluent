@@ -1,7 +1,6 @@
 package ge.nlatsabidze.walletfluent.ui.personalInfo
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -17,8 +16,7 @@ class PersonalInfoViewModel @Inject constructor(
     var firebaseAuth: FirebaseAuth,
     var database: DatabaseReference,
     var checkInternetConnection: CheckInternetConnection,
-    application: Application
-) : AndroidViewModel(application) {
+) : ViewModel() {
 
     private val _balance = MutableSharedFlow<String>()
     val balance: MutableSharedFlow<String> get() = _balance
@@ -31,8 +29,6 @@ class PersonalInfoViewModel @Inject constructor(
 
     private val _expireYear = MutableSharedFlow<String>()
     val expireYear: MutableSharedFlow<String> get() = _expireYear
-
-    var counter: Long = 0
 
     fun setInformationFromDatabase() {
 
@@ -141,10 +137,6 @@ class PersonalInfoViewModel @Inject constructor(
         var yearToInt = year.toInt()
         yearToInt += 5
         return yearToInt.toString()
-    }
-
-    fun checkConnection(): Boolean {
-        return checkInternetConnection.isOnline(getApplication())
     }
 
 }

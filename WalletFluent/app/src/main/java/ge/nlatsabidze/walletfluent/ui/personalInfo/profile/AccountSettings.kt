@@ -41,10 +41,9 @@ class AccountSettings : BaseFragment<AccountSettingsFragmentBinding>(AccountSett
             setUpUi()
         }
 
-        if (accountsSettingsViewModel.checkConnection()) {
-            accountsSettingsViewModel.initializeFirebase()
-            accountsSettingsViewModel.getUserName()
-        }
+        accountsSettingsViewModel.initializeFirebase()
+        accountsSettingsViewModel.getUserName()
+
 
         binding.btnTransactions.setOnClickListener { navigateToTransactionsPage() }
         binding.btnLogout.setOnClickListener{
@@ -63,6 +62,9 @@ class AccountSettings : BaseFragment<AccountSettingsFragmentBinding>(AccountSett
             accountsSettingsViewModel.changeUserPassword()
         }
 
+    }
+
+    override fun observes() {
         observers()
     }
 

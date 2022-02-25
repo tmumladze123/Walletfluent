@@ -51,11 +51,6 @@ class PersonalInfoFragment :
 
         initRecycler()
 
-//        if (!personalInfoViewModel.checkConnection()) {
-//            changeVisibility(relatedViews, View.INVISIBLE)
-//            binding.progressBarInfo.visibility = View.VISIBLE
-//        }
-
         binding.btnIncrease.setOnSafeClickListener {
             defineOnClick = true
             val actionToIncrease =

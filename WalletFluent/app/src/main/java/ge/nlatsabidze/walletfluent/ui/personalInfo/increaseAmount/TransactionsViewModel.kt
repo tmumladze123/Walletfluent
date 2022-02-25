@@ -17,9 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class  TransactionsViewModel @Inject constructor(
     var firebaseAuth: FirebaseAuth,
-    var database: DatabaseReference,
-    application: Application,
-) : AndroidViewModel(application) {
+    var database: DatabaseReference
+) : ViewModel() {
 
     private val _setAmount = MutableSharedFlow<Int>()
     val setAmount: MutableSharedFlow<Int> get() = _setAmount

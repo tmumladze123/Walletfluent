@@ -30,12 +30,12 @@ class UserProfileFragment :
     var relatedViews: ArrayList<View> = ArrayList()
 
     override fun start() {
+
         userViewModel.initializeFirebase()
         userViewModel.setInformationFromDatabase()
 
         setViewToList()
         checkLiveConnection()
-//        checkStableConnection()
     }
 
     override fun observes() {
@@ -97,13 +97,6 @@ class UserProfileFragment :
                 }
         }
 
-    }
-
-    private fun checkStableConnection() {
-        if (!userViewModel.checkConnection()) {
-            changeVisibility(relatedViews, View.INVISIBLE)
-            binding.progressBarProfile.visibility = View.VISIBLE
-        }
     }
 
     private fun setViewToList() {

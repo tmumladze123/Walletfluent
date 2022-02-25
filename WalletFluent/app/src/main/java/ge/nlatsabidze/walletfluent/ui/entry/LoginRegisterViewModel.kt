@@ -1,16 +1,13 @@
 package ge.nlatsabidze.walletfluent.ui.entry
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import ge.nlatsabidze.walletfluent.ui.entry.entryRepository.FirebaseUserRepository
+import ge.nlatsabidze.walletfluent.ui.entry.entryRepository.FirebaseUserRepositoryImpl
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginRegisterViewModel @Inject constructor(private val firebaseRepository: FirebaseUserRepository) :
+class LoginRegisterViewModel @Inject constructor(private val firebaseRepository: FirebaseUserRepositoryImpl) :
     ViewModel() {
 
     private var _userMutableLive = MutableStateFlow<Boolean>(false)

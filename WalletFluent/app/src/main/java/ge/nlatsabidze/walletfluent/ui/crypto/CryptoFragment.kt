@@ -41,7 +41,7 @@ class CryptoFragment : BaseFragment<FragmentCryptoBinding>(FragmentCryptoBinding
     }
 
     private fun displayProgressBar() {
-        cryptoViewModel.showLoadingBar()
+
         viewLifecycleOwner.lifecycleScope.launch {
             cryptoViewModel.showLoadingViewModel.flowWithLifecycle(
                 viewLifecycleOwner.lifecycle,

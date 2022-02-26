@@ -14,20 +14,16 @@ class CurrencyRepositoryImpl @Inject constructor(private var apiService: Currenc
 
     private var _showLoading = MutableStateFlow<Boolean>(false)
 
-    override suspend fun getCountryCurrencies(): Flow<Resource<Currency>> {
-        return flow {
-            emit(handleResponse {
-                apiService.getCurrencies()
-            })
-        }.flowOn(Dispatchers.IO)
+    override suspend fun getCountryCurrencies(): Resource<Currency> {
+        return handleResponse {
+            apiService.getCurrencies()
+        }
     }
 
-    override suspend fun getConvertedValues(amount: Double, from: String, to: String): Flow<Resource<Converter>> {
-        return flow {
-            emit(handleResponse {
-                apiService.getConverterValues(amount, from, to)
-            })
-        }.flowOn(Dispatchers.IO)
+    override suspend fun getConvertedValues(amount: Double, from: String, to: String): Resource<Converter> {
+        return handleResponse {
+            apiService.getConverterValues(amount, from, to)
+        }
     }
 
     private suspend fun <T> handleResponse(apiCall: suspend() -> Response<T>): Resource<T> {

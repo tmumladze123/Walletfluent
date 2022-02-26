@@ -15,7 +15,11 @@ import ge.nlatsabidze.walletfluent.constants.base.BaseUrlConstants.SECOND_BASE_U
 import ge.nlatsabidze.walletfluent.constants.firebaseDatabase.FirebaseDatabase.DATABASE
 import ge.nlatsabidze.walletfluent.constants.firebaseDatabase.FirebaseDatabase.DATABASE_REFERENCE
 import ge.nlatsabidze.walletfluent.network.cryptoNetwork.CryptoApi
+import ge.nlatsabidze.walletfluent.network.cryptoNetwork.CryptoRepository
+import ge.nlatsabidze.walletfluent.network.cryptoNetwork.CryptoRepositoryImpl
 import ge.nlatsabidze.walletfluent.network.currencyNetwork.CurrencyApi
+import ge.nlatsabidze.walletfluent.network.currencyNetwork.CurrencyRepository
+import ge.nlatsabidze.walletfluent.network.currencyNetwork.CurrencyRepositoryImpl
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
@@ -57,5 +61,17 @@ object ApiModule {
     @Provides
     @Singleton
     fun provideDatabaseReference(): DatabaseReference = FirebaseDatabase.getInstance(DATABASE).getReference(DATABASE_REFERENCE)
+
+    @Provides
+    @Singleton
+    fun provideCurrencyRepository(api: CurrencyApi): CurrencyRepository {
+        return CurrencyRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCryptoRepository(api: CryptoApi): CryptoRepository {
+        return CryptoRepositoryImpl(api)
+    }
 
 }

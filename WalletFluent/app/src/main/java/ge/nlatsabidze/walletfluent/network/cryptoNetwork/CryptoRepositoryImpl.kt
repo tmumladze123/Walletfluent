@@ -13,20 +13,16 @@ class CryptoRepositoryImpl @Inject constructor(private var apiService: CryptoApi
     private var _showLoading = MutableStateFlow<Boolean>(false)
     val showLoading: MutableStateFlow<Boolean> get() = _showLoading
 
-    override suspend fun getMarketValues(): Flow<Resource<List<MarketsItem>>> {
-        return flow {
-            emit(handleResponse {
-                apiService.getMarketItems()
-            })
-        }.flowOn(Dispatchers.IO)
+    override suspend fun getMarketValues(): Resource<List<MarketsItem>> {
+        return handleResponse {
+            apiService.getMarketItems()
+        }
     }
 
-    override suspend fun getChartValues(id: String): Flow<Resource<ChartItem>> {
-        return flow {
-            emit (handleResponse {
-                apiService.getChartItems(id)
-            })
-        }.flowOn(Dispatchers.IO)
+    override suspend fun getChartValues(id: String): Resource<ChartItem> {
+        return handleResponse {
+            apiService.getChartItems(id)
+        }
     }
 
 

@@ -1,15 +1,8 @@
 package ge.nlatsabidze.walletfluent
 
 
-enum class ApiStatus {
-    SUCCESS,
-    ERROR
-}
-
-sealed class Resource<out T>(val status: ApiStatus, val data: T?, val message: String?) {
-
-    data class Success<out R>(val _data: R?) :
-        Resource<R>(status = ApiStatus.SUCCESS, data = _data, message = null)
-    data class Error(val exception: String) :
-        Resource<Nothing>(status = ApiStatus.ERROR, data = null, message = exception)
+sealed class Resource<T>(val data: T? = null, val message: String? = null, val empty: Int? = null) {
+    class Loading<T> : Resource<T>()
+    class Success<T>(data: T) : Resource<T>(data)
+    class Error<T>(message: String, data: T? = null) : Resource<T>(data, message)
 }

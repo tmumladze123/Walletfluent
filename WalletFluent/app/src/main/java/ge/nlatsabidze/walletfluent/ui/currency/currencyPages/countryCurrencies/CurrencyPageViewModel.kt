@@ -3,20 +3,21 @@ package ge.nlatsabidze.walletfluent.ui.currency.currencyPages.countryCurrencies
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import ge.nlatsabidze.walletfluent.Resource
 import ge.nlatsabidze.walletfluent.model.valuteModel.CommercialRates
-import ge.nlatsabidze.walletfluent.network.currencyNetwork.CurrencyRepositoryImpl
+import ge.nlatsabidze.walletfluent.useCases.GetCountryCurrenciesUseCase
 import ge.nlatsabidze.walletfluent.roomDatabase.CurrencyRoomRepository.CurrencyRoomRepoImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class CurrencyPageViewModel @Inject constructor(
-    private val currencyRepository: CurrencyRepositoryImpl,
-    private val currencyRoomRepository: CurrencyRoomRepoImpl
+    private val currencyRoomRepository: CurrencyRoomRepoImpl,
+    private val getCountryCurrienciescase: GetCountryCurrenciesUseCase
 ) :
     ViewModel() {
 
@@ -28,19 +29,22 @@ class CurrencyPageViewModel @Inject constructor(
 
     val currencyValues = currencyRoomRepository.currencyValues
 
-    init {
-        _showLoadingViewModelState = currencyRepository.showLoadingError()
-    }
-
     fun getCommercialRates() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                currencyRepository.getCountryCurrencies().collectLatest {
-                    if (it.data?.commercialRatesList != null) {
-                        _commercialRates.value = it.data.commercialRatesList
-                        currencyRoomRepository.deleteAllValues()
-                        currencyRoomRepository.insertValues(it.data.commercialRatesList)
+                getCountryCurrienciescase().collect {
+                    when (it) {
+                        is Resource.Success -> {
+                            _showLoadingViewModelState.value = false
+                            _commercialRates.value = it.data?.commercialRatesList!!
+                            currencyRoomRepository.deleteAllValues()
+                            currencyRoomRepository.insertValues(it.data.commercialRatesList)
+                        }
+                        is Resource.Loading -> {
+                            _showLoadingViewModelState.value = true
+                        }
                     }
+
                 }
             }
         }

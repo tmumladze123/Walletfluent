@@ -3,9 +3,11 @@ package ge.nlatsabidze.walletfluent.ui.crypto
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import ge.nlatsabidze.walletfluent.Resource
 import ge.nlatsabidze.walletfluent.model.cryptoModel.MarketsItem
 import ge.nlatsabidze.walletfluent.network.cryptoNetwork.CryptoRepositoryImpl
 import ge.nlatsabidze.walletfluent.roomDatabase.CurrencyRoomRepository.CryptoRoomRepositoryImpl
+import ge.nlatsabidze.walletfluent.useCases.GetMarketValuesUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -15,7 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CryptoViewModel @Inject constructor(
-    private val cryptoService: CryptoRepositoryImpl,
+    private val getMarketValuesUseCase: GetMarketValuesUseCase,
     private val currencyRoomRepository: CryptoRoomRepositoryImpl
 ) : ViewModel() {
 
@@ -30,21 +32,19 @@ class CryptoViewModel @Inject constructor(
     fun getCryptoExchangeValues() {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                cryptoService.getMarketValues().collectLatest {
-                    if (it.data != null) {
-                        _marketValues.value = it.data
-                        currencyRoomRepository.deleteAllValues()
-                        currencyRoomRepository.insert(it.data)
+                getMarketValuesUseCase().collectLatest {
+                    when (it) {
+                        is Resource.Success -> {
+                            _showLoadingViewModelState.value = false
+                            _marketValues.value = it.data!!
+                            currencyRoomRepository.deleteAllValues()
+                            currencyRoomRepository.insert(it.data)
+                        }
+                        is Resource.Loading -> {
+                            _showLoadingViewModelState.value = true
+                        }
                     }
                 }
-            }
-        }
-    }
-
-    fun showLoadingBar() {
-        viewModelScope.launch {
-            cryptoService.showLoading.collectLatest {
-                _showLoadingViewModelState.value = it
             }
         }
     }

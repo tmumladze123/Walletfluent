@@ -7,6 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface CurrencyRepository {
 
-    suspend fun getCountryCurrencies(): Flow<Resource<Currency>>
-    suspend fun getConvertedValues(amount: Double, from: String, to: String): Flow<Resource<Converter>>
+    suspend fun getCountryCurrencies(): Resource<Currency>
+    suspend fun getConvertedValues(amount: Double, from: String, to: String): Resource<Converter>
 }

@@ -1,11 +1,13 @@
 package ge.nlatsabidze.walletfluent.roomDatabase.CurrencyRoomRepository
 
+import ge.nlatsabidze.walletfluent.model.cryptoModel.MarketsItem
 import ge.nlatsabidze.walletfluent.model.valuteModel.CommercialRates
-import ge.nlatsabidze.walletfluent.roomDatabase.RoomRepository
 import ge.nlatsabidze.walletfluent.roomDatabase.daoInterface.CurrencyDao
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class CurrencyRoomRepoImpl @Inject constructor(private val currencyDao: CurrencyDao): RoomRepository {
+class CurrencyRoomRepoImpl @Inject constructor(private val currencyDao: CurrencyDao):
+    CurrencyRoomRepository {
 
     override fun deleteAllValues() {
         currencyDao.deleteAllFromCurrency()
@@ -15,5 +17,9 @@ class CurrencyRoomRepoImpl @Inject constructor(private val currencyDao: Currency
         currencyDao.insertCurrency(list)
     }
 
-    val currencyValues = currencyDao.getCurrencyValues()
+    override fun getAllValues(): Flow<List<CommercialRates>> {
+        return currencyDao.getCurrencyValues()
+    }
+
+//    val currencyValues = currencyDao.getCurrencyValues()
 }

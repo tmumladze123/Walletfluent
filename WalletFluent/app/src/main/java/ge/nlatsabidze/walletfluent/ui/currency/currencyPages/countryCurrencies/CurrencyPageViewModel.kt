@@ -5,8 +5,10 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.nlatsabidze.walletfluent.Resource
 import ge.nlatsabidze.walletfluent.model.valuteModel.CommercialRates
+import ge.nlatsabidze.walletfluent.roomDatabase.CryptoRoomRepository.cryptoUseCases.CryptoRoomUseCases
 import ge.nlatsabidze.walletfluent.useCases.GetCountryCurrenciesUseCase
 import ge.nlatsabidze.walletfluent.roomDatabase.CurrencyRoomRepository.CurrencyRoomRepoImpl
+import ge.nlatsabidze.walletfluent.roomDatabase.CurrencyRoomRepository.CurrencyUseCases.CurrencyRoomUseCases
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
@@ -17,7 +19,8 @@ import javax.inject.Inject
 @HiltViewModel
 class CurrencyPageViewModel @Inject constructor(
     private val currencyRoomRepository: CurrencyRoomRepoImpl,
-    private val getCountryCurrienciescase: GetCountryCurrenciesUseCase
+    private val getCountryCurrienciescase: GetCountryCurrenciesUseCase,
+    private val currencyRoomUseCases: CurrencyRoomUseCases
 ) :
     ViewModel() {
 
@@ -27,7 +30,7 @@ class CurrencyPageViewModel @Inject constructor(
     private var _showLoadingViewModelState = MutableStateFlow<Boolean>(false)
     val showLoadingViewModel: MutableStateFlow<Boolean> get() = _showLoadingViewModelState
 
-    val currencyValues = currencyRoomRepository.currencyValues
+    val currencyValues = currencyRoomUseCases.getValuesUseCase()
 
     fun getCommercialRates() {
         viewModelScope.launch {
@@ -37,8 +40,8 @@ class CurrencyPageViewModel @Inject constructor(
                         is Resource.Success -> {
                             _showLoadingViewModelState.value = false
                             _commercialRates.value = it.data?.commercialRatesList!!
-                            currencyRoomRepository.deleteAllValues()
-                            currencyRoomRepository.insertValues(it.data.commercialRatesList)
+                            currencyRoomUseCases.deleteValues()
+                            currencyRoomUseCases.insertValuesUseCase(it.data.commercialRatesList)
                         }
                         is Resource.Loading -> {
                             _showLoadingViewModelState.value = true

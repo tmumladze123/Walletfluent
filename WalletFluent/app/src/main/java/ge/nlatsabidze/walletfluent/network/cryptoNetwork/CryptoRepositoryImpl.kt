@@ -8,10 +8,8 @@ import kotlinx.coroutines.flow.*
 import retrofit2.Response
 import javax.inject.Inject
 
-class CryptoRepositoryImpl @Inject constructor(private var apiService: CryptoApi): CryptoRepository {
-
-    private var _showLoading = MutableStateFlow<Boolean>(false)
-    val showLoading: MutableStateFlow<Boolean> get() = _showLoading
+class CryptoRepositoryImpl @Inject constructor(private var apiService: CryptoApi) :
+    CryptoRepository {
 
     override suspend fun getMarketValues(): Resource<List<MarketsItem>> {
         return handleResponse {
@@ -26,18 +24,16 @@ class CryptoRepositoryImpl @Inject constructor(private var apiService: CryptoApi
     }
 
 
-    private suspend fun <T> handleResponse(apiCall: suspend() -> Response<T>): Resource<T> {
-        _showLoading.value = true
+    private suspend fun <T> handleResponse(apiCall: suspend () -> Response<T>): Resource<T> {
         try {
             val response = apiCall()
             val body = response.body()
             if (response.isSuccessful && body != null) {
-                _showLoading.value = false
                 return Resource.Success(body)
             }
             return Resource.Error(response.errorBody().toString())
 
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             return Resource.Error("exception")
         }
     }

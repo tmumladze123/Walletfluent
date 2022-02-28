@@ -1,4 +1,5 @@
 package ge.nlatsabidze.walletfluent.network.currencyNetwork
+
 import ge.nlatsabidze.walletfluent.Resource
 import ge.nlatsabidze.walletfluent.model.valuteModel.Converter
 import ge.nlatsabidze.walletfluent.model.valuteModel.Currency
@@ -10,9 +11,8 @@ import kotlinx.coroutines.flow.flowOn
 import retrofit2.Response
 import javax.inject.Inject
 
-class CurrencyRepositoryImpl @Inject constructor(private var apiService: CurrencyApi): CurrencyRepository {
-
-    private var _showLoading = MutableStateFlow<Boolean>(false)
+class CurrencyRepositoryImpl @Inject constructor(private var apiService: CurrencyApi) :
+    CurrencyRepository {
 
     override suspend fun getCountryCurrencies(): Resource<Currency> {
         return handleResponse {
@@ -20,29 +20,28 @@ class CurrencyRepositoryImpl @Inject constructor(private var apiService: Currenc
         }
     }
 
-    override suspend fun getConvertedValues(amount: Double, from: String, to: String): Resource<Converter> {
+    override suspend fun getConvertedValues(
+        amount: Double,
+        from: String,
+        to: String
+    ): Resource<Converter> {
         return handleResponse {
             apiService.getConverterValues(amount, from, to)
         }
     }
 
-    private suspend fun <T> handleResponse(apiCall: suspend() -> Response<T>): Resource<T> {
-        _showLoading.value = true
+    private suspend fun <T> handleResponse(apiCall: suspend () -> Response<T>): Resource<T> {
         try {
             val response = apiCall()
             val body = response.body()
             if (response.isSuccessful && body != null) {
-                _showLoading.value = false
                 return Resource.Success(body)
             }
             return Resource.Error(response.errorBody().toString())
 
-        }catch (e: Exception) {
+        } catch (e: Exception) {
             return Resource.Error("exception")
         }
     }
 
-    fun showLoadingError(): MutableStateFlow<Boolean> {
-        return _showLoading
-    }
 }

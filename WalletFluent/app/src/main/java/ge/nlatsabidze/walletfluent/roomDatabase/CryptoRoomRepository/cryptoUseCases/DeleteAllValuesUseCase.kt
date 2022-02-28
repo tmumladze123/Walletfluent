@@ -6,6 +6,7 @@ import javax.inject.Inject
 class DeleteAllValuesUseCase @Inject constructor(
     private val cryptoRoomRepository: CryptoRoomRepository
 ) {
+
     operator fun invoke() {
         cryptoRoomRepository.deleteAllValues()
     }

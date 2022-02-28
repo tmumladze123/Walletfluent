@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -17,6 +18,7 @@ import ge.nlatsabidze.walletfluent.checkConnectivity.CheckLiveConnection
 import ge.nlatsabidze.walletfluent.databinding.TransactionsFragmentBinding
 import ge.nlatsabidze.walletfluent.extensions.showDialogError
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
@@ -35,9 +37,6 @@ class TransactionsFragment : BottomSheetDialogFragment() {
     @Inject
     lateinit var connectionManager: CheckLiveConnection
 
-    @Inject
-    lateinit var checkInternetConnection: CheckInternetConnection
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -49,11 +48,17 @@ class TransactionsFragment : BottomSheetDialogFragment() {
     }
 
     private fun start() {
+        var checker = false
+        viewLifecycleOwner.lifecycleScope.launch {
+            connectionManager.asFlow().collectLatest {
+                checker = it
+            }
+        }
 
         transactionsViewModel.initializeFirebase()
 
         binding.btnIncreaseAmount.setOnClickListener {
-            if (checkInternetConnection.isOnline(requireContext())) {
+            if (checker) {
                 if (binding.etEnterAmount.text!!.isNotEmpty() && binding.etPurpose.text!!.isNotEmpty()) {
                     if (args.defineClickType) {
                         transactionsViewModel.pushTransaction(

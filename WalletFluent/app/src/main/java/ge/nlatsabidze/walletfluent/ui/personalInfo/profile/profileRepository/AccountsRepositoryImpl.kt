@@ -2,22 +2,24 @@ package ge.nlatsabidze.walletfluent.ui.personalInfo.profile.profileRepository
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import ge.nlatsabidze.walletfluent.Resource
 import ge.nlatsabidze.walletfluent.ui.entry.entryRepository.FirebaseUserRepositoryImpl
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class AccountsRepositoryImpl @Inject constructor(
     var firebaseRepository: FirebaseUserRepositoryImpl,
     var firebaseAuth: FirebaseAuth,
     var database: DatabaseReference
-): AccountsRepository {
-
-    private val _userName = MutableStateFlow<String>("")
-    val userName: MutableStateFlow<String> get() = _userName
-
-    private val _showChangePasswordDialog = MutableStateFlow<String>("Follow the instructions in the email.")
-    val showChangePasswordDialog: MutableStateFlow<String> get() = _showChangePasswordDialog
-
+) : AccountsRepository {
 
     override fun initializeFirebase() {
         var firebaseUser = firebaseAuth.currentUser!!
@@ -27,32 +29,41 @@ class AccountsRepositoryImpl @Inject constructor(
                 .getReference("Users").child(firebaseUser.uid)
     }
 
-    override fun changeUserPassword() {
-        database.addValueEventListener(object : ValueEventListener {
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun changeUserPassword(): Flow<Resource<String>> = callbackFlow {
+        val listener = database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val email = snapshot.child("email").value.toString()
                 firebaseRepository.resetUserPassword(email)
 
-
-                _showChangePasswordDialog.value = ("Follow the instructions in the email.")
-
-
+                trySend(Resource.Success("Follow the instructions in the email."))
             }
 
             override fun onCancelled(error: DatabaseError) {}
+
         })
+
+        awaitClose {
+            database.removeEventListener(listener)
+        }
     }
 
-    override fun getUserName() {
-        database.addValueEventListener(object: ValueEventListener {
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun getUserName(): Flow<Resource<String>> = callbackFlow {
+        val listener = database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val userName = snapshot.child("name").value.toString()
-                _userName.value = userName
-
+                trySend(Resource.Success(userName))
             }
 
-            override fun onCancelled(error: DatabaseError) {}
+            override fun onCancelled(error: DatabaseError) {
+                trySend(Resource.Error("Exception"))
+            }
         })
+
+        awaitClose {
+            database.removeEventListener(listener)
+        }
     }
 
     override fun logOutCurrentUser() {

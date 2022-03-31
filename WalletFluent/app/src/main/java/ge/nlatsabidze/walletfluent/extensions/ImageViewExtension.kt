@@ -7,6 +7,10 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
 import ge.nlatsabidze.walletfluent.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 
 fun ImageView.setImage(url:String?) {
     Glide.with(context).load(url).placeholder(R.drawable.borderlayout).into(this)
@@ -20,4 +24,11 @@ fun onSnack(view: View, text: String, color: Int) {
     val textView = snackbarView.findViewById(com.google.android.material.R.id.snackbar_text) as TextView
     textView.textSize = 10f
     snackbar.show()
+}
+
+fun CoroutineScope.launchPeriodicAsync(repeatMillis: Long, action: () -> Unit) = this.async {
+    while (isActive) {
+        action()
+        delay(repeatMillis)
+    }
 }

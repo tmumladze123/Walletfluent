@@ -7,6 +7,7 @@ import ge.nlatsabidze.walletfluent.ui.entry.entryRepository.FirebaseUserReposito
 import ge.nlatsabidze.walletfluent.ui.personalInfo.profile.profileRepository.AccountsRepositoryImpl
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -22,24 +23,24 @@ class AccountSettingsViewModel @Inject constructor(
     private var _showChangePasswordDialog = MutableSharedFlow<String>()
     val showChangePasswordDialog: MutableSharedFlow<String> get() = _showChangePasswordDialog
 
-    init {
-        _userName = profileRepository.userName
-    }
-
     fun initializeFirebase() {
         profileRepository.initializeFirebase()
     }
 
-
     fun changeUserPassword() {
-        profileRepository.changeUserPassword()
         viewModelScope.launch {
-            _showChangePasswordDialog.emit(profileRepository.showChangePasswordDialog.value)
+            profileRepository.changeUserPassword().collect { dialog ->
+                _showChangePasswordDialog.emit(dialog.data.toString())
+            }
         }
     }
 
     fun getUserName() {
-        profileRepository.getUserName()
+        viewModelScope.launch {
+            profileRepository.getUserName().collect { userName ->
+                _userName.value = userName.data.toString()
+            }
+        }
     }
 
     fun logOutCurrentUser() {

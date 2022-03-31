@@ -131,9 +131,12 @@ dependencies {
 
     //progressbar
     implementation 'com.github.ybq:Android-SpinKit:1.4.0'
-
+    //chart
     implementation 'com.github.PhilJay:MPAndroidChart:3.1.0'
-
+    //splashscreen
     implementation 'androidx.core:core-splashscreen:1.0.0-beta01'
 
+    //workmanager
+    def work_version = "2.7.1"
+    implementation("androidx.work:work-runtime-ktx:$work_version")
 }

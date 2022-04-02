@@ -3,25 +3,19 @@ package ge.nlatsabidze.walletfluent.ui.personalInfo.UserProfile.UserProfileRepos
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import ge.nlatsabidze.walletfluent.Resource
+import ge.nlatsabidze.walletfluent.ui.entry.userData.UserState
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
 class UserProfileRepositoryImpl @Inject constructor(
     var firebaseAuth: FirebaseAuth,
     var database: DatabaseReference,
-): UserProfileRepository {
-
-    private val _balance = MutableStateFlow("")
-    val balance: MutableStateFlow<String> get() = _balance
-
-    private val _name = MutableStateFlow("")
-    val name: MutableStateFlow<String> get() = _name
-
-    private val _currentDate = MutableStateFlow("")
-    val currentData: MutableStateFlow<String> get() = _currentDate
-
-    private val _email = MutableStateFlow("")
-    val emailHolder: MutableStateFlow<String> get() = _email
+) : UserProfileRepository {
 
     override fun initializeFirebase() {
         var firebaseUser = firebaseAuth.currentUser!!
@@ -31,26 +25,29 @@ class UserProfileRepositoryImpl @Inject constructor(
                 .getReference("Users").child(firebaseUser.uid)
     }
 
-    override fun setInformationFromDatabase() {
-        database.addValueEventListener(object: ValueEventListener {
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun setInformationFromDatabase(): Flow<Resource<UserState>> = callbackFlow {
+        trySend(Resource.Loading())
+        val listener = database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val balance = snapshot.child("balance").value.toString() + "₾"
                 val name = snapshot.child("name").value.toString()
                 val currentDate = snapshot.child("expireDate").value.toString()
                 val email = snapshot.child("email").value.toString()
 
-                _balance.value = balance
-                _name.value = name
-                _currentDate.value = currentDate
-                _email.value = email
-
+                val userState = UserState(balance, name, currentDate, email)
+                trySend(Resource.Success(userState))
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.e("firebase", "onCancelled ${error.message}" )
+                Log.e("firebase", "onCancelled ${error.message}")
             }
 
         })
+
+        awaitClose {
+            database.removeEventListener(listener)
+        }
     }
 
 

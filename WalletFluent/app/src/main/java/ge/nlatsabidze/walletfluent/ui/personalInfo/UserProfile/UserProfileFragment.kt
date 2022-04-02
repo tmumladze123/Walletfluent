@@ -78,6 +78,17 @@ class UserProfileFragment :
                 binding.tvBalance.text = it
             }
         }
+
+        viewLifecycleOwner.lifecycleScope.launch {
+            userViewModel.loaderFlow.flowWithLifecycle(
+                viewLifecycleOwner.lifecycle,
+                Lifecycle.State.STARTED
+            ).collect {
+                if (it) {
+                    binding.progressBarProfile.visibility = View.VISIBLE
+                }
+            }
+        }
     }
 
     private fun checkLiveConnection() {

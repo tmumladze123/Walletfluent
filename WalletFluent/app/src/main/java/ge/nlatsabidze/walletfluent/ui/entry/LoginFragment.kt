@@ -57,7 +57,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
                     (activity as MainActivity).setDisableToDrawer()
                     (activity as MainActivity).setUnVisible()
                     navigateToSettingsPage()
-                    logInViewModel.changeUserValue()
                 }
             }
         }

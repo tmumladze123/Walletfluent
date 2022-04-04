@@ -6,7 +6,12 @@ import com.google.firebase.database.DatabaseReference
 import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.extensions.isEmailValid
 import ge.nlatsabidze.walletfluent.ui.entry.userData.User
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.channelFlow
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -18,10 +23,10 @@ class FirebaseUserRepositoryImpl @Inject constructor(
     private var database: DatabaseReference
 ): FirebaseUserRepository {
 
-    private var _currentUser = MutableStateFlow<Boolean>(false)
     private var _repositoryDialogError = MutableStateFlow("")
 
-    override fun register(email: String?, password: String?, name: String, balance: Int) {
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun register(email: String?, password: String?, name: String, balance: Int): Flow<Boolean> = callbackFlow {
         if (email!!.isNotEmpty() && password!!.isNotEmpty()) {
             firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
@@ -34,7 +39,7 @@ class FirebaseUserRepositoryImpl @Inject constructor(
                         val activeUser = User(email, name, password, balance, userCreationDate)
                         database.child(uid!!).setValue(activeUser).addOnCompleteListener {
                             if (it.isSuccessful) {
-                                _currentUser.value = true
+                                trySend(true)
                             } else {
                                 _repositoryDialogError.value = it.exception?.message.toString()
                             }
@@ -44,15 +49,18 @@ class FirebaseUserRepositoryImpl @Inject constructor(
                     }
                 }
         }
+
+        awaitClose{}
     }
 
-    override fun login(email: String?, password: String?) {
+    @OptIn(ExperimentalCoroutinesApi::class)
+    override fun login(email: String?, password: String?): Flow<Boolean> = callbackFlow {
         if (email!!.isNotEmpty() && password!!.isNotEmpty()) {
             firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener { Task ->
                 if (Task.isSuccessful) {
                     val firebaseUser = firebaseAuth.currentUser
                     if (firebaseUser!!.isEmailVerified) {
-                        _currentUser.value = true
+                        trySend(true)
                     } else {
                         firebaseUser.sendEmailVerification()
                         _repositoryDialogError.value =
@@ -62,7 +70,9 @@ class FirebaseUserRepositoryImpl @Inject constructor(
                     _repositoryDialogError.value = Task.exception?.message.toString()
                 }
             }
+
         }
+        awaitClose {}
     }
 
     override fun resetUserPassword(email: String?) {
@@ -80,16 +90,8 @@ class FirebaseUserRepositoryImpl @Inject constructor(
         }
     }
 
-    fun getRegisteredValue(): MutableStateFlow<Boolean> {
-        return _currentUser
-    }
-
     fun getDialogErrorValue(): MutableStateFlow<String> {
         return _repositoryDialogError
-    }
-
-    fun changeUserFlowValue() {
-        _currentUser.value = false
     }
 
     fun changeRepositoryDialogError() {

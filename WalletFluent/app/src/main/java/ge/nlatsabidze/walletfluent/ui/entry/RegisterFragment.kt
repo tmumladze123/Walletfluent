@@ -65,7 +65,6 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
                         binding.emailEditText.text.toString(),
                         binding.passwordEditText.text.toString()
                     )
-                    loginViewModel.changeUserValue()
                 }
             }
         }

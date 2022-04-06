@@ -49,4 +49,8 @@ class CalculatorPageViewModel @Inject constructor(private val getConvertedValues
         return result
     }
 
+    fun checkIfNumberIsNotEmpty(number: String): Boolean {
+        return number.isNotEmpty()
+    }
+
 }

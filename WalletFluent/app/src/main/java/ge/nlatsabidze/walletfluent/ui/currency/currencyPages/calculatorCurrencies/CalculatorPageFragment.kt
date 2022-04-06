@@ -45,11 +45,13 @@ class CalculatorPageFragment :
                 ) {
                     val selectedValue = parent?.getItemAtPosition(position).toString()
                     firstValue = selectedValue
-                    if (binding.etNumber.text?.isNotEmpty() == true) {
+
+                    if (calculatorViewModel.checkIfNumberIsNotEmpty(binding.etNumber.text.toString())) {
                         calculatorViewModel.getConvertedValue(
                             binding.etNumber.text.toString().toDouble(), firstValue, secondValue
                         )
                     }
+
                 }
 
                 override fun onNothingSelected(p0: AdapterView<*>?) {}
@@ -67,7 +69,7 @@ class CalculatorPageFragment :
                     val selectedValue = parent?.getItemAtPosition(position).toString()
                     secondValue = selectedValue
 
-                    if (binding.etNumber.text?.isNotEmpty() == true) {
+                    if (calculatorViewModel.checkIfNumberIsNotEmpty(binding.etNumber.text.toString())) {
                         calculatorViewModel.getConvertedValue(
                             binding.etNumber.text.toString().toDouble(), firstValue, secondValue
                         )

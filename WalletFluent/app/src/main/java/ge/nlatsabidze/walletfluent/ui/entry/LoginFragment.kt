@@ -133,7 +133,7 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     }
 
     private fun showDialogError(message: String) {
-        val builder = AlertDialog.Builder(requireContext())
+        AlertDialog.Builder(requireContext())
         showDialogError(message, requireContext())
     }
 
@@ -141,12 +141,6 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         if (args.email != "email" && args.password != "password") {
             binding.emailEditText.setText(args.email)
             binding.passwordEditText.setText(args.password)
-        }
-    }
-
-    private fun onBackPressed() {
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            activity?.finish()
         }
     }
 

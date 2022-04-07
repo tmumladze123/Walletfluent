@@ -13,6 +13,7 @@ import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.checkConnectivity.CheckLiveConnection
 import ge.nlatsabidze.walletfluent.databinding.UserProfileFragmentBinding
 import ge.nlatsabidze.walletfluent.extensions.changeVisibility
+import ge.nlatsabidze.walletfluent.extensions.collectFlow
 import ge.nlatsabidze.walletfluent.extensions.onSnack
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -30,10 +31,6 @@ class UserProfileFragment :
     var relatedViews: ArrayList<View> = ArrayList()
 
     override fun start() {
-
-        userViewModel.initializeFirebase()
-        userViewModel.setInformationFromDatabase()
-
         setViewToList()
         checkLiveConnection()
     }
@@ -43,52 +40,23 @@ class UserProfileFragment :
     }
 
     private fun observeInformation() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            userViewModel.name.flowWithLifecycle(
-                viewLifecycleOwner.lifecycle,
-                Lifecycle.State.STARTED
-            ).collect {
-                binding.tvName.text = it
-            }
+
+        collectFlow(userViewModel.name) {
+            binding.tvName.text = it
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            userViewModel.currentData.flowWithLifecycle(
-                viewLifecycleOwner.lifecycle,
-                Lifecycle.State.STARTED
-            ).collect {
-                binding.tvDate.text = it
-            }
+        collectFlow(userViewModel.currentData) {
+            binding.tvDate.text = it
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            userViewModel.emailHolder.flowWithLifecycle(
-                viewLifecycleOwner.lifecycle,
-                Lifecycle.State.STARTED
-            ).collect {
-                binding.tvEmail.text = it
-            }
+        collectFlow(userViewModel.emailHolder) {
+            binding.tvEmail.text = it
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            userViewModel.balance.flowWithLifecycle(
-                viewLifecycleOwner.lifecycle,
-                Lifecycle.State.STARTED
-            ).collect {
-                binding.tvBalance.text = it
-            }
+        collectFlow(userViewModel.balance) {
+            binding.tvBalance.text = it
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            userViewModel.loaderFlow.flowWithLifecycle(
-                viewLifecycleOwner.lifecycle,
-                Lifecycle.State.STARTED
-            ).collect {
-                if (it) {
-                    binding.progressBarProfile.visibility = View.VISIBLE
-                }
-            }
-        }
     }
 
     private fun checkLiveConnection() {

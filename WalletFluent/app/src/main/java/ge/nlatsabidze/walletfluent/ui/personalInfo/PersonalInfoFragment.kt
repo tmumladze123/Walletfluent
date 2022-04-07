@@ -20,6 +20,7 @@ import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
 import ge.nlatsabidze.walletfluent.checkConnectivity.CheckLiveConnection
 import ge.nlatsabidze.walletfluent.databinding.PersonalInfoFragmentBinding
 import ge.nlatsabidze.walletfluent.extensions.changeVisibility
+import ge.nlatsabidze.walletfluent.extensions.collectFlow
 import ge.nlatsabidze.walletfluent.extensions.onSnack
 import ge.nlatsabidze.walletfluent.extensions.setOnSafeClickListener
 import javax.inject.Inject
@@ -77,42 +78,22 @@ class PersonalInfoFragment :
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
     private fun observers() {
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            personalInfoViewModel.balance.flowWithLifecycle(
-                viewLifecycleOwner.lifecycle,
-                Lifecycle.State.STARTED
-            ).collect {
-                binding.balance.text = it
-            }
+        collectFlow(personalInfoViewModel.balance) {
+            binding.balance.text = it
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            personalInfoViewModel.name.flowWithLifecycle(
-                viewLifecycleOwner.lifecycle,
-                Lifecycle.State.STARTED
-            ).collect {
-                binding.tvName.text = it
-            }
+        collectFlow(personalInfoViewModel.name) {
+            binding.tvName.text = it
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            personalInfoViewModel.transaction.flowWithLifecycle(
-                viewLifecycleOwner.lifecycle,
-                Lifecycle.State.STARTED
-            ).collect {
-                transactionAdapter.userTransactions.add(0, it)
-                binding.rvItems.startLayoutAnimation()
-                transactionAdapter.notifyDataSetChanged()
-            }
+        collectFlow(personalInfoViewModel.transaction) {
+            transactionAdapter.userTransactions.add(0, it)
+            binding.rvItems.startLayoutAnimation()
+            transactionAdapter.notifyDataSetChanged()
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            personalInfoViewModel.expireYear.flowWithLifecycle(
-                viewLifecycleOwner.lifecycle,
-                Lifecycle.State.STARTED
-            ).collect {
-                binding.tvDate.text = it
-            }
+        collectFlow(personalInfoViewModel.expireYear) {
+            binding.tvDate.text = it
         }
 
     }
@@ -125,23 +106,17 @@ class PersonalInfoFragment :
     }
 
     private fun checkLiveConnection() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            checkLiveConnection.asFlow()
-                .flowWithLifecycle(
-                    viewLifecycleOwner.lifecycle,
-                    Lifecycle.State.STARTED
-                ).collect {
-                    if (!it) {
-                        onSnack(
-                            binding.root,
-                            resources.getString(R.string.InternetRequired),
-                            Color.RED
-                        )
-                    } else {
-                        binding.progressBarInfo.visibility = View.INVISIBLE
-                        changeVisibility(relatedViews, View.VISIBLE)
-                    }
-                }
+        collectFlow(checkLiveConnection.asFlow()) {
+            if (!it) {
+                onSnack(
+                    binding.root,
+                    resources.getString(R.string.InternetRequired),
+                    Color.RED
+                )
+            } else {
+                binding.progressBarInfo.visibility = View.INVISIBLE
+                changeVisibility(relatedViews, View.VISIBLE)
+            }
         }
     }
 

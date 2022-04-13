@@ -4,14 +4,21 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.nlatsabidze.walletfluent.ui.entry.entryRepository.FirebaseUserRepositoryImpl
+import ge.nlatsabidze.walletfluent.util.Dispatchers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginRegisterViewModel @Inject constructor(private val firebaseRepository: FirebaseUserRepositoryImpl) :
+class LoginRegisterViewModel @Inject constructor(
+    private val firebaseRepository: FirebaseUserRepositoryImpl,
+    private val dispatchers: Dispatchers
+) :
     ViewModel() {
 
     private var _userMutableLive = MutableSharedFlow<Boolean>()
@@ -33,7 +40,7 @@ class LoginRegisterViewModel @Inject constructor(private val firebaseRepository:
     }
 
     fun login(email: String, password: String) {
-        viewModelScope.launch {
+        dispatchers.launchBackground(viewModelScope) {
             firebaseRepository.login(email, password).collect {
                 _userMutableLive.emit(it)
             }
@@ -49,6 +56,7 @@ class LoginRegisterViewModel @Inject constructor(private val firebaseRepository:
     }
 
 }
+
 
 
 

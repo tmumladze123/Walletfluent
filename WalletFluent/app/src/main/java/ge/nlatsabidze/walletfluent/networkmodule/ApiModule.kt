@@ -1,7 +1,6 @@
 package ge.nlatsabidze.walletfluent.networkmodule
 
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.squareup.moshi.Moshi
@@ -20,6 +19,7 @@ import ge.nlatsabidze.walletfluent.network.cryptoNetwork.CryptoRepositoryImpl
 import ge.nlatsabidze.walletfluent.network.currencyNetwork.CurrencyApi
 import ge.nlatsabidze.walletfluent.network.currencyNetwork.CurrencyRepository
 import ge.nlatsabidze.walletfluent.network.currencyNetwork.CurrencyRepositoryImpl
+import ge.nlatsabidze.walletfluent.util.Dispatchers
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
@@ -60,7 +60,8 @@ object ApiModule {
 
     @Provides
     @Singleton
-    fun provideDatabaseReference(): DatabaseReference = FirebaseDatabase.getInstance(DATABASE).getReference(DATABASE_REFERENCE)
+    fun provideDatabaseReference(): DatabaseReference =
+        FirebaseDatabase.getInstance(DATABASE).getReference(DATABASE_REFERENCE)
 
     @Provides
     @Singleton
@@ -72,6 +73,12 @@ object ApiModule {
     @Singleton
     fun provideCryptoRepository(api: CryptoApi): CryptoRepository {
         return CryptoRepositoryImpl(api)
+    }
+
+    @Provides
+    @Singleton
+    fun provideDispatchers(): Dispatchers {
+        return Dispatchers.Base()
     }
 
 }

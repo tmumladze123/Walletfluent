@@ -1,8 +1,8 @@
 package ge.nlatsabidze.walletfluent.ui.entry.userData
 
 data class UserState(
-    val balance: String,
-    val name: String,
-    val currentDate: String,
-    val email: String
+    val balance: String? = null,
+    val name: String? = null,
+    val currentDate: String? = null,
+    val email: String? = null
 )

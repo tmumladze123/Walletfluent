@@ -1,9 +1,9 @@
 package ge.nlatsabidze.walletfluent.util
 
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.CoroutineScope
 
 interface Dispatchers {
     fun launchUI(scope: CoroutineScope, block: suspend CoroutineScope.() -> Unit): Job

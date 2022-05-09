@@ -52,6 +52,7 @@
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/drawable/ic_language.xml" value="0.3828125" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/drawable/ic_launcher_background.xml" value="0.21302083333333333" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/drawable/ic_lock.xml" value="0.1640625" />
+        <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/drawable/ic_menu.xml" value="0.158" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/drawable/ic_menu_gallery.xml" value="0.3828125" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/drawable/ic_right.xml" value="0.3728205128205128" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/drawable/splash_screen_background.xml" value="0.3828125" />
@@ -59,7 +60,7 @@
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/drawable/swapvalues.xml" value="0.25729166666666664" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/account_settings_fragment.xml" value="0.22" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/activity_main.xml" value="0.254981884057971" />
-        <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/app_bar_main.xml" value="0.254981884057971" />
+        <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/app_bar_main.xml" value="0.28266913809082483" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/calculator_page_fragment.xml" value="0.22" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/content_main.xml" value="0.22" />
         <entry key="..\:/Users/user/wallet/Walletfluent/WalletFluent/app/src/main/res/layout/crypto_item.xml" value="0.25885416666666666" />

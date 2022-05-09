@@ -5,8 +5,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import ge.nlatsabidze.walletfluent.Resource
+import ge.nlatsabidze.walletfluent.extensions.collect
+import ge.nlatsabidze.walletfluent.ui.entry.userData.UserState
 import ge.nlatsabidze.walletfluent.ui.personalInfo.UserProfile.UserProfileRepository.UserProfileRepositoryImpl
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -14,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserProfileViewModel @Inject constructor(
-    var userProfileRepository: UserProfileRepositoryImpl
+    var userProfileRepository: UserProfileRepositoryImpl,
+    private val dispatchers: ge.nlatsabidze.walletfluent.util.Dispatchers
 ) : ViewModel() {
 
     init {
@@ -22,38 +25,25 @@ class UserProfileViewModel @Inject constructor(
         setInformationFromDatabase()
     }
 
-    private var _balance = MutableStateFlow("")
-    val balance: MutableStateFlow<String> get() = _balance
+    private val _userState = MutableStateFlow(UserState())
+    val userState: MutableStateFlow<UserState> get() = _userState
 
-    private var _name = MutableStateFlow("")
-    val name: MutableStateFlow<String> get() = _name
-
-    private var _currentDate = MutableStateFlow("")
-    val currentData: MutableStateFlow<String> get() = _currentDate
-
-    private var _email = MutableStateFlow("")
-    val emailHolder: MutableStateFlow<String> get() = _email
-
-    private fun setInformationFromDatabase() {
-        viewModelScope.launch {
-            userProfileRepository.setInformationFromDatabase().collectLatest {
-                when (it) {
-                    is Resource.Success -> {
-                        it.data?.let { it1 -> _balance.emit(it1.balance) }
-                        it.data?.let { it1 -> _name.emit(it1.name) }
-                        it.data?.let { it1 -> _email.emit(it1.email) }
-                        it.data?.let { it1 -> _currentDate.emit(it1.currentDate) }
-                    }
-                    is Resource.Error -> {
-                        Log.d("Error", "REALTIME DB ERROR")
-                    }
-                    else -> {
-                        Log.d("Exception", "REALTIME DB ERROR")
-                    }
+    private fun setInformationFromDatabase() = dispatchers.launchBackground(viewModelScope) {
+        collect(userProfileRepository.setInformationFromDatabase()) { userState ->
+            when (userState) {
+                is Resource.Success -> {
+                    _userState.value = userState.data!!
+                }
+                is Resource.Error -> {
+                    Log.d("Error", "REALTIME DB ERROR")
+                }
+                else -> {
+                    Log.d("Exception", "REALTIME DB ERROR")
                 }
             }
         }
     }
 
-
 }
+
+

@@ -50,6 +50,7 @@ class AccountsRepositoryImpl @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     override fun getUserName(): Flow<Resource<String>> = callbackFlow {
+        trySend(Resource.Loading())
         val listener = database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val userName = snapshot.child("name").value.toString()

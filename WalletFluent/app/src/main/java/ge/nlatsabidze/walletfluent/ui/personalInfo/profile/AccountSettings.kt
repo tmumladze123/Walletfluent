@@ -1,28 +1,18 @@
 package ge.nlatsabidze.walletfluent.ui.personalInfo.profile
 
 import android.annotation.SuppressLint
-import androidx.lifecycle.ViewModelProvider
-import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
+import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.*
-import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
 import ge.nlatsabidze.walletfluent.databinding.AccountSettingsFragmentBinding
-import ge.nlatsabidze.walletfluent.extensions.setOnSafeClickListener
-import ge.nlatsabidze.walletfluent.extensions.showDialogError
-import ge.nlatsabidze.walletfluent.ui.entry.LoginFragmentDirections
+import ge.nlatsabidze.walletfluent.extensions.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -50,6 +40,7 @@ class AccountSettings : BaseFragment<AccountSettingsFragmentBinding>(AccountSett
             logOUT()
             (activity as MainActivity).setVisible()
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            (activity as MainActivity).recreate()
             navigateBack()
         }
 
@@ -70,18 +61,27 @@ class AccountSettings : BaseFragment<AccountSettingsFragmentBinding>(AccountSett
 
     @SuppressLint("SetTextI18n")
     private fun observers() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            accountsSettingsViewModel.userName.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect { it ->
-                val name = it.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }
-                binding.tvFirebaseUser.text = "Welcome $name"
+
+        collectFlow(accountsSettingsViewModel.userName) {
+            binding.rootConstraint.showAll()
+            binding.loadingBar.visibility = View.INVISIBLE
+            binding.tvFirebaseUser.text = "Welcome $it"
+        }
+
+        collectFlow(accountsSettingsViewModel.loaderFlow) {
+            if (it) {
+                binding.rootConstraint.hideAll()
+                binding.loadingBar.visible()
+            } else {
+                binding.rootConstraint.showAll()
+                binding.loadingBar.gone()
             }
         }
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            accountsSettingsViewModel.showChangePasswordDialog.collect {
-                showDialogError(it, requireContext())
-            }
+        collectFlow(accountsSettingsViewModel.showChangePasswordDialog) {
+            showDialogError(it, requireContext())
         }
+
     }
 
     private fun navigateToTransactionsPage() {

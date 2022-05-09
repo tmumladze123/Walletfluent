@@ -41,39 +41,23 @@ class UserProfileFragment :
 
     private fun observeInformation() {
 
-        collectFlow(userViewModel.name) {
-            binding.tvName.text = it
-        }
-
-        collectFlow(userViewModel.currentData) {
-            binding.tvDate.text = it
-        }
-
-        collectFlow(userViewModel.emailHolder) {
-            binding.tvEmail.text = it
-        }
-
-        collectFlow(userViewModel.balance) {
-            binding.tvBalance.text = it
+        collectFlow(userViewModel.userState) {
+            binding.tvName.text = it.name
+            binding.tvDate.text = it.currentDate
+            binding.tvEmail.text = it.email
+            binding.tvBalance.text = it.balance
         }
 
     }
 
     private fun checkLiveConnection() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            checkLiveConnection.asFlow()
-                .flowWithLifecycle(
-                    viewLifecycleOwner.lifecycle,
-                    Lifecycle.State.STARTED
-                ).collect {
-                    if (it) {
-                        changeVisibility(relatedViews, View.VISIBLE)
-                        binding.progressBarProfile.visibility = View.INVISIBLE
-
-                    } else if (!it) {
-                        onSnack(binding.root, "Internet Connection Required", Color.RED)
-                    }
-                }
+        collectFlow(checkLiveConnection.asFlow()) {
+            if (it) {
+                changeVisibility(relatedViews, View.VISIBLE)
+                binding.progressBarProfile.visibility = View.INVISIBLE
+            } else if (!it) {
+                onSnack(binding.root, "Internet Connection Required", Color.RED)
+            }
         }
 
     }

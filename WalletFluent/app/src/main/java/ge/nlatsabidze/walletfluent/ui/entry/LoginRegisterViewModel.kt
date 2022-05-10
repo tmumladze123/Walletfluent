@@ -2,7 +2,9 @@ package ge.nlatsabidze.walletfluent.ui.entry
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.auth.AuthResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import ge.nlatsabidze.walletfluent.Resource
 import ge.nlatsabidze.walletfluent.ui.entry.entryRepository.FirebaseUserRepositoryImpl
 import ge.nlatsabidze.walletfluent.util.Dispatchers
 import kotlinx.coroutines.CoroutineScope
@@ -21,8 +23,8 @@ class LoginRegisterViewModel @Inject constructor(
 ) :
     ViewModel() {
 
-    private var _userMutableLive = MutableSharedFlow<Boolean>()
-    val userMutableLiveFlow: MutableSharedFlow<Boolean> get() = _userMutableLive
+    private var _userMutableLive = MutableSharedFlow<Resource<AuthResult>>()
+    val userMutableLiveFlow: MutableSharedFlow<Resource<AuthResult>> get() = _userMutableLive
 
     private var _dialogError = MutableStateFlow("")
     val dialogError: MutableStateFlow<String> get() = _dialogError
@@ -47,13 +49,15 @@ class LoginRegisterViewModel @Inject constructor(
         }
     }
 
-    fun resetPassword(email: String) {
-        firebaseRepository.resetUserPassword(email)
-    }
+    fun validate(email: String, password: String): Boolean =
+        email.isNotEmpty() && password.isNotEmpty()
 
-    fun changeRepositoryValue() {
-        firebaseRepository.changeRepositoryDialogError()
-    }
+    fun validateRegister(email: String, password: String, name: String): Boolean =
+        email.isNotEmpty() && password.isNotEmpty() && name.isNotEmpty()
+
+    fun resetPassword(email: String) = firebaseRepository.resetUserPassword(email)
+
+    fun changeRepositoryValue() = firebaseRepository.changeRepositoryDialogError()
 
 }
 

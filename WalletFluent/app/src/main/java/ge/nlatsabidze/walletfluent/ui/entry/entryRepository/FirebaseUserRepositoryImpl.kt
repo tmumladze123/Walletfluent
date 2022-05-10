@@ -5,14 +5,13 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import ge.nlatsabidze.walletfluent.R
+import ge.nlatsabidze.walletfluent.Resource
 import ge.nlatsabidze.walletfluent.extensions.isEmailValid
 import ge.nlatsabidze.walletfluent.ui.entry.userData.User
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 import javax.inject.Inject
@@ -22,82 +21,50 @@ class FirebaseUserRepositoryImpl @Inject constructor(
     private val application: Application,
     private val firebaseAuth: FirebaseAuth,
     private var database: DatabaseReference,
+    private val io: CoroutineDispatcher
 ) : FirebaseUserRepository {
 
     private var _repositoryDialogError = MutableStateFlow("")
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun register(
-        email: String?,
-        password: String?,
-        name: String,
-        balance: Int
-    ): Flow<Boolean> = callbackFlow {
-        if (email!!.isNotEmpty() && password!!.isNotEmpty()) {
-            firebaseAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-
-                        val user = firebaseAuth.currentUser
-                        val uid = user?.uid
-                        val userCreationDate = generateCurrentDate()
-
-                        val activeUser = User(email, name, password, balance, userCreationDate)
-                        database.child(uid!!).setValue(activeUser).addOnCompleteListener {
-                            if (it.isSuccessful) {
-                                trySend(true)
-                            } else {
-                                _repositoryDialogError.value = it.exception?.message.toString()
-                            }
-                        }
-                    } else {
-                        _repositoryDialogError.value = task.exception?.message.toString()
-                    }
-                }
+    override suspend fun register(
+        email: String?, password: String?, name: String, balance: Int
+    ): Flow<Resource<AuthResult>> = flow {
+        try {
+            emit(Resource.Loading())
+            if (email!!.isNotEmpty() && password!!.isNotEmpty()) {
+                val createResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+                val user = firebaseAuth.currentUser
+                val uid = user?.uid
+                val userCreationDate = generateCurrentDate()
+                val activeUser = User(email, name, password, balance, userCreationDate)
+                database.child(uid!!).setValue(activeUser).await()
+                emit(Resource.Success(createResult))
+            }
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message.toString()))
         }
-
-        awaitClose {}
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    override fun login(email: String?, password: String?): Flow<Boolean> = callbackFlow {
-        if (email!!.isNotEmpty() && password!!.isNotEmpty()) {
-            firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener { Task ->
-                if (Task.isSuccessful) {
+
+    override suspend fun login(email: String?, password: String?): Flow<Resource<AuthResult>> =
+        flow {
+            try {
+                emit(Resource.Loading())
+                if (email!!.isNotEmpty() && password!!.isNotEmpty()) {
+                    val loginResult =
+                        firebaseAuth.signInWithEmailAndPassword(email, password).await()
                     val firebaseUser = firebaseAuth.currentUser
                     if (firebaseUser!!.isEmailVerified) {
-                        trySend(true)
+                        emit(Resource.Success(loginResult))
                     } else {
                         firebaseUser.sendEmailVerification()
-                        _repositoryDialogError.value =
-                            application.resources.getString(R.string.VerificationDialog)
+                        emit(Resource.Error(application.resources.getString(R.string.VerificationDialog)))
                     }
-                } else {
-                    _repositoryDialogError.value = Task.exception?.message.toString()
                 }
+            } catch (e: Exception) {
+                emit(Resource.Error(e.message.toString()))
             }
-
-        }
-        awaitClose {}
-    }
-
-//    override fun login(email: String?, password: String?): Flow<Boolean> = flow {
-//        if (email!!.isNotEmpty() && password!!.isNotEmpty()) {
-//            firebaseAuth.signInWithEmailAndPassword(email, password).await()
-//            val firebaseUser = firebaseAuth.currentUser
-//            if (firebaseUser != null) {
-//                if (firebaseUser.isEmailVerified) {
-//                    emit(true)
-//                } else {
-//                    firebaseUser.sendEmailVerification()
-//                    _repositoryDialogError.value =
-//                        application.resources.getString(R.string.VerificationDialog)
-//                }
-//            }
-//        } else {
-//            _repositoryDialogError.value = "Task.exception?.message.toString()"
-//        }
-//    }
+        }.flowOn(io)
 
     override fun resetUserPassword(email: String?) {
         if (email!!.isNotEmpty() && email.isEmailValid()) {
@@ -122,9 +89,7 @@ class FirebaseUserRepositoryImpl @Inject constructor(
         _repositoryDialogError.value = ""
     }
 
-    fun logOutUser() {
-        firebaseAuth.signOut()
-    }
+    fun logOutUser() = firebaseAuth.signOut()
 
     private fun generateCurrentDate(): String {
         val currentDateFormatter = SimpleDateFormat("dd/M/yyyy")

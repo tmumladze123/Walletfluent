@@ -3,14 +3,19 @@ package ge.nlatsabidze.walletfluent.extensions
 import androidx.appcompat.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.res.Resources
 import android.graphics.Color
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.children
 import com.bumptech.glide.Glide
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import ge.nlatsabidze.walletfluent.R
 import ge.nlatsabidze.walletfluent.util.SafeClickListener
 
@@ -74,9 +79,7 @@ fun ViewGroup.showAll() {
 }
 
 fun View.visible(): View {
-    if (visibility != View.VISIBLE) {
-        visibility = View.VISIBLE
-    }
+    visibility = View.VISIBLE
     return this
 }
 
@@ -85,4 +88,11 @@ fun View.gone(): View {
         visibility = View.GONE
     }
     return this
+}
+
+fun animateItems(context:Context, text: TextInputEditText, item: TextInputLayout, resources: Resources) {
+    val shake: Animation = AnimationUtils.loadAnimation(context, R.anim.vibrate)
+    item.startAnimation(shake)
+    item.helperText = resources.getString(R.string.invalidField)
+    text.setBackgroundResource(R.drawable.border)
 }

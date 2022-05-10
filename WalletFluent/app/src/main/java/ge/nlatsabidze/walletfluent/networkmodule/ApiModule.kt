@@ -20,6 +20,7 @@ import ge.nlatsabidze.walletfluent.network.currencyNetwork.CurrencyApi
 import ge.nlatsabidze.walletfluent.network.currencyNetwork.CurrencyRepository
 import ge.nlatsabidze.walletfluent.network.currencyNetwork.CurrencyRepositoryImpl
 import ge.nlatsabidze.walletfluent.util.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
@@ -80,5 +81,9 @@ object ApiModule {
     fun provideDispatchers(): Dispatchers {
         return Dispatchers.Base()
     }
+
+    @Provides
+    fun provideIoDispatcher(): CoroutineDispatcher = kotlinx.coroutines.Dispatchers.IO
+
 
 }

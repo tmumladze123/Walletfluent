@@ -14,10 +14,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.MainActivity
 import ge.nlatsabidze.walletfluent.R
+import ge.nlatsabidze.walletfluent.Resource
 import ge.nlatsabidze.walletfluent.databinding.FragmentRegisterBinding
-import ge.nlatsabidze.walletfluent.extensions.onSnack
-import ge.nlatsabidze.walletfluent.extensions.setOnSafeClickListener
-import ge.nlatsabidze.walletfluent.extensions.showDialogError
+import ge.nlatsabidze.walletfluent.extensions.*
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -25,92 +24,24 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterBinding::inflate) {
 
-    private lateinit var firebaseAuth: FirebaseAuth
     private val loginViewModel: LoginRegisterViewModel by activityViewModels()
 
-
     override fun start() {
-
-        firebaseAuth = FirebaseAuth.getInstance()
-        binding.btnSignUp.setOnSafeClickListener {
-            registerUser()
-        }
-
-        observervers()
+        binding.btnSignUp.setOnSafeClickListener { registerUser() }
     }
 
     private fun registerUser() {
-        val shake: Animation = AnimationUtils.loadAnimation(requireContext(), R.anim.vibrate)
-        with(binding) {
-            val name = nameEditText.text.toString()
-            val email = emailEditText.text.toString()
-            val password = passwordEditText.text.toString()
-            checkInputValidation(email, password)
-            if (name.isNotEmpty()) {
-                loginViewModel.register(email, password, name, 1000)
-            } else {
-                nameEditTextWrapper.startAnimation(shake)
-                nameEditTextWrapper.helperText = resources.getString(R.string.invalidField)
-                nameEditText.setBackgroundResource(R.drawable.border)
-            }
-        }
-    }
+        val name = binding.nameEditText.text.toString()
+        val email = binding.emailEditText.text.toString()
+        val password = binding.passwordEditText.text.toString()
 
-    private fun observervers() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            loginViewModel.userMutableLiveFlow.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect { userLogedIn ->
-                if (userLogedIn) {
-                    (activity as MainActivity).setDisableToDrawer()
-                    navigateToSignInPage(
-                        binding.emailEditText.text.toString(),
-                        binding.passwordEditText.text.toString()
-                    )
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            loginViewModel.dialogError.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect { showDialogError ->
-                if (showDialogError != "") {
-                    showDialogError(showDialogError)
-                    loginViewModel.changeRepositoryValue()
-                }
-            }
-        }
-    }
-
-    private fun checkInputValidation(email: String, password: String) {
-        with(binding) {
-            val shake: Animation = AnimationUtils.loadAnimation(requireContext(), R.anim.vibrate)
-            if (email.isEmpty() && password.isEmpty()) {
-                emailEditTextWrapper.startAnimation(shake)
-                emailEditTextWrapper.helperText = resources.getString(R.string.invalidField)
-                emailEditText.setBackgroundResource(R.drawable.border)
-
-                passwordEditTextWrapper.startAnimation(shake)
-                passwordEditTextWrapper.helperText = resources.getString(R.string.invalidField)
-                passwordEditText.setBackgroundResource(R.drawable.border)
-
-            } else if (password.isEmpty()) {
-                passwordEditTextWrapper.startAnimation(shake)
-                passwordEditTextWrapper.helperText = resources.getString(R.string.invalidField)
-                emailEditTextWrapper.helperText = ""
-                passwordEditText.setBackgroundResource(R.drawable.border)
-                emailEditText.setBackgroundResource(R.color.transparent)
-            } else if (email.isEmpty()) {
-                emailEditTextWrapper.startAnimation(shake)
-                emailEditTextWrapper.helperText = resources.getString(R.string.invalidField)
-                passwordEditTextWrapper.helperText = ""
-                emailEditText.setBackgroundResource(R.drawable.border)
-                passwordEditText.setBackgroundResource(R.color.transparent)
-            } else {
-                passwordEditTextWrapper.helperText = ""
-                emailEditTextWrapper.helperText = ""
-                emailEditText.setBackgroundResource(R.color.transparent)
-                passwordEditText.setBackgroundResource(R.color.transparent)
-                passwordEditText.setBackgroundResource(R.color.transparent)
-            }
-        }
+        if (loginViewModel.validateRegister(email, password, name)) loginViewModel.register(
+            email,
+            password,
+            email,
+            1000
+        )
+        else showDialogError("Fill the fields", requireContext())
     }
 
     private fun navigateToSignInPage(email: String, password: String) {
@@ -123,5 +54,37 @@ class RegisterFragment : BaseFragment<FragmentRegisterBinding>(FragmentRegisterB
         showDialogError(message, requireContext())
     }
 
+
+    override fun observes() {
+        collectFlow(loginViewModel.userMutableLiveFlow) {
+            when (it) {
+                is Resource.Loading -> binding.progressBar2.visible()
+                is Resource.Success -> displaySuccessState()
+                is Resource.Error -> it.message?.let { it1 -> displayErrorState(it1) }
+                else -> showDialogError("Unexpected Error Occurred!", requireContext())
+            }
+        }
+
+        collectFlow(loginViewModel.dialogError) { showDialogError ->
+            if (showDialogError != "") {
+                showDialogError(showDialogError)
+                loginViewModel.changeRepositoryValue()
+            }
+        }
+    }
+
+    private fun displaySuccessState() {
+        binding.progressBar2.gone()
+        (activity as MainActivity).setDisableToDrawer()
+        navigateToSignInPage(
+            binding.emailEditText.text.toString(),
+            binding.passwordEditText.text.toString()
+        )
+    }
+
+    private fun displayErrorState(error: String) {
+        binding.progressBar2.gone()
+        showDialogError(error, requireContext())
+    }
 
 }

@@ -56,13 +56,13 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
-        supportActionBar?.hide();
+        supportActionBar?.hide()
 
         drawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
 
-        nav_Menu = navView.getMenu()
+        nav_Menu = navView.menu
 
         val navGraph = navController.navInflater.inflate(R.navigation.mobile_navigation)
 
@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
             ), drawerLayout
         )
 
-        nav_Menu.findItem(R.id.languageFragment).setVisible(false)
+        nav_Menu.findItem(R.id.languageFragment).isVisible = false
 
         if (FirebaseAuth.getInstance().currentUser != null && checkInternetConnection.isOnline(
                 applicationContext
@@ -94,7 +94,6 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main, menu)
         return true
     }
@@ -108,16 +107,16 @@ class MainActivity : AppCompatActivity(), NavController.OnDestinationChangedList
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
     }
 
-    fun setEnableToDrawer() {
+    private fun setEnableToDrawer() {
         drawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
     }
 
     fun setUnVisible() {
-        nav_Menu.findItem(R.id.loginFragment).setVisible(false)
+        nav_Menu.findItem(R.id.loginFragment).isVisible = false
     }
 
     fun setVisible() {
-        nav_Menu.findItem(R.id.loginFragment).setVisible(true)
+        nav_Menu.findItem(R.id.loginFragment).isVisible = true
     }
 
 

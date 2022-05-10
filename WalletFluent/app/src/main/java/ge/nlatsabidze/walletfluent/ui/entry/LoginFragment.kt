@@ -1,27 +1,23 @@
 package ge.nlatsabidze.walletfluent.ui.entry
 
-import android.annotation.SuppressLint
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
-import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 import ge.nlatsabidze.walletfluent.BaseFragment
 import ge.nlatsabidze.walletfluent.MainActivity
 import ge.nlatsabidze.walletfluent.R
+import ge.nlatsabidze.walletfluent.Resource
 import ge.nlatsabidze.walletfluent.checkConnectivity.CheckInternetConnection
 import ge.nlatsabidze.walletfluent.checkConnectivity.CheckLiveConnection
 import ge.nlatsabidze.walletfluent.databinding.FragmentLoginBinding
-import ge.nlatsabidze.walletfluent.extensions.setOnSafeClickListener
-import ge.nlatsabidze.walletfluent.extensions.showDialogError
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import ge.nlatsabidze.walletfluent.extensions.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -30,107 +26,28 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
     private val logInViewModel: LoginRegisterViewModel by activityViewModels()
     private val args: LoginFragmentArgs by navArgs()
 
-    @Inject
-    lateinit var checkInternetConnection: CheckInternetConnection
-    @Inject
-    lateinit var liveConnection: CheckLiveConnection
-
     override fun start() {
 
-        binding.tvSignUp.setOnSafeClickListener { navigateToRegisterPage() }
+        binding.tvSignUp.setOnSafeClickListener { navigate(LoginFragmentDirections.actionLoginFragmentToRegisterFragment()) }
         binding.btnSignin.setOnSafeClickListener { loginUser() }
         binding.tvForgotPassword.setOnSafeClickListener { resetPassword() }
 
-        showErrorOnConnection()
         setDataFromRegisterPage()
     }
 
-    override fun observes() {
-        observers()
-    }
-
-    private fun observers() {
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            logInViewModel.userMutableLiveFlow.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect { userLogedIn ->
-                if (userLogedIn) {
-                    (activity as MainActivity).setDisableToDrawer()
-                    (activity as MainActivity).setUnVisible()
-                    navigateToSettingsPage()
-                }
-            }
-        }
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            logInViewModel.dialogError.flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED).collect { showResetPasswordError ->
-                if (showResetPasswordError != "") {
-                    showDialogError(showResetPasswordError)
-                    logInViewModel.changeRepositoryValue()
-                }
-            }
-        }
-
-    }
-
-    @SuppressLint("ResourceAsColor")
     private fun loginUser() {
-        with(binding) {
-            val email = emailEditText.text.toString()
-            val password = passwordEditText.text.toString()
-
-            checkInputValidation(email, password)
-            logInViewModel.login(email, password)
-        }
+        val email = binding.emailEditText.text.toString()
+        val password = binding.passwordEditText.text.toString()
+        if (logInViewModel.validate(email, password)) logInViewModel.login(email, password)
+        else showDialogError("Fill the fields", requireContext())
     }
 
     private fun resetPassword() {
-        with(binding) {
-            val email = emailEditText.text.toString()
-            logInViewModel.resetPassword(email)
-        }
+        val email = binding.emailEditText.text.toString()
+        logInViewModel.resetPassword(email)
     }
 
-
-    private fun checkInputValidation(email: String, password: String) {
-        with(binding) {
-            val shake: Animation = AnimationUtils.loadAnimation(requireContext(), R.anim.vibrate)
-            if (email.isEmpty() && password.isEmpty()) {
-                emailEditTextWrapper.startAnimation(shake)
-                emailEditTextWrapper.helperText = resources.getString(R.string.invalidField)
-                emailEditText.setBackgroundResource(R.drawable.border)
-
-                passwordEditTextWrapper.startAnimation(shake)
-                passwordEditTextWrapper.helperText = resources.getString(R.string.invalidField)
-                passwordEditText.setBackgroundResource(R.drawable.border)
-
-            } else if (password.isEmpty()) {
-                passwordEditTextWrapper.startAnimation(shake)
-                passwordEditTextWrapper.helperText = resources.getString(R.string.invalidField)
-                passwordEditText.setBackgroundResource(R.drawable.border)
-
-            } else if (email.isEmpty()) {
-                emailEditTextWrapper.startAnimation(shake)
-                emailEditTextWrapper.helperText = resources.getString(R.string.invalidField);
-                emailEditText.setBackgroundResource(R.drawable.border)
-
-            } else {
-                passwordEditTextWrapper.helperText = ""
-                emailEditTextWrapper.helperText = ""
-                emailEditText.setBackgroundResource(R.color.transparent)
-                passwordEditText.setBackgroundResource(R.color.transparent)
-            }
-        }
-    }
-
-    private fun navigateToRegisterPage() {
-        val actionLoginFragmentToRegister = LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
-        findNavController().navigate(actionLoginFragmentToRegister)
-    }
-
-    private fun navigateToSettingsPage() {
-        val actionLoginFragmentToSettings = LoginFragmentDirections.actionLoginFragmentToAccountSettings()
-        findNavController().navigate(actionLoginFragmentToSettings)
-    }
+    private fun navigate(directions: NavDirections) = findNavController().navigate(directions)
 
     private fun showDialogError(message: String) {
         AlertDialog.Builder(requireContext())
@@ -144,12 +61,33 @@ class LoginFragment : BaseFragment<FragmentLoginBinding>(FragmentLoginBinding::i
         }
     }
 
-    private fun showErrorOnConnection() {
-        if (!checkInternetConnection.isOnline(requireContext())) {
-            showDialogError(
-                resources.getString(R.string.CheckConnection),
-                requireContext()
-            )
+    override fun observes() {
+        collectFlow(logInViewModel.userMutableLiveFlow) { authResult ->
+            when (authResult) {
+                is Resource.Loading -> binding.progressBar.visible()
+                is Resource.Success -> logUser()
+                is Resource.Error -> displayError(authResult.message!!)
+                else -> showDialogError("Something went wrong!", requireContext())
+            }
         }
+
+        collectFlow(logInViewModel.dialogError) { showResetPasswordError ->
+            if (showResetPasswordError != "") {
+                showDialogError(showResetPasswordError)
+                logInViewModel.changeRepositoryValue()
+            }
+        }
+    }
+
+    private fun logUser() {
+        binding.progressBar.gone()
+        (activity as MainActivity).setDisableToDrawer()
+        (activity as MainActivity).setUnVisible()
+        navigate(LoginFragmentDirections.actionLoginFragmentToAccountSettings())
+    }
+
+    private fun displayError(item: String) {
+        showDialogError(item, requireContext())
+        binding.progressBar.gone()
     }
 }
